@@ -1,0 +1,1472 @@
+[Measure]
+Class="Function"
+Prototype="void Measure(int menuBar, int menuItem, void *callbackData, int panel);"
+
+[RunOscilloscope]
+Class="Function"
+Prototype="void RunOscilloscope(int menuBar, int menuItem, void *callbackData, int panel);"
+
+[KernelGen]
+Class="Function"
+Prototype="void KernelGen();"
+
+[RunDoStep]
+Class="Function"
+Prototype="int RunDoStep(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);"
+
+[DoStep]
+Class="Function"
+Prototype="void DoStep(char Issue, int Homecontrol);"
+
+[Oscilloscope]
+Class="Function"
+Prototype="void Oscilloscope();"
+
+[SetLoopActual]
+Class="Function"
+Prototype="void SetLoopActual();"
+
+[DecideAction]
+Class="Function"
+Prototype="void DecideAction();"
+
+[CloseMeasure]
+Class="Function"
+Prototype="void CloseMeasure();"
+
+[InitMem]
+Class="Function"
+Prototype="void InitMem();"
+
+[CloseMem]
+Class="Function"
+Prototype="void CloseMem();"
+
+[CompleteParmS]
+Class="Function"
+Prototype="void CompleteParmS();"
+
+[MakePath]
+Class="Function"
+Prototype="void MakePath();"
+
+[CheckJump]
+Class="Function"
+Prototype="void CheckJump();"
+
+[InitPres]
+Class="Function"
+Prototype="void InitPres();"
+
+[InitFiber]
+Class="Function"
+Prototype="void InitFiber();"
+
+[InitGeom]
+Class="Function"
+Prototype="void InitGeom();"
+
+[InitSource]
+Class="Function"
+Prototype="void InitSource();"
+
+[InitFilter]
+Class="Function"
+Prototype="void InitFilter();"
+
+[InitTwitch]
+Class="Function"
+Prototype="void InitTwitch();"
+
+[CompileSub]
+Class="Function"
+Prototype="void CompileSub(long Ram, long Frame, long Page);"
+
+[CalcPower]
+Class="Function"
+Prototype="double CalcPower(long Frame, long Page, int Roi);"
+
+[CalcStdev]
+Class="Function"
+Prototype="double CalcStdev(long Frame, long Page, int Roi);"
+
+[InsertMicroPos]
+Class="Function"
+Prototype="double InsertMicroPos(long Frame, long Page, int Roi);"
+
+[CalcLoopIndex]
+Class="Function"
+Prototype="void CalcLoopIndex(long Steps, long *Loop1, long *Loop2, long *Loop3, long *Loop4, long *Loop5);"
+
+[TextDisplay]
+Class="Function"
+Prototype="void TextDisplay();"
+
+[UpdateTag]
+Class="Function"
+Prototype="void UpdateTag();"
+
+[InitDisplay]
+Class="Function"
+Prototype="void InitDisplay();"
+
+[DisplayStatus]
+Class="Function"
+Prototype="void DisplayStatus();"
+
+[DisplayPlot]
+Class="Function"
+Prototype="void DisplayPlot();"
+
+[SetGraphType]
+Class="Function"
+Prototype="void SetGraphType();"
+
+[GraphPlot]
+Class="Function"
+Prototype="void GraphPlot();"
+
+[GraphRoi]
+Class="Function"
+Prototype="void GraphRoi();"
+
+[DisplayRoi]
+Class="Function"
+Prototype="void DisplayRoi();"
+
+[CalcArea]
+Class="Function"
+Prototype="long CalcArea(long First, long Last);"
+
+[CalcWidth]
+Class="Function"
+Prototype="double CalcWidth(long First, long Last, double Treshold);"
+
+[GetRange]
+Class="Function"
+Prototype="void GetRange(long RoiFirst, long RoiLast, double Fract, long *Max, long *Peak, long *pRangeFirst, long *pRangeLast, double *Treshold);"
+
+[GetCommand]
+Class="Function"
+Prototype="int GetCommand(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);"
+
+[WaitEnd]
+Class="Function"
+Prototype="void WaitEnd(double Time, long Pos, char Type, char Step);"
+
+[WaitCount]
+Class="Function"
+Prototype="void WaitCount();"
+
+[WaitChrono]
+Class="Function"
+Prototype="void WaitChrono();"
+
+[SpcInit]
+Class="Function"
+Prototype="void SpcInit();"
+
+[SpcClose]
+Class="Function"
+Prototype="void SpcClose();"
+
+[SpcPause]
+Class="Function"
+Prototype="void SpcPause();"
+
+[SpcClear]
+Class="Function"
+Prototype="void SpcClear();"
+
+[SpcIn]
+Class="Function"
+Prototype="void SpcIn();"
+
+[SpcRestart]
+Class="Function"
+Prototype="void SpcRestart();"
+
+[SpcReset]
+Class="Function"
+Prototype="void SpcReset(char Status, char Clear, char Stop);"
+
+[SpcTime]
+Class="Function"
+Prototype="void SpcTime(float Time);"
+
+[SpcStop]
+Class="Function"
+Prototype="void SpcStop(char Status);"
+
+[SpcWait]
+Class="Function"
+Prototype="void SpcWait();"
+
+[SpcGet]
+Class="Function"
+Prototype="void SpcGet();"
+
+[SpcOut]
+Class="Function"
+Prototype="void SpcOut(char Status);"
+
+[DataSubtract]
+Class="Function"
+Prototype="void DataSubtract();"
+
+[DataReverse]
+Class="Function"
+Prototype="void DataReverse();"
+
+[CalcTime]
+Class="Function"
+Prototype="void CalcTime();"
+
+[DataCopy]
+Class="Function"
+Prototype="void DataCopy();"
+
+[NewAcq]
+Class="Function"
+Prototype="void NewAcq();"
+
+[InitSpc300]
+Class="Function"
+Prototype="void InitSpc300();"
+
+[GetDataSpc300]
+Class="Function"
+Prototype="void GetDataSpc300();"
+
+[InitSpcm]
+Class="Function"
+Prototype="void InitSpcm(int Board);"
+
+[CloseSpcm]
+Class="Function"
+Prototype="void CloseSpcm();"
+
+[GetDataSpcm]
+Class="Function"
+Prototype="void GetDataSpcm();"
+
+[ClearSpcm]
+Class="Function"
+Prototype="void ClearSpcm();"
+
+[test_fill_state]
+Class="Function"
+Prototype="short test_fill_state();"
+
+[InitHydra]
+Class="Function"
+Prototype="void InitHydra(int Board);"
+
+[CloseHydra]
+Class="Function"
+Prototype="void CloseHydra();"
+
+[GetDataHydra]
+Class="Function"
+Prototype="void GetDataHydra();"
+
+[ClearHydra]
+Class="Function"
+Prototype="void ClearHydra();"
+
+[InitTH260]
+Class="Function"
+Prototype="void InitTH260(int Board);"
+
+[CloseTH260]
+Class="Function"
+Prototype="void CloseTH260();"
+
+[GetDataTH260]
+Class="Function"
+Prototype="void GetDataTH260();"
+
+[patch2]
+Class="Function"
+Prototype="void patch2(int ret);"
+
+[ClearTH260]
+Class="Function"
+Prototype="void ClearTH260();"
+
+[CompleteClosureSC1000]
+Class="Function"
+Prototype="void CompleteClosureSC1000(int Board);"
+
+[ReInitSC1000]
+Class="Function"
+Prototype="void ReInitSC1000(int Board, char Operation);"
+
+[InitSC1000]
+Class="Function"
+Prototype="void InitSC1000(int Board);"
+
+[StartSC1000]
+Class="Function"
+Prototype="float StartSC1000(int Board, float AcqTime);"
+
+[CloseSC1000]
+Class="Function"
+Prototype="void CloseSC1000();"
+
+[PipeRead]
+Class="Function"
+Prototype="int PipeRead(int Board, int Det, int Timeout);"
+
+[GetDataSC1000]
+Class="Function"
+Prototype="void GetDataSC1000();"
+
+[ClearSC1000]
+Class="Function"
+Prototype="void ClearSC1000();"
+
+[FlushSC1000]
+Class="Function"
+Prototype="void FlushSC1000(int Board);"
+
+[CalcNonlinSC1000]
+Class="Function"
+Prototype="void CalcNonlinSC1000();"
+
+[LinRefoldSC1000]
+Class="Function"
+Prototype="void LinRefoldSC1000(int Refold, int Board, int Det, unsigned long *NonLinArray, double *LinArray, int NumChannLin);"
+
+[InitSpad]
+Class="Function"
+Prototype="void InitSpad(int Board);"
+
+[TimeSpad]
+Class="Function"
+Prototype="void TimeSpad(int Board, double Time);"
+
+[CloseSpad]
+Class="Function"
+Prototype="void CloseSpad();"
+
+[GetDataSpad]
+Class="Function"
+Prototype="void GetDataSpad();"
+
+[ClearSpad]
+Class="Function"
+Prototype="void ClearSpad();"
+
+[PauseSpad]
+Class="Function"
+Prototype="void PauseSpad(int Board);"
+
+[StartSpad]
+Class="Function"
+Prototype="void StartSpad(int Board);"
+
+[StopSpad]
+Class="Function"
+Prototype="void StopSpad(int Board);"
+
+[WaitSpad]
+Class="Function"
+Prototype="void WaitSpad(int Board);"
+
+[InitVarro]
+Class="Function"
+Prototype="void InitVarro();"
+
+[CheckAcqVarro]
+Class="Function"
+Prototype="char CheckAcqVarro();"
+
+[GetDataVarro]
+Class="Function"
+Prototype="void GetDataVarro();"
+
+[StringCommVarro]
+Class="Function"
+Prototype="void StringCommVarro(char *comstring);"
+
+[CharCommVarro]
+Class="Function"
+Prototype="void CharCommVarro(char comchar);"
+
+[NewComm]
+Class="Function"
+Prototype="void NewComm();"
+
+[SendAck]
+Class="Function"
+Prototype="void SendAck();"
+
+[GetAck]
+Class="Function"
+Prototype="void GetAck();"
+
+[GetDataTest]
+Class="Function"
+Prototype="void GetDataTest();"
+
+[InitDemo]
+Class="Function"
+Prototype="void InitDemo();"
+
+[CloseDemo]
+Class="Function"
+Prototype="void CloseDemo();"
+
+[GetDataDemo]
+Class="Function"
+Prototype="void GetDataDemo();"
+
+[InitTrim]
+Class="Function"
+Prototype="void InitTrim(char Trim);"
+
+[AutoTrim]
+Class="Function"
+Prototype="void AutoTrim(int Trim);"
+
+[CheckTrimGoal]
+Class="Function"
+Prototype="void CheckTrimGoal(int Trim);"
+
+[SaveTrim]
+Class="Function"
+Prototype="void SaveTrim(char Trim);"
+
+[InitSwitch]
+Class="Function"
+Prototype="void InitSwitch(char Switch);"
+
+[CloseSwitch]
+Class="Function"
+Prototype="void CloseSwitch(char Switch);"
+
+[MoveSwitch]
+Class="Function"
+Prototype="void MoveSwitch(long Goal, char Switch);"
+
+[CalcGoalSwitch]
+Class="Function"
+Prototype="long CalcGoalSwitch(char Switch);"
+
+[InitPosSwitch]
+Class="Function"
+Prototype="void InitPosSwitch(char Switch);"
+
+[InitSwitch2X2]
+Class="Function"
+Prototype="void InitSwitch2X2(char Switch);"
+
+[MoveSwitch2X2]
+Class="Function"
+Prototype="void MoveSwitch2X2(long Goal, char Switch);"
+
+[InitSwitch1X4]
+Class="Function"
+Prototype="void InitSwitch1X4(char Switch);"
+
+[InitSwitch1X9]
+Class="Function"
+Prototype="void InitSwitch1X9(char Switch);"
+
+[MoveSwitch1X9]
+Class="Function"
+Prototype="void MoveSwitch1X9(long Goal, char Switch);"
+
+[MoveSwitch1X4_old]
+Class="Function"
+Prototype="void MoveSwitch1X4_old(long Goal, char Switch);"
+
+[MoveSwitch1X4]
+Class="Function"
+Prototype="void MoveSwitch1X4(long Goal, char Switch);"
+
+[InitSwitch2X2EOL]
+Class="Function"
+Prototype="void InitSwitch2X2EOL(char Switch);"
+
+[MoveSwitch2X2EOL]
+Class="Function"
+Prototype="void MoveSwitch2X2EOL(long Goal, char Switch);"
+
+[InitSync]
+Class="Function"
+Prototype="void InitSync();"
+
+[StartSync]
+Class="Function"
+Prototype="void StartSync();"
+
+[StopSync]
+Class="Function"
+Prototype="void StopSync();"
+
+[InitOma]
+Class="Function"
+Prototype="void InitOma();"
+
+[StartOma]
+Class="Function"
+Prototype="void StartOma();"
+
+[StopOma]
+Class="Function"
+Prototype="void StopOma();"
+
+[CloseOma]
+Class="Function"
+Prototype="void CloseOma();"
+
+[ClientTCPCB]
+Class="Function"
+Prototype="int ClientTCPCB(unsigned int handle, int event, int error, void *callbackData);"
+
+[InitOphir]
+Class="Function"
+Prototype="void InitOphir();"
+
+[CloseOphir]
+Class="Function"
+Prototype="void CloseOphir();"
+
+[GetOphir]
+Class="Function"
+Prototype="void GetOphir();"
+
+[StartCont]
+Class="Function"
+Prototype="void StartCont(char Step, char Status);"
+
+[WaitCont]
+Class="Function"
+Prototype="void WaitCont(char Step, char Status);"
+
+[InitStep]
+Class="Function"
+Prototype="void InitStep(char Step);"
+
+[CloseStep]
+Class="Function"
+Prototype="void CloseStep(char Step);"
+
+[SetVel]
+Class="Function"
+Prototype="void SetVel(char Step, double Freq);"
+
+[InitPos]
+Class="Function"
+Prototype="void InitPos(char Step);"
+
+[InitBreak]
+Class="Function"
+Prototype="void InitBreak(char Loop);"
+
+[DefineHome]
+Class="Function"
+Prototype="void DefineHome(char Step);"
+
+[InvertIndex]
+Class="Function"
+Prototype="void InvertIndex();"
+
+[CalcGoal]
+Class="Function"
+Prototype="long CalcGoal(char Step);"
+
+[MoveStep]
+Class="Function"
+Prototype="void MoveStep(long *Actual, long Goal, char Step, char Wait, char Status);"
+
+[StopStep]
+Class="Function"
+Prototype="void StopStep(char Step);"
+
+[TellPos]
+Class="Function"
+Prototype="void TellPos(char Step, long *Position);"
+
+[WaitPos]
+Class="Function"
+Prototype="void WaitPos(char Step, long Goal);"
+
+[WaitStep]
+Class="Function"
+Prototype="void WaitStep(long *Actual, long Goal, char Step, char Status);"
+
+[InitLpt]
+Class="Function"
+Prototype="void InitLpt();"
+
+[MoveLpt]
+Class="Function"
+Prototype="void MoveLpt(char Step, long Inc, char Dir);"
+
+[CalcSleepStep]
+Class="Function"
+Prototype="double CalcSleepStep(long it, long StepMax, double FreqMax, double FreqMin);"
+
+[InitNewp]
+Class="Function"
+Prototype="void InitNewp(double speed, char Axis, char Step);"
+
+[SetVelNewp]
+Class="Function"
+Prototype="void SetVelNewp(double Freq);"
+
+[DefineHomeNewp]
+Class="Function"
+Prototype="void DefineHomeNewp(char Step);"
+
+[MoveNewp]
+Class="Function"
+Prototype="void MoveNewp(char Step, long Goal, long Delta, char Axis, char Speed, char Wait);"
+
+[TellPosNewp]
+Class="Function"
+Prototype="void TellPosNewp(char Step, long *Position);"
+
+[InitNewp4005]
+Class="Function"
+Prototype="void InitNewp4005(double speed, char Axis, char Step);"
+
+[SetVelNewp4005]
+Class="Function"
+Prototype="void SetVelNewp4005(char Step, double Freq);"
+
+[DefineHomeNewp4005]
+Class="Function"
+Prototype="void DefineHomeNewp4005(char Step);"
+
+[MoveNewp4005]
+Class="Function"
+Prototype="void MoveNewp4005(char Step, long Goal, long Delta, char Axis, char Speed, char Wait);"
+
+[TellPosNewp4005]
+Class="Function"
+Prototype="void TellPosNewp4005(char Step, long *Position);"
+
+[InitMio]
+Class="Function"
+Prototype="void InitMio(char Axis, char Step);"
+
+[MoveMio]
+Class="Function"
+Prototype="void MoveMio(char Step, long Goal);"
+
+[CloseMio]
+Class="Function"
+Prototype="void CloseMio(char Step);"
+
+[InitTio]
+Class="Function"
+Prototype="void InitTio(char Axis, char Step);"
+
+[CloseTio]
+Class="Function"
+Prototype="void CloseTio(char Axis, char Step);"
+
+[SetVelTio]
+Class="Function"
+Prototype="void SetVelTio(char Step, double Freq);"
+
+[MoveTio]
+Class="Function"
+Prototype="void MoveTio(char Step, long Delta, char Dir, char Wait);"
+
+[WaitTio]
+Class="Function"
+Prototype="void WaitTio(char Step, long Delta, char Dir);"
+
+[TellPosTio]
+Class="Function"
+Prototype="void TellPosTio(char Step, long *Position);"
+
+[StopTio]
+Class="Function"
+Prototype="void StopTio(char Step);"
+
+[InitMicro]
+Class="Function"
+Prototype="void InitMicro(char Step);"
+
+[CloseMicro]
+Class="Function"
+Prototype="void CloseMicro(char Step);"
+
+[SetVelMicro]
+Class="Function"
+Prototype="void SetVelMicro(char Step, double Freq);"
+
+[MoveMicro]
+Class="Function"
+Prototype="void MoveMicro(char Step, long Goal, char Wait);"
+
+[WaitMicro]
+Class="Function"
+Prototype="void WaitMicro(char Step, long Goal);"
+
+[TellPosMicro]
+Class="Function"
+Prototype="void TellPosMicro(char Step, long *Actual);"
+
+[StopMicro]
+Class="Function"
+Prototype="void StopMicro(char Step);"
+
+[DefineHomeMicro]
+Class="Function"
+Prototype="void DefineHomeMicro(char Step);"
+
+[TalkMicro]
+Class="Function"
+Prototype="void TalkMicro(char Step, char Command, long Value, long *Answer);"
+
+[GetMicro]
+Class="Function"
+Prototype="void GetMicro(int Com, long *Answer);"
+
+[InitEsp300]
+Class="Function"
+Prototype="void InitEsp300(char Step);"
+
+[CloseEsp300]
+Class="Function"
+Prototype="void CloseEsp300(char Step);"
+
+[SetVelEsp300]
+Class="Function"
+Prototype="void SetVelEsp300(char Step, double Freq);"
+
+[MoveEsp300]
+Class="Function"
+Prototype="void MoveEsp300(char Step, long Goal, char Wait);"
+
+[WaitEsp300]
+Class="Function"
+Prototype="void WaitEsp300(char Step, long Goal);"
+
+[TellPosEsp300]
+Class="Function"
+Prototype="void TellPosEsp300(char Step, long *Actual);"
+
+[StopEsp300]
+Class="Function"
+Prototype="void StopEsp300(char Step);"
+
+[DefineHomeEsp300]
+Class="Function"
+Prototype="void DefineHomeEsp300(char Step);"
+
+[TalkEsp300a]
+Class="Function"
+Prototype="void TalkEsp300a(int Com, int Axis, char *Command, long Value);"
+
+[TalkEsp300b]
+Class="Function"
+Prototype="void TalkEsp300b(int Com, int Axis, char *Command);"
+
+[GetEsp300]
+Class="Function"
+Prototype="void GetEsp300(int Com, char *Answer);"
+
+[InitLt900]
+Class="Function"
+Prototype="void InitLt900(char Step);"
+
+[CloseLt900]
+Class="Function"
+Prototype="void CloseLt900(char Step);"
+
+[MoveLt900]
+Class="Function"
+Prototype="void MoveLt900(char Step, long Goal);"
+
+[DefineHomeLt900]
+Class="Function"
+Prototype="void DefineHomeLt900(char Step);"
+
+[TalkLt900]
+Class="Function"
+Prototype="void TalkLt900(int Com, char *Command, char *Answer);"
+
+[GetLt900]
+Class="Function"
+Prototype="void GetLt900(int Com, char *Answer);"
+
+[InitCham]
+Class="Function"
+Prototype="void InitCham(char Step);"
+
+[CloseCham]
+Class="Function"
+Prototype="void CloseCham(char Step);"
+
+[SetVelCham]
+Class="Function"
+Prototype="void SetVelCham(char Step, double Freq);"
+
+[MoveCham]
+Class="Function"
+Prototype="void MoveCham(char Step, long Goal, char Wait);"
+
+[WaitCham]
+Class="Function"
+Prototype="void WaitCham(char Step, long Goal);"
+
+[TellPosCham]
+Class="Function"
+Prototype="void TellPosCham(char Step, long *Actual);"
+
+[StopCham]
+Class="Function"
+Prototype="void StopCham(char Step);"
+
+[DefineHomeCham]
+Class="Function"
+Prototype="void DefineHomeCham(char Step);"
+
+[TalkChama]
+Class="Function"
+Prototype="void TalkChama(int Com, int Axis, char Command[2], long Value);"
+
+[TalkChamb]
+Class="Function"
+Prototype="void TalkChamb(int Com, int Axis, char Command[2]);"
+
+[GetCham]
+Class="Function"
+Prototype="void GetCham(int Com, float *Answer);"
+
+[InitPi]
+Class="Function"
+Prototype="void InitPi(char Step);"
+
+[ClosePi]
+Class="Function"
+Prototype="void ClosePi();"
+
+[SetVelPi]
+Class="Function"
+Prototype="void SetVelPi(double Freq);"
+
+[MovePi]
+Class="Function"
+Prototype="void MovePi(char Step, long Goal, char Wait);"
+
+[WaitPi]
+Class="Function"
+Prototype="void WaitPi(char Step, long Goal);"
+
+[TellPosPi]
+Class="Function"
+Prototype="void TellPosPi(char Step, long *Actual);"
+
+[StopPi]
+Class="Function"
+Prototype="void StopPi();"
+
+[DefineHomePi]
+Class="Function"
+Prototype="void DefineHomePi(char Step);"
+
+[PrintError]
+Class="Function"
+Prototype="void PrintError();"
+
+[InitStanda]
+Class="Function"
+Prototype="void InitStanda(char Step);"
+
+[CloseStanda]
+Class="Function"
+Prototype="void CloseStanda(char Step);"
+
+[SetVelStanda]
+Class="Function"
+Prototype="void SetVelStanda(char Step, double Freq);"
+
+[MoveStanda]
+Class="Function"
+Prototype="void MoveStanda(char Step, long Goal, char Wait);"
+
+[WaitStanda]
+Class="Function"
+Prototype="void WaitStanda(char Step, long Goal);"
+
+[TellPosStanda]
+Class="Function"
+Prototype="void TellPosStanda(char Step, long *Actual);"
+
+[StopStanda]
+Class="Function"
+Prototype="void StopStanda(char Step);"
+
+[DefineHomeStanda]
+Class="Function"
+Prototype="void DefineHomeStanda(char Step);"
+
+[InitStanda2]
+Class="Function"
+Prototype="void InitStanda2(char Step);"
+
+[CloseStanda2]
+Class="Function"
+Prototype="void CloseStanda2(char Step);"
+
+[SetVelStanda2]
+Class="Function"
+Prototype="void SetVelStanda2(char Step, double Freq);"
+
+[MoveStanda2]
+Class="Function"
+Prototype="void MoveStanda2(char Step, long Goal, char Wait);"
+
+[WaitStanda2]
+Class="Function"
+Prototype="void WaitStanda2(char Step, long Goal);"
+
+[TellPosStanda2]
+Class="Function"
+Prototype="void TellPosStanda2(char Step, long *Actual);"
+
+[StopStanda2]
+Class="Function"
+Prototype="void StopStanda2(char Step);"
+
+[DefineHomeStanda2]
+Class="Function"
+Prototype="void DefineHomeStanda2(char Step);"
+
+[SetFreqNI_USB6229]
+Class="Function"
+Prototype="void SetFreqNI_USB6229(char Step, long Goal);"
+
+[SetVoltNI_USB6229]
+Class="Function"
+Prototype="void SetVoltNI_USB6229(char Step, long Goal);"
+
+[SetVoltNI_USB6221]
+Class="Function"
+Prototype="void SetVoltNI_USB6221(char Step, long Goal);"
+
+[InitDelayerGate]
+Class="Function"
+Prototype="void InitDelayerGate(char Step);"
+
+[MoveDelayerGate]
+Class="Function"
+Prototype="void MoveDelayerGate(char Step, long Goal);"
+
+[CalcStr]
+Class="Function"
+Prototype="void CalcStr(float Goal, char Step, int n);"
+
+[TalkDelayerStep]
+Class="Function"
+Prototype="void TalkDelayerStep(char Step);"
+
+[InitNKTLambda]
+Class="Function"
+Prototype="void InitNKTLambda(char Step);"
+
+[InitNKTPow]
+Class="Function"
+Prototype="void InitNKTPow(char Step);"
+
+[CloseNKTLambda]
+Class="Function"
+Prototype="void CloseNKTLambda(char Step);"
+
+[CloseNKTPow]
+Class="Function"
+Prototype="void CloseNKTPow(char Step);"
+
+[calcCRC16]
+Class="Function"
+Prototype="unsigned short calcCRC16(unsigned char data, unsigned short crc);"
+
+[addToTxMsgData]
+Class="Function"
+Prototype="void addToTxMsgData(unsigned char *txBuffer, int *txBufferSize, unsigned short *txCRC, unsigned char data, unsigned int escParse, unsigned int updCRC);"
+
+[rx]
+Class="Function"
+Prototype="void rx(char Step, unsigned char *rxBuffer);"
+
+[NKTSendMessage]
+Class="Function"
+Prototype="void NKTSendMessage(char Step, void *Value, unsigned char Dest, unsigned char Source, unsigned char Type, unsigned char Register, unsigned int DataType);"
+
+[SetNKTLambda]
+Class="Function"
+Prototype="void SetNKTLambda(char Step, long Goal);"
+
+[SetNKTPow]
+Class="Function"
+Prototype="void SetNKTPow(char Step, long Goal);"
+
+[ReadNKTLimits]
+Class="Function"
+Prototype="void ReadNKTLimits(char Step, long *WaveShort, long *WaveLong);"
+
+[InitDelayer]
+Class="Function"
+Prototype="void InitDelayer(char Step);"
+
+[MoveDelayer]
+Class="Function"
+Prototype="void MoveDelayer(char Step, long Goal);"
+
+[CloseDelayer]
+Class="Function"
+Prototype="void CloseDelayer(char Step);"
+
+[InitPwm]
+Class="Function"
+Prototype="void InitPwm(char Step);"
+
+[ClosePwm]
+Class="Function"
+Prototype="void ClosePwm(char Step);"
+
+[SetVelPwm]
+Class="Function"
+Prototype="void SetVelPwm(char Step, double Freq);"
+
+[MovePwm]
+Class="Function"
+Prototype="void MovePwm(char Step, long Goal, char Wait);"
+
+[TellPosPwm]
+Class="Function"
+Prototype="void TellPosPwm(char Step, long *Actual);"
+
+[StopPwm]
+Class="Function"
+Prototype="void StopPwm(char Step);"
+
+[DefineHomePwm]
+Class="Function"
+Prototype="void DefineHomePwm(unsigned int Step);"
+
+[TalkPwm]
+Class="Function"
+Prototype="void TalkPwm(int Com, char Command, long Value, long *Answer);"
+
+[GetPwm]
+Class="Function"
+Prototype="void GetPwm(int Com, long *Answer);"
+
+[InitMono]
+Class="Function"
+Prototype="void InitMono(char Step);"
+
+[CloseMono]
+Class="Function"
+Prototype="void CloseMono(char Step);"
+
+[SetVelMono]
+Class="Function"
+Prototype="void SetVelMono(char Step, double Freq);"
+
+[MoveMono]
+Class="Function"
+Prototype="void MoveMono(char Step, long Goal, char Wait);"
+
+[WaitMono]
+Class="Function"
+Prototype="void WaitMono(char Step, long Goal);"
+
+[TellPosMono]
+Class="Function"
+Prototype="void TellPosMono(char Step, long *Actual);"
+
+[DefineHomeMono]
+Class="Function"
+Prototype="void DefineHomeMono(char Step);"
+
+[TalkMono]
+Class="Function"
+Prototype="void TalkMono(int Com, int Command, long Value, long *Answer);"
+
+[GetMono]
+Class="Function"
+Prototype="void GetMono(int Com, long *Answer);"
+
+[InitMonoTcp]
+Class="Function"
+Prototype="void InitMonoTcp(char Step);"
+
+[CloseMonoTcp]
+Class="Function"
+Prototype="void CloseMonoTcp(char Step);"
+
+[SetVelMonoTcp]
+Class="Function"
+Prototype="void SetVelMonoTcp(char Step, double Freq);"
+
+[MoveMonoTcp]
+Class="Function"
+Prototype="void MoveMonoTcp(char Step, long Goal, char Wait);"
+
+[WaitMonoTcp]
+Class="Function"
+Prototype="void WaitMonoTcp(char Step, long Goal);"
+
+[TellPosMonoTcp]
+Class="Function"
+Prototype="void TellPosMonoTcp(char Step, long *Actual);"
+
+[DefineHomeMonoTcp]
+Class="Function"
+Prototype="void DefineHomeMonoTcp(char Step);"
+
+[TalkMonoTcp]
+Class="Function"
+Prototype="void TalkMonoTcp(char *Command);"
+
+[Client_MonoTCPCB]
+Class="Function"
+Prototype="int Client_MonoTCPCB(unsigned int handle, int event, int error, void *callbackData);"
+
+[InitFpm]
+Class="Function"
+Prototype="void InitFpm(char Step);"
+
+[CloseFpm]
+Class="Function"
+Prototype="void CloseFpm(char Step);"
+
+[StopFpm]
+Class="Function"
+Prototype="void StopFpm(char Step);"
+
+[MoveFpm]
+Class="Function"
+Prototype="void MoveFpm(char Step, long Goal);"
+
+[TalkFpm]
+Class="Function"
+Prototype="void TalkFpm(int Com, char *Command, long Value, long *Answer);"
+
+[GetFpm]
+Class="Function"
+Prototype="void GetFpm(int Com, long *Answer);"
+
+[InitAdc]
+Class="Function"
+Prototype="void InitAdc();"
+
+[StartAdc]
+Class="Function"
+Prototype="void StartAdc();"
+
+[WaitAdc]
+Class="Function"
+Prototype="void WaitAdc();"
+
+[StopAdc]
+Class="Function"
+Prototype="void StopAdc();"
+
+[CloseDataFile]
+Class="Function"
+Prototype="void CloseDataFile();"
+
+[InitDataFile]
+Class="Function"
+Prototype="void InitDataFile();"
+
+[EnterName]
+Class="Function"
+Prototype="void EnterName();"
+
+[DataSave]
+Class="Function"
+Prototype="void DataSave();"
+
+[CompileHeader]
+Class="Function"
+Prototype="void CompileHeader();"
+
+[InitIeee]
+Class="Function"
+Prototype="void InitIeee();"
+
+[InitTime]
+Class="Function"
+Prototype="void InitTime();"
+
+[CloseTime]
+Class="Function"
+Prototype="void CloseTime();"
+
+[TimerN]
+Class="Function"
+Prototype="double TimerN();"
+
+[InitProf]
+Class="Function"
+Prototype="void InitProf();"
+
+[RecProf]
+Class="Function"
+Prototype="void RecProf(char *Label);"
+
+[CloseProf]
+Class="Function"
+Prototype="void CloseProf();"
+
+[GpibWrite]
+Class="Function"
+Prototype="void GpibWrite(int Address, char *Command);"
+
+[GpibRead]
+Class="Function"
+Prototype="void GpibRead(int Address, char *Buffer, int MaxByte);"
+
+[Failure]
+Class="Function"
+Prototype="void Failure(char *Error);"
+
+[PrintValue]
+Class="Function"
+Prototype="void PrintValue(double value, char *Text);"
+
+[Passed]
+Class="Function"
+Prototype="void Passed();"
+
+[NewItoa]
+Class="Function"
+Prototype="char *NewItoa(int num, char *numstring, int length);"
+
+[StringToNum]
+Class="Function"
+Prototype="int StringToNum(char *sNum);"
+
+[CompLRC]
+Class="Function"
+Prototype="void CompLRC(char *pointer, int size);"
+
+[SetNow]
+Class="Function"
+Prototype="void SetNow(unsigned int *ptimeorigin);"
+
+[CheckTime]
+Class="Function"
+Prototype="void CheckTime(unsigned int timeorigin);"
+
+[PrintTime]
+Class="Function"
+Prototype="void PrintTime(unsigned int timeorigin, char *Title);"
+
+[CalibrateTime]
+Class="Function"
+Prototype="void CalibrateTime(double TimeDelay);"
+
+[ErrHandler]
+Class="Function"
+Prototype="void ErrHandler(int Device, int Code, char *Function);"
+
+[DAlloc1D]
+Class="Function"
+Prototype="unsigned short *DAlloc1D(int Num1);"
+
+[SC1000Alloc1D]
+Class="Function"
+Prototype="unsigned long *SC1000Alloc1D(int Num1);"
+
+[doubleAlloc1D]
+Class="Function"
+Prototype="double *doubleAlloc1D(int Num1);"
+
+[DAlloc2D]
+Class="Function"
+Prototype="unsigned short **DAlloc2D(int Num1, int Num2);"
+
+[DAlloc3D]
+Class="Function"
+Prototype="unsigned short ***DAlloc3D(int Num1, int Num2, int Num3);"
+
+[DAlloc3D_SC1000]
+Class="Function"
+Prototype="unsigned long ***DAlloc3D_SC1000(int Num1, int Num2, int Num3);"
+
+[doubleAlloc3D]
+Class="Function"
+Prototype="double ***doubleAlloc3D(int Num1, int Num2, int Num3);"
+
+[SAlloc2D]
+Class="Function"
+Prototype="struct sSubHeader1 **SAlloc2D(int Num1, int Num2);"
+
+[DFree1D]
+Class="Function"
+Prototype="void DFree1D(unsigned short *D);"
+
+[SC1000Free1D]
+Class="Function"
+Prototype="void SC1000Free1D(unsigned long *D);"
+
+[doubleFree1D]
+Class="Function"
+Prototype="void doubleFree1D(double *D);"
+
+[DFree2D]
+Class="Function"
+Prototype="void DFree2D(unsigned short **D, int Num1);"
+
+[DFree3D]
+Class="Function"
+Prototype="void DFree3D(unsigned short ***D, int Num1, int Num2);"
+
+[DFree3D_SC1000]
+Class="Function"
+Prototype="void DFree3D_SC1000(unsigned long ***D, int Num1, int Num2);"
+
+[doubleFree3D]
+Class="Function"
+Prototype="void doubleFree3D(double ***D, int Num1, int Num2);"
+
+[SFree2D]
+Class="Function"
+Prototype="void SFree2D(struct sSubHeader1 **D, int Num1);"
+
+[KernelMamm]
+Class="Function"
+Prototype="void KernelMamm();"
+
+[InitLegend]
+Class="Function"
+Prototype="void InitLegend();"
+
+[AddLabel]
+Class="Function"
+Prototype="void AddLabel(int IdName);"
+
+[AddThick]
+Class="Function"
+Prototype="void AddThick(int ID);"
+
+[InitMamm]
+Class="Function"
+Prototype="void InitMamm();"
+
+[InitRam]
+Class="Function"
+Prototype="void InitRam();"
+
+[DoMamm]
+Class="Function"
+Prototype="void DoMamm();"
+
+[IsBorderNIR]
+Class="Function"
+Prototype="char IsBorderNIR(char is_before, char is_border_VIS);"
+
+[IsBorderVIS]
+Class="Function"
+Prototype="char IsBorderVIS(char is_before);"
+
+[FindTop]
+Class="Function"
+Prototype="void FindTop();"
+
+[FindBorderVIS]
+Class="Function"
+Prototype="int FindBorderVIS(int *iActual, char Axis, double Rate, char Dir);"
+
+[DataSaveMamm]
+Class="Function"
+Prototype="void DataSaveMamm();"
+
+[AnalysisMamm]
+Class="Function"
+Prototype="void AnalysisMamm();"
+
+[AnalysisMamm_new]
+Class="Function"
+Prototype="void AnalysisMamm_new();"
+
+[StartMammot]
+Class="Function"
+Prototype="void StartMammot();"
+
+[StopMammot]
+Class="Function"
+Prototype="void StopMammot();"
+
+[AdjustIndex]
+Class="Function"
+Prototype="void AdjustIndex();"
+
+[CheckMammot]
+Class="Function"
+Prototype="void CheckMammot();"
+
+[ShiftCorrection]
+Class="Function"
+Prototype="void ShiftCorrection();"
+
+[BackShift]
+Class="Function"
+Prototype="void BackShift();"
+
+[InitMoxy]
+Class="Function"
+Prototype="void InitMoxy();"
+
+[CloseMoxy]
+Class="Function"
+Prototype="void CloseMoxy();"
+
+[StartMoxy]
+Class="Function"
+Prototype="void StartMoxy();"
+
+[AbortMoxy]
+Class="Function"
+Prototype="void AbortMoxy();"
+
+[GotoMoxy]
+Class="Function"
+Prototype="void GotoMoxy(int Switch, int Chann);"
+
+[WaitMoxy]
+Class="Function"
+Prototype="void WaitMoxy();"
+
+[KernelMoxy]
+Class="Function"
+Prototype="void KernelMoxy();"
+
+[InitBank]
+Class="Function"
+Prototype="void InitBank();"
+
+[WaitBank]
+Class="Function"
+Prototype="void WaitBank();"
+
+[EnableBank]
+Class="Function"
+Prototype="void EnableBank();"
+
+[GetBank]
+Class="Function"
+Prototype="void GetBank();"
+
+[StatusBank]
+Class="Function"
+Prototype="void StatusBank(int ActBank, int TotBank);"
+
+[CopySaveBank]
+Class="Function"
+Prototype="void CopySaveBank();"
+

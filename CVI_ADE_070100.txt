@@ -1,0 +1,50 @@
+National Instruments - Product Activation Request Information
+
+Product Activation Information
+
+    Product:           CVI Development Environment
+    Version:           7.1
+    Serial Number:     G11X46976
+    Computer ID:       HMZ2-F2TB-38KM-FZD7
+    Operating System:  Windows
+
+Directions:
+
+1. To activate your product via the Web, go to ni.com/activate and follow the
+   directions. All of the information you will need is listed above.
+
+2. To activate your product via email, attach this file to an empty email with
+   no subject line and send it to activate@ni.com. You will receive a return
+   email containing your activation code within one business day of your
+   request being sent, although typical response time is less than ten minutes.
+
+3. To activate your product over the phone, contact a National Instruments
+   Customer Service Representative. If you reside in the United States or
+   Canada, please call 1-800-433-3488. Otherwise, contact the nearest
+   National Instruments branch office.
+
+
+DO NOT MODIFY THE FOLLOWING LINES
+****************************************
+
+email=
+UserName=Dept%2E%20of%20Physics
+Organization=Politecnico%20di%20Milano
+SerialNum=G11X46976
+Feature=CVI_ADE_070100
+Version=7.1
+MachineId=HMZ2-F2TB-38KM-FZD7
+OsType=Windows
+Locale=US
+ExpDate=
+registerProduct=N
+rPhone=
+rFax=
+rAddress=
+rCity=
+rStateProv=
+rPostalCode=
+rCountry=
+rEmail=
+rHwFamily=
+rHwOther=

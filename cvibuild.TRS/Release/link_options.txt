@@ -1,0 +1,51 @@
+-nologo
+-out:c:\Users\Laboratorio\Desktop\TRS\cvibuild.TRS\Release\Trs.exe
+-arch:x86
+-timestamp
+-loadextmod
+-res:c:\Users\Laboratorio\Desktop\TRS\cvibuild.TRS\Release\resources.res
+-entry:_CVIWinMainStartupCode@0
+-base:0x400000
+-linked:c:\Users\Laboratorio\Desktop\TRS\cvibuild.TRS\Release\linkersummary.txt
+-dlldeps:c:\Users\Laboratorio\Desktop\TRS\cvibuild.TRS\Release\dlldependencies.txt
+-licensing:c:\Users\Laboratorio\Desktop\TRS\cvibuild.TRS\Release\linkerlicensing.txt
+-browsedeps:c:\Users\Laboratorio\Desktop\TRS\cvibuild.TRS\Release\moduledependencies.txt
+-stackreserve:1048576
+-stackcommit:4096
+-in:c:\Users\Laboratorio\Desktop\TRS\cvibuild.TRS\Release\Measure.obj
+-in:c:\Users\Laboratorio\Desktop\TRS\cvibuild.TRS\Release\Trs.obj
+-more:c:\program files (x86)\national instruments\cvi2013\bin\msvc\cvistart.lib
+-more:c:\program files (x86)\national instruments\cvi2013\bin\msvc\cvi.lib
+-more:c:\program files (x86)\national instruments\cvi2013\sdk\lib\msvc\advapi32.lib
+-more:c:\ProgramData\National Instruments\CVI2013\bin\msvc\analysis.lib
+-more:c:\Program Files (x86)\National Instruments\CVI2013\bin\msvc\cviauto.lib
+-more:c:\Program Files (x86)\National Instruments\CVI2013\bin\msvc\cviddc.lib
+-more:c:\Program Files (x86)\National Instruments\CVI2013\bin\msvc\cvidotnet.lib
+-more:c:\Program Files (x86)\National Instruments\CVI2013\bin\msvc\cvinetstreams.lib
+-more:c:\Program Files (x86)\National Instruments\CVI2013\bin\msvc\cvinetv.lib
+-more:c:\Program Files (x86)\National Instruments\CVI2013\bin\msvc\cvintwrk.lib
+-more:c:\Program Files (x86)\National Instruments\CVI2013\bin\msvc\cvitdms.lib
+-more:c:\Users\Laboratorio\Desktop\TRS\Library\easyio.lib
+-more:c:\program files (x86)\national instruments\cvi2013\sdk\lib\msvc\gdi32.lib
+-more:c:\Program Files (x86)\National Instruments\CVI2013\bin\msvc\gpib.lib
+-more:c:\Users\Laboratorio\Desktop\TRS\Library\hhlib.lib
+-more:c:\Program Files (x86)\National Instruments\Shared\CVI\Bin\msvc\ivi.lib
+-more:c:\program files (x86)\national instruments\cvi2013\sdk\lib\msvc\kernel32.lib
+-more:c:\Users\Laboratorio\Desktop\TRS\Library\libximc.lib
+-more:c:\Users\Laboratorio\Desktop\TRS\Library\MBC32.LIB
+-more:c:\Users\Laboratorio\Desktop\TRS\Library\MercLib210_CVI.lib
+-more:c:\Program Files (x86)\National Instruments\Shared\CVI\Bin\msvc\NIDAQmx.lib
+-more:c:\Program Files (x86)\National Instruments\CVI2013\bin\msvc\nivxi.lib
+-more:c:\Program Files (x86)\National Instruments\CVI2013\bin\msvc\omp.lib
+-more:c:\Users\Laboratorio\Desktop\TRS\Library\scTDCmod.lib
+-more:c:\Users\Laboratorio\Desktop\TRS\Library\SPC_ISA.LIB
+-more:c:\Users\Laboratorio\Desktop\TRS\Library\spcm32x64.lib
+-more:c:\Users\Laboratorio\Desktop\TRS\Library\th260lib.lib
+-more:c:\Users\Laboratorio\Desktop\TRS\Library\THLIB.LIB
+-more:c:\Program Files (x86)\National Instruments\CVI2013\toolslib\toolbox\msvc\toolbox.obj
+-more:c:\program files (x86)\national instruments\cvi2013\sdk\lib\msvc\user32.lib
+-more:c:\Users\Laboratorio\Desktop\TRS\Library\USMCDLL.lib
+-more:c:\program files (x86)\national instruments\cvi2013\sdk\lib\msvc\uuid.lib
+-more:c:\Program Files (x86)\National Instruments\Shared\CVI\Bin\msvc\visa.lib
+-more:c:\Users\Laboratorio\Desktop\TRS\Library\w32nii3e.lib
+-more:c:\program files (x86)\national instruments\cvi2013\sdk\lib\msvc\winmm.lib

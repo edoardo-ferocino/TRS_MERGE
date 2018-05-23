@@ -1,0 +1,100 @@
+[main]
+Class="Function"
+Prototype="int main(int argc, char **argv);"
+
+[SaveSetting]
+Class="Function"
+Prototype="void SaveSetting(int menuBar, int menuItem, void *callbackData, int panel);"
+
+[SaveSet]
+Class="Function"
+Prototype="void SaveSet(char *FilePath, int Panel);"
+
+[LoadSetting]
+Class="Function"
+Prototype="void LoadSetting(int menuBar, int menuItem, void *callbackData, int panel);"
+
+[LoadSet]
+Class="Function"
+Prototype="void LoadSet(char *FilePath, int Panel);"
+
+[Print]
+Class="Function"
+Prototype="void Print(int menuBar, int menuItem, void *callbackData, int panel);"
+
+[Quit]
+Class="Function"
+Prototype="void Quit(int menuBar, int menuItem, void *callbackData, int panel);"
+
+[ShowPanel]
+Class="Function"
+Prototype="void ShowPanel(int menuBar, int menuItem, void *callbackData, int panel);"
+
+[About]
+Class="Function"
+Prototype="void About(int menuBar, int menuItem, void *callbackData, int panel);"
+
+[InitPanel]
+Class="Function"
+Prototype="void InitPanel();"
+
+[ReadAll]
+Class="Function"
+Prototype="void ReadAll();"
+
+[Setting]
+Class="Function"
+Prototype="int Setting(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);"
+
+[UpdatePanel]
+Class="Function"
+Prototype="void UpdatePanel();"
+
+[ClosePanel]
+Class="Function"
+Prototype="int ClosePanel(int panel, int event, void *callbackdata, int eventdata1, int eventdata2);"
+
+[AddTab]
+Class="Function"
+Prototype="void AddTab(int Class, int Type, int Panel, int Control, char *Label, int Row, int Col, void *Addr);"
+
+[CreateTable]
+Class="Function"
+Prototype="void CreateTable();"
+
+[InitPad]
+Class="Function"
+Prototype="void InitPad();"
+
+[CreatePad]
+Class="Function"
+Prototype="int CreatePad(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);"
+
+[SetType]
+Class="Function"
+Prototype="int SetType(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);"
+
+[PropPad]
+Class="Function"
+Prototype="int PropPad(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);"
+
+[ShowPad]
+Class="Function"
+Prototype="int ShowPad(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);"
+
+[SaveGeom]
+Class="Function"
+Prototype="int SaveGeom(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);"
+
+[ReadGeom]
+Class="Function"
+Prototype="void ReadGeom();"
+
+[LoadGeom]
+Class="Function"
+Prototype="int LoadGeom(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);"
+
+[ReCreatePad]
+Class="Function"
+Prototype="void ReCreatePad();"
+

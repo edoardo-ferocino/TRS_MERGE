@@ -1,0 +1,1 @@
+-force-include-file "Measure.c";"c:\Users\Laboratorio\Desktop\TRS\Sources\Measure.c" -force-include-file "Trs.c";"c:\Users\Laboratorio\Desktop\TRS\Sources\Trs.c" 

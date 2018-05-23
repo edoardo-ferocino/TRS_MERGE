@@ -1,0 +1,386 @@
+[Workspace Header]
+Version = 1302
+Pathname = "/c/Users/Laboratorio/Desktop/TRS/TRS.cws"
+CVI Dir = "/c/program files (x86)/national instruments/cvi2013"
+CVI Shared Dir = "/C/Program Files (x86)/National Instruments/Shared/CVI"
+CVI Pub Local Dir = "/C/ProgramData/National Instruments/CVI2013"
+CVI Pub Global Dir = "/C/ProgramData/National Instruments/CVI"
+IVI Standard Root Dir = "/C/Program Files (x86)/IVI Foundation/IVI"
+IVI Standard Root 64-bit Dir = "/C/Program Files/IVI Foundation/IVI"
+VXIplug&play Framework Dir = "/C/Program Files (x86)/IVI Foundation/VISA/winnt"
+VXIplug&play Framework 64-bit Dir = "/C/Program Files/IVI Foundation/VISA/win64"
+Number of Projects = 1
+Active Project = 1
+Project 0001 = "TRS.PRJ"
+Drag Bar Left = 191
+Window Top = 53
+Window Left = -28
+Window Bottom = 875
+Window Right = 916
+Maximized = True
+Maximized Children = True
+Max32 Number Of Errors = 20
+Track Include File Dependencies = True
+Prompt For Missing Includes = True
+Stop On First Error File = False
+Bring Up Err Win At Start = True
+Bring Up Err Win For Errors = False
+Save Changes Before Running = "Always"
+Save Changes Before Compiling = "Always"
+Hide Windows = False
+Break At First Statement = False
+Sort Type = "File Name"
+Number of Opened Files = 8
+Window Confinement Region Enabled = True
+MainColumnWidth = 174
+FileDateColumnWidth = 70
+FileSizeColumnWidth = 70
+
+[Project Header 0001]
+Version = 1302
+Don't Update DistKit = True
+Platform Code = 4
+Build Configuration = "Release"
+Warn User If Debugging Release = 1
+Batch Build Release = True
+Batch Build Debug = True
+
+[File 0001]
+Path = "/c/Users/Laboratorio/Desktop/TRS/Sources/Measure.c"
+File Type = "CSource"
+Disk Date = 3606707561
+In Projects = "1,"
+Window Top = 32
+Window Left = 10
+Window Z-Order = 1
+Source Window State = "1,2949,2949,2949,5,18,18,0,3,140,0,0,0,0,0,30,2955,0,2949,5,531,1020,1,0,"
+Breakpoint 0001 = "601,0,enabled,"
+Breakpoint 0002 = "2043,0,enabled,"
+Breakpoint 0003 = "2797,0,enabled,"
+Breakpoint 0004 = "2831,0,enabled,"
+Breakpoint 0005 = "8973,0,enabled,"
+
+[File 0002]
+Path = "/c/Users/Laboratorio/Desktop/TRS/Sources/Trs.c"
+File Type = "CSource"
+Disk Date = 3588842786
+In Projects = "1,"
+Window Top = 45
+Window Left = 6
+Window Z-Order = 3
+Source Window State = "1,346,346,346,5,11,11,0,0,52,0,395,0,575,18,15,52,0,66,33,349,676,1,17,"
+
+[File 0003]
+Path = "/c/Users/Laboratorio/Desktop/TRS/Sources/MEASURE.H"
+File Type = "Include"
+Disk Date = 3588845104
+In Projects = ""
+Window Top = 32
+Window Left = 10
+Window Z-Order = 2
+Source Window State = "1,1360,1360,1360,7,11,11,0,3,80,0,2384,0,2384,0,18,1354,0,1360,7,391,1020,1,0,"
+
+[File 0004]
+Path = "/c/Users/Laboratorio/Desktop/TRS/Sources/TRS.UIR"
+File Type = "User Interface Resource"
+Disk Date = 3588842828
+In Projects = "1,"
+Window Top = 45
+Window Left = 6
+Window Height = 284
+Window Width = 687
+Window Z-Order = 4
+
+[File 0005]
+Path = "/c/Program Files (x86)/National Instruments/CVI2013/include/userint.h"
+File Type = "Include"
+Disk Date = 3486495600
+In Projects = ""
+Window Top = 32
+Window Left = 10
+Window Z-Order = 8
+Source Window State = "1,2311,2311,2311,12,28,28,0,3,80,0,0,0,0,0,18,2302,0,2311,12,391,1020,1,0,"
+
+[File 0006]
+Path = "/c/Program Files (x86)/National Instruments/CVI2013/include/utility.h"
+File Type = "Include"
+Disk Date = 3486495600
+In Projects = ""
+Window Top = 32
+Window Left = 10
+Window Z-Order = 6
+Source Window State = "1,667,667,667,15,23,23,0,3,80,0,0,0,0,0,24,655,0,667,15,511,1020,1,0,"
+
+[File 0007]
+Path = "/c/Users/Laboratorio/Desktop/TRS/Library/scTDC_types.h"
+File Type = "Include"
+Disk Date = 3563460073
+In Projects = ""
+Window Top = 32
+Window Left = 10
+Window Z-Order = 7
+Source Window State = "1,300,300,300,17,32,32,0,3,80,0,0,0,0,0,24,288,0,300,17,511,1020,1,0,"
+
+[File 0008]
+Path = "/c/Program Files (x86)/National Instruments/CVI2013/include/ansi/string.h"
+File Type = "Include"
+Disk Date = 3486495600
+In Projects = ""
+Window Top = 32
+Window Left = 10
+Window Z-Order = 5
+Source Window State = "1,0,0,0,0,0,0,0,0,80,0,0,0,0,0,24,0,0,0,0,511,1020,1,0,"
+
+[File 0009]
+Path = "/c/Users/Laboratorio/Desktop/TRS/Library/libximc.lib"
+File Type = "Library"
+Disk Date = 3563460073
+In Projects = "1,"
+
+[File 0010]
+Path = "/c/Users/Laboratorio/Desktop/TRS/Library/scTDCmod.lib"
+File Type = "Library"
+Disk Date = 3563460073
+In Projects = "1,"
+
+[File 0011]
+Path = "/c/Users/Laboratorio/Desktop/TRS/Library/spcm32x64.lib"
+File Type = "Library"
+Disk Date = 3563460073
+In Projects = "1,"
+
+[File 0012]
+Path = "/c/Users/Laboratorio/Desktop/TRS/Library/th260lib.lib"
+File Type = "Library"
+Disk Date = 3563460073
+In Projects = "1,"
+
+[File 0013]
+Path = "/c/Users/Laboratorio/Desktop/TRS/Library/easyio.lib"
+File Type = "Library"
+Disk Date = 3563460073
+In Projects = "1,"
+
+[File 0014]
+Path = "/c/Users/Laboratorio/Desktop/TRS/Library/hhlib.lib"
+File Type = "Library"
+Disk Date = 3563460073
+In Projects = "1,"
+
+[File 0015]
+Path = "/c/Users/Laboratorio/Desktop/TRS/Library/MBC32.LIB"
+File Type = "Library"
+Disk Date = 3563460073
+In Projects = "1,"
+
+[File 0016]
+Path = "/c/Users/Laboratorio/Desktop/TRS/Library/MercLib210_CVI.lib"
+File Type = "Library"
+Disk Date = 3563460073
+In Projects = "1,"
+
+[File 0017]
+Path = "/c/Users/Laboratorio/Desktop/TRS/Library/SPC_ISA.LIB"
+File Type = "Library"
+Disk Date = 3563460073
+In Projects = "1,"
+
+[File 0018]
+Path = "/c/Users/Laboratorio/Desktop/TRS/Library/THLIB.LIB"
+File Type = "Library"
+Disk Date = 3563460073
+In Projects = "1,"
+
+[File 0019]
+Path = "/c/Users/Laboratorio/Desktop/TRS/Library/USMCDLL.lib"
+File Type = "Library"
+Disk Date = 3563460073
+In Projects = "1,"
+
+[File 0020]
+Path = "/c/Users/Laboratorio/Desktop/TRS/Library/w32nii3e.lib"
+File Type = "Library"
+Disk Date = 3563460073
+In Projects = "1,"
+
+[Tab Order]
+Tab 0001 = "/c/Program Files (x86)/National Instruments/CVI2013/include/userint.h"
+Tab 0002 = "/c/Program Files (x86)/National Instruments/CVI2013/include/utility.h"
+Tab 0003 = "/c/Users/Laboratorio/Desktop/TRS/Sources/Measure.c"
+Tab 0004 = "/c/Users/Laboratorio/Desktop/TRS/Sources/TRS.UIR"
+Tab 0005 = "/c/Users/Laboratorio/Desktop/TRS/Sources/Trs.c"
+Tab 0006 = "/c/Users/Laboratorio/Desktop/TRS/Sources/MEASURE.H"
+Tab 0007 = "/c/Users/Laboratorio/Desktop/TRS/Library/scTDC_types.h"
+Tab 0008 = "/c/Program Files (x86)/National Instruments/CVI2013/include/ansi/string.h"
+
+[Default Build Config 0001 Debug]
+Generate Browse Info = True
+Enable Uninitialized Locals Runtime Warning = True
+Batch Build = True
+Profile = "Disabled"
+Debugging Level = "Standard"
+Execution Trace = "Disabled"
+Command Line Args = "P.Step[Step].Type"
+Working Directory = ""
+Environment Options = ""
+External Process Path = ""
+
+[Default Build Config 0001 Release]
+Generate Browse Info = True
+Enable Uninitialized Locals Runtime Warning = True
+Batch Build = True
+Profile = "Disabled"
+Debugging Level = "Standard"
+Execution Trace = "Disabled"
+Command Line Args = "P.Step[Step].Type"
+Working Directory = ""
+Environment Options = ""
+External Process Path = ""
+
+[Default Build Config 0001 Debug64]
+Generate Browse Info = True
+Enable Uninitialized Locals Runtime Warning = True
+Batch Build = False
+Profile = "Disabled"
+Debugging Level = "Standard"
+Execution Trace = "Disabled"
+Command Line Args = "P.Step[Step].Type"
+Working Directory = ""
+Environment Options = ""
+External Process Path = ""
+
+[Default Build Config 0001 Release64]
+Generate Browse Info = True
+Enable Uninitialized Locals Runtime Warning = True
+Batch Build = False
+Profile = "Disabled"
+Debugging Level = "Standard"
+Execution Trace = "Disabled"
+Command Line Args = "P.Step[Step].Type"
+Working Directory = ""
+Environment Options = ""
+External Process Path = ""
+
+[Build Dependencies 0001]
+Number of Dependencies = 0
+
+[Build Options 0001]
+Generate Browse Info = True
+Enable Uninitialized Locals Runtime Warning = True
+Execution Trace = "Disabled"
+Profile = "Disabled"
+Debugging Level = "Standard"
+Break On Library Errors = True
+Break On First Chance Exceptions = False
+
+[Execution Target 0001]
+Execution Target Address = "Local desktop computer"
+Execution Target Port = 0
+Execution Target Type = 0
+
+[SCC Options 0001]
+Use global settings = True
+SCC Provider = ""
+SCC Project = ""
+Local Path = ""
+Auxiliary Path = ""
+Perform Same Action For .h File As For .uir File = "Ask"
+Perform Same Action For .cds File As For .prj File = "Ask"
+Username = ""
+Comment = ""
+Use Default Username = False
+Use Default Comment = True
+Suppress CVI Error Messages = False
+Always show confirmation dialog = True
+
+[DLL Debugging Support 0001]
+External Process Path = ""
+
+[Command Line Args 0001]
+Command Line Args = "P.Step[Step].Type"
+Working Directory = ""
+Environment Options = ""
+
+[Watch 1]
+Watch Expression = "LinArray"
+
+[Watch 2]
+Watch Expression = "DataSave"
+
+[Watch 3]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 4]
+Watch Expression = "P.Spc.PipeClose"
+
+[Watch 5]
+Watch Expression = "P.Chann.Num"
+
+[Watch 6]
+Watch Expression = "LinArray"
+
+[Watch 7]
+Watch Expression = "DataSave"
+
+[Watch 8]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 9]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 10]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 11]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 12]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 13]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 14]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 15]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 16]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 17]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 18]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 19]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 20]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 21]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 22]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 23]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 24]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 25]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 26]
+Watch Expression = "NonLinArray"
+
+[Distributions]
+Active Index = 1
+AbsCDSPath 0001 = "/c/Users/Laboratorio/Desktop/TRS/TRS.cds"
+RelCDSPath 0001 = "TRS.cds"
+
