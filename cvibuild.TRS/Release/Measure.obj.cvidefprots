@@ -374,6 +374,46 @@ Prototype="void StopSpad(int Board);"
 Class="Function"
 Prototype="void WaitSpad(int Board);"
 
+[NirsBox]
+Class="Function"
+Prototype="int NirsBox(int Start);"
+
+[NirsLasers]
+Class="Function"
+Prototype="int NirsLasers(int Start);"
+
+[InitNirs]
+Class="Function"
+Prototype="void InitNirs(int Board);"
+
+[TimeNirs]
+Class="Function"
+Prototype="void TimeNirs(int Board, double Time);"
+
+[TrashNirs]
+Class="Function"
+Prototype="void TrashNirs();"
+
+[CloseNirs]
+Class="Function"
+Prototype="void CloseNirs();"
+
+[StartNirs]
+Class="Function"
+Prototype="void StartNirs(int Board);"
+
+[StopNirs]
+Class="Function"
+Prototype="void StopNirs(int Board);"
+
+[GetDataNirs]
+Class="Function"
+Prototype="void GetDataNirs();"
+
+[WaitNirs]
+Class="Function"
+Prototype="void WaitNirs(int Board);"
+
 [InitVarro]
 Class="Function"
 Prototype="void InitVarro();"

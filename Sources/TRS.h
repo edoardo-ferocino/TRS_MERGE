@@ -294,7 +294,15 @@
 #define  MOXY_EXT_TRIG                    4       /* control type: ring, callback function: Setting */
 #define  MOXY_PRES_EDGE                   5       /* control type: ring, callback function: Setting */
 
-#define  PARM                             8       /* callback function: ClosePanel */
+#define  NIRS                             8
+#define  NIRS_TITLE                       2       /* control type: textMsg, callback function: (none) */
+#define  NIRS_LASERS                      3       /* control type: textButton, callback function: NirsLasersCbk */
+#define  NIRS_BOX                         4       /* control type: textButton, callback function: NirsBoxCbk */
+#define  NIRS_TIME                        5       /* control type: numeric, callback function: Setting */
+#define  NIRS_FREQ                        6       /* control type: numeric, callback function: Setting */
+#define  NIRS_LAMBDA                      7       /* control type: ring, callback function: Setting */
+
+#define  PARM                             9       /* callback function: ClosePanel */
 #define  PARM_LOOP_HOME_1                 2       /* control type: numeric, callback function: Setting */
 #define  PARM_LOOP_HOME_2                 3       /* control type: numeric, callback function: Setting */
 #define  PARM_LOOP_HOME_3                 4       /* control type: numeric, callback function: Setting */
@@ -423,7 +431,7 @@
 #define  PARM_SC1000_FIRST                127     /* control type: numeric, callback function: Setting */
 #define  PARM_SC1000_LAST                 128     /* control type: numeric, callback function: Setting */
 
-#define  PRESENT                          9       /* callback function: ClosePanel */
+#define  PRESENT                          10      /* callback function: ClosePanel */
 #define  PRESENT_TBLOCK_DEF               2       /* control type: table, callback function: Setting */
 #define  PRESENT_TBLOCK_SEQUENCE          3       /* control type: table, callback function: Setting */
 #define  PRESENT_ALIGN                    4       /* control type: radioButton, callback function: Setting */
@@ -437,7 +445,7 @@
 #define  PRESENT_PRES_INIT_FILETEXT       12      /* control type: textMsg, callback function: (none) */
 #define  PRESENT_PRES_INIT_FILETEXT_2     13      /* control type: textMsg, callback function: (none) */
 
-#define  STEP                             10      /* callback function: ClosePanel */
+#define  STEP                             11      /* callback function: ClosePanel */
 #define  STEP_TEXTMSG_1                   2       /* control type: textMsg, callback function: (none) */
 #define  STEP_TEXTMSG_2                   3       /* control type: textMsg, callback function: (none) */
 #define  STEP_TEXTMSG_3                   4       /* control type: textMsg, callback function: (none) */
@@ -548,75 +556,97 @@
 #define  STEP_FNAME_9                     109     /* control type: string, callback function: Setting */
 #define  STEP_FNAME_10                    110     /* control type: string, callback function: Setting */
 #define  STEP_FNAME_11                    111     /* control type: string, callback function: Setting */
-#define  STEP_FREQMIN_1                   112     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQMIN_2                   113     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQMIN_3                   114     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQMIN_4                   115     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQMIN_5                   116     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQMIN_6                   117     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQMIN_7                   118     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQMIN_8                   119     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQMIN_9                   120     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQMIN_10                  121     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQMIN_11                  122     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQMAX_1                   123     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQMAX_2                   124     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQMAX_3                   125     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQMAX_4                   126     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQMAX_5                   127     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQMAX_6                   128     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQMAX_7                   129     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQMAX_8                   130     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQMAX_9                   131     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQMAX_10                  132     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQMAX_11                  133     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQ_1                      134     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQ_2                      135     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQ_3                      136     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQ_4                      137     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQ_5                      138     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQ_6                      139     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQ_7                      140     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQ_8                      141     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQ_9                      142     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQ_10                     143     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQ_11                     144     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQDELTA_1                 145     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQDELTA_2                 146     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQDELTA_3                 147     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQDELTA_4                 148     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQDELTA_5                 149     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQDELTA_6                 150     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQDELTA_7                 151     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQDELTA_8                 152     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQDELTA_9                 153     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQDELTA_10                154     /* control type: numeric, callback function: Setting */
-#define  STEP_FREQDELTA_11                155     /* control type: numeric, callback function: Setting */
-#define  STEP_FACTOR_1                    156     /* control type: numeric, callback function: Setting */
-#define  STEP_FACTOR_2                    157     /* control type: numeric, callback function: Setting */
-#define  STEP_FACTOR_3                    158     /* control type: numeric, callback function: Setting */
-#define  STEP_FACTOR_4                    159     /* control type: numeric, callback function: Setting */
-#define  STEP_FACTOR_5                    160     /* control type: numeric, callback function: Setting */
-#define  STEP_FACTOR_6                    161     /* control type: numeric, callback function: Setting */
-#define  STEP_FACTOR_7                    162     /* control type: numeric, callback function: Setting */
-#define  STEP_FACTOR_8                    163     /* control type: numeric, callback function: Setting */
-#define  STEP_FACTOR_9                    164     /* control type: numeric, callback function: Setting */
-#define  STEP_FACTOR_10                   165     /* control type: numeric, callback function: Setting */
-#define  STEP_FACTOR_11                   166     /* control type: numeric, callback function: Setting */
-#define  STEP_SORT_1                      167     /* control type: binary, callback function: Setting */
-#define  STEP_SORT_2                      168     /* control type: binary, callback function: Setting */
-#define  STEP_SORT_3                      169     /* control type: binary, callback function: Setting */
-#define  STEP_SORT_4                      170     /* control type: binary, callback function: Setting */
-#define  STEP_SORT_5                      171     /* control type: binary, callback function: Setting */
-#define  STEP_SORT_6                      172     /* control type: binary, callback function: Setting */
-#define  STEP_SORT_7                      173     /* control type: binary, callback function: Setting */
-#define  STEP_SORT_8                      174     /* control type: binary, callback function: Setting */
-#define  STEP_SORT_9                      175     /* control type: binary, callback function: Setting */
-#define  STEP_SORT_10                     176     /* control type: binary, callback function: Setting */
-#define  STEP_SORT_11                     177     /* control type: binary, callback function: Setting */
-#define  STEP_TITLE                       178     /* control type: textMsg, callback function: (none) */
+#define  STEP_MIN_1                       112     /* control type: numeric, callback function: Setting */
+#define  STEP_MIN_2                       113     /* control type: numeric, callback function: Setting */
+#define  STEP_MIN_3                       114     /* control type: numeric, callback function: Setting */
+#define  STEP_MIN_4                       115     /* control type: numeric, callback function: Setting */
+#define  STEP_MIN_5                       116     /* control type: numeric, callback function: Setting */
+#define  STEP_MIN_6                       117     /* control type: numeric, callback function: Setting */
+#define  STEP_MIN_7                       118     /* control type: numeric, callback function: Setting */
+#define  STEP_MIN_8                       119     /* control type: numeric, callback function: Setting */
+#define  STEP_MIN_9                       120     /* control type: numeric, callback function: Setting */
+#define  STEP_MIN_10                      121     /* control type: numeric, callback function: Setting */
+#define  STEP_MIN_11                      122     /* control type: numeric, callback function: Setting */
+#define  STEP_MAX_1                       123     /* control type: numeric, callback function: Setting */
+#define  STEP_MAX_2                       124     /* control type: numeric, callback function: Setting */
+#define  STEP_MAX_3                       125     /* control type: numeric, callback function: Setting */
+#define  STEP_MAX_4                       126     /* control type: numeric, callback function: Setting */
+#define  STEP_MAX_5                       127     /* control type: numeric, callback function: Setting */
+#define  STEP_MAX_6                       128     /* control type: numeric, callback function: Setting */
+#define  STEP_MAX_7                       129     /* control type: numeric, callback function: Setting */
+#define  STEP_MAX_8                       130     /* control type: numeric, callback function: Setting */
+#define  STEP_MAX_9                       131     /* control type: numeric, callback function: Setting */
+#define  STEP_MAX_10                      132     /* control type: numeric, callback function: Setting */
+#define  STEP_MAX_11                      133     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQMIN_1                   134     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQMIN_2                   135     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQMIN_3                   136     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQMIN_4                   137     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQMIN_5                   138     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQMIN_6                   139     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQMIN_7                   140     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQMIN_8                   141     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQMIN_9                   142     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQMIN_10                  143     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQMIN_11                  144     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQMAX_1                   145     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQMAX_2                   146     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQMAX_3                   147     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQMAX_4                   148     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQMAX_5                   149     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQMAX_6                   150     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQMAX_7                   151     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQMAX_8                   152     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQMAX_9                   153     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQMAX_10                  154     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQMAX_11                  155     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQ_1                      156     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQ_2                      157     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQ_3                      158     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQ_4                      159     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQ_5                      160     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQ_6                      161     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQ_7                      162     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQ_8                      163     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQ_9                      164     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQ_10                     165     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQ_11                     166     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQDELTA_1                 167     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQDELTA_2                 168     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQDELTA_3                 169     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQDELTA_4                 170     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQDELTA_5                 171     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQDELTA_6                 172     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQDELTA_7                 173     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQDELTA_8                 174     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQDELTA_9                 175     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQDELTA_10                176     /* control type: numeric, callback function: Setting */
+#define  STEP_FREQDELTA_11                177     /* control type: numeric, callback function: Setting */
+#define  STEP_FACTOR_1                    178     /* control type: numeric, callback function: Setting */
+#define  STEP_FACTOR_2                    179     /* control type: numeric, callback function: Setting */
+#define  STEP_FACTOR_3                    180     /* control type: numeric, callback function: Setting */
+#define  STEP_FACTOR_4                    181     /* control type: numeric, callback function: Setting */
+#define  STEP_FACTOR_5                    182     /* control type: numeric, callback function: Setting */
+#define  STEP_FACTOR_6                    183     /* control type: numeric, callback function: Setting */
+#define  STEP_FACTOR_7                    184     /* control type: numeric, callback function: Setting */
+#define  STEP_FACTOR_8                    185     /* control type: numeric, callback function: Setting */
+#define  STEP_FACTOR_9                    186     /* control type: numeric, callback function: Setting */
+#define  STEP_FACTOR_10                   187     /* control type: numeric, callback function: Setting */
+#define  STEP_FACTOR_11                   188     /* control type: numeric, callback function: Setting */
+#define  STEP_SORT_1                      189     /* control type: binary, callback function: Setting */
+#define  STEP_SORT_2                      190     /* control type: binary, callback function: Setting */
+#define  STEP_SORT_3                      191     /* control type: binary, callback function: Setting */
+#define  STEP_SORT_4                      192     /* control type: binary, callback function: Setting */
+#define  STEP_SORT_5                      193     /* control type: binary, callback function: Setting */
+#define  STEP_SORT_6                      194     /* control type: binary, callback function: Setting */
+#define  STEP_SORT_7                      195     /* control type: binary, callback function: Setting */
+#define  STEP_SORT_8                      196     /* control type: binary, callback function: Setting */
+#define  STEP_SORT_9                      197     /* control type: binary, callback function: Setting */
+#define  STEP_SORT_10                     198     /* control type: binary, callback function: Setting */
+#define  STEP_SORT_11                     199     /* control type: binary, callback function: Setting */
+#define  STEP_TITLE                       200     /* control type: textMsg, callback function: (none) */
 
-#define  SWITCH                           11      /* callback function: ClosePanel */
+#define  SWITCH                           12      /* callback function: ClosePanel */
 #define  SWITCH_SWITCH_1                  2       /* control type: binary, callback function: Setting */
 #define  SWITCH_SWITCH_2                  3       /* control type: binary, callback function: Setting */
 #define  SWITCH_SWITCH_3                  4       /* control type: binary, callback function: Setting */
@@ -719,180 +749,220 @@
 #define  SWITCH_TEXTMSG_3                 101     /* control type: textMsg, callback function: (none) */
 #define  SWITCH_TITLE                     102     /* control type: textMsg, callback function: (none) */
 
-#define  TRIM                             12      /* callback function: ClosePanel */
-#define  TRIM_STEP_1                      2       /* control type: ring, callback function: Setting */
-#define  TRIM_STEP_2                      3       /* control type: ring, callback function: Setting */
-#define  TRIM_STEP_3                      4       /* control type: ring, callback function: Setting */
-#define  TRIM_STEP_4                      5       /* control type: ring, callback function: Setting */
-#define  TRIM_STEP_5                      6       /* control type: ring, callback function: Setting */
-#define  TRIM_STEP_6                      7       /* control type: ring, callback function: Setting */
-#define  TRIM_STEP_7                      8       /* control type: ring, callback function: Setting */
-#define  TRIM_STEP_8                      9       /* control type: ring, callback function: Setting */
-#define  TRIM_STEP_9                      10      /* control type: ring, callback function: Setting */
-#define  TRIM_STEP_10                     11      /* control type: ring, callback function: Setting */
-#define  TRIM_TYPE_1                      12      /* control type: ring, callback function: Setting */
-#define  TRIM_TYPE_2                      13      /* control type: ring, callback function: Setting */
-#define  TRIM_TYPE_3                      14      /* control type: ring, callback function: Setting */
-#define  TRIM_TYPE_4                      15      /* control type: ring, callback function: Setting */
-#define  TRIM_TYPE_5                      16      /* control type: ring, callback function: Setting */
-#define  TRIM_TYPE_6                      17      /* control type: ring, callback function: Setting */
-#define  TRIM_TYPE_7                      18      /* control type: ring, callback function: Setting */
-#define  TRIM_TYPE_8                      19      /* control type: ring, callback function: Setting */
-#define  TRIM_TYPE_9                      20      /* control type: ring, callback function: Setting */
-#define  TRIM_TYPE_10                     21      /* control type: ring, callback function: Setting */
-#define  TRIM_TARGET_1                    22      /* control type: ring, callback function: Setting */
-#define  TRIM_TARGET_2                    23      /* control type: ring, callback function: Setting */
-#define  TRIM_TARGET_3                    24      /* control type: ring, callback function: Setting */
-#define  TRIM_TARGET_4                    25      /* control type: ring, callback function: Setting */
-#define  TRIM_TARGET_5                    26      /* control type: ring, callback function: Setting */
-#define  TRIM_TARGET_6                    27      /* control type: ring, callback function: Setting */
-#define  TRIM_TARGET_7                    28      /* control type: ring, callback function: Setting */
-#define  TRIM_TARGET_8                    29      /* control type: ring, callback function: Setting */
-#define  TRIM_TARGET_9                    30      /* control type: ring, callback function: Setting */
-#define  TRIM_TARGET_10                   31      /* control type: ring, callback function: Setting */
-#define  TRIM_GOAL_1                      32      /* control type: numeric, callback function: Setting */
-#define  TRIM_GOAL_2                      33      /* control type: numeric, callback function: Setting */
-#define  TRIM_GOAL_3                      34      /* control type: numeric, callback function: Setting */
-#define  TRIM_GOAL_4                      35      /* control type: numeric, callback function: Setting */
-#define  TRIM_GOAL_5                      36      /* control type: numeric, callback function: Setting */
-#define  TRIM_GOAL_6                      37      /* control type: numeric, callback function: Setting */
-#define  TRIM_GOAL_7                      38      /* control type: numeric, callback function: Setting */
-#define  TRIM_GOAL_8                      39      /* control type: numeric, callback function: Setting */
-#define  TRIM_GOAL_9                      40      /* control type: numeric, callback function: Setting */
-#define  TRIM_GOAL_10                     41      /* control type: numeric, callback function: Setting */
-#define  TRIM_SIGN_1                      42      /* control type: ring, callback function: Setting */
-#define  TRIM_SIGN_2                      43      /* control type: ring, callback function: Setting */
-#define  TRIM_SIGN_3                      44      /* control type: ring, callback function: Setting */
-#define  TRIM_SIGN_4                      45      /* control type: ring, callback function: Setting */
-#define  TRIM_SIGN_5                      46      /* control type: ring, callback function: Setting */
-#define  TRIM_SIGN_6                      47      /* control type: ring, callback function: Setting */
-#define  TRIM_SIGN_7                      48      /* control type: ring, callback function: Setting */
-#define  TRIM_SIGN_8                      49      /* control type: ring, callback function: Setting */
-#define  TRIM_SIGN_9                      50      /* control type: ring, callback function: Setting */
-#define  TRIM_SIGN_10                     51      /* control type: ring, callback function: Setting */
-#define  TRIM_REGION_1                    52      /* control type: ring, callback function: Setting */
-#define  TRIM_REGION_2                    53      /* control type: ring, callback function: Setting */
-#define  TRIM_REGION_3                    54      /* control type: ring, callback function: Setting */
-#define  TRIM_REGION_4                    55      /* control type: ring, callback function: Setting */
-#define  TRIM_REGION_5                    56      /* control type: ring, callback function: Setting */
-#define  TRIM_REGION_6                    57      /* control type: ring, callback function: Setting */
-#define  TRIM_REGION_7                    58      /* control type: ring, callback function: Setting */
-#define  TRIM_REGION_8                    59      /* control type: ring, callback function: Setting */
-#define  TRIM_REGION_9                    60      /* control type: ring, callback function: Setting */
-#define  TRIM_REGION_10                   61      /* control type: ring, callback function: Setting */
-#define  TRIM_FRACT_1                     62      /* control type: numeric, callback function: Setting */
-#define  TRIM_FRACT_2                     63      /* control type: numeric, callback function: Setting */
-#define  TRIM_FRACT_3                     64      /* control type: numeric, callback function: Setting */
-#define  TRIM_FRACT_4                     65      /* control type: numeric, callback function: Setting */
-#define  TRIM_FRACT_5                     66      /* control type: numeric, callback function: Setting */
-#define  TRIM_FRACT_6                     67      /* control type: numeric, callback function: Setting */
-#define  TRIM_FRACT_7                     68      /* control type: numeric, callback function: Setting */
-#define  TRIM_FRACT_8                     69      /* control type: numeric, callback function: Setting */
-#define  TRIM_FRACT_9                     70      /* control type: numeric, callback function: Setting */
-#define  TRIM_FRACT_10                    71      /* control type: numeric, callback function: Setting */
-#define  TRIM_TIME_1                      72      /* control type: numeric, callback function: Setting */
-#define  TRIM_TIME_2                      73      /* control type: numeric, callback function: Setting */
-#define  TRIM_TIME_3                      74      /* control type: numeric, callback function: Setting */
-#define  TRIM_TIME_4                      75      /* control type: numeric, callback function: Setting */
-#define  TRIM_TIME_5                      76      /* control type: numeric, callback function: Setting */
-#define  TRIM_TIME_6                      77      /* control type: numeric, callback function: Setting */
-#define  TRIM_TIME_7                      78      /* control type: numeric, callback function: Setting */
-#define  TRIM_TIME_8                      79      /* control type: numeric, callback function: Setting */
-#define  TRIM_TIME_9                      80      /* control type: numeric, callback function: Setting */
-#define  TRIM_TIME_10                     81      /* control type: numeric, callback function: Setting */
-#define  TRIM_DELTA_1                     82      /* control type: numeric, callback function: Setting */
-#define  TRIM_DELTA_2                     83      /* control type: numeric, callback function: Setting */
-#define  TRIM_DELTA_3                     84      /* control type: numeric, callback function: Setting */
-#define  TRIM_DELTA_4                     85      /* control type: numeric, callback function: Setting */
-#define  TRIM_DELTA_5                     86      /* control type: numeric, callback function: Setting */
-#define  TRIM_DELTA_6                     87      /* control type: numeric, callback function: Setting */
-#define  TRIM_DELTA_7                     88      /* control type: numeric, callback function: Setting */
-#define  TRIM_DELTA_8                     89      /* control type: numeric, callback function: Setting */
-#define  TRIM_DELTA_9                     90      /* control type: numeric, callback function: Setting */
-#define  TRIM_DELTA_10                    91      /* control type: numeric, callback function: Setting */
-#define  TRIM_NUM_1                       92      /* control type: numeric, callback function: Setting */
-#define  TRIM_NUM_2                       93      /* control type: numeric, callback function: Setting */
-#define  TRIM_NUM_3                       94      /* control type: numeric, callback function: Setting */
-#define  TRIM_NUM_4                       95      /* control type: numeric, callback function: Setting */
-#define  TRIM_NUM_5                       96      /* control type: numeric, callback function: Setting */
-#define  TRIM_NUM_6                       97      /* control type: numeric, callback function: Setting */
-#define  TRIM_NUM_7                       98      /* control type: numeric, callback function: Setting */
-#define  TRIM_NUM_8                       99      /* control type: numeric, callback function: Setting */
-#define  TRIM_NUM_9                       100     /* control type: numeric, callback function: Setting */
-#define  TRIM_NUM_10                      101     /* control type: numeric, callback function: Setting */
-#define  TRIM_DIR_1                       102     /* control type: ring, callback function: Setting */
-#define  TRIM_DIR_2                       103     /* control type: ring, callback function: Setting */
-#define  TRIM_DIR_3                       104     /* control type: ring, callback function: Setting */
-#define  TRIM_DIR_4                       105     /* control type: ring, callback function: Setting */
-#define  TRIM_DIR_5                       106     /* control type: ring, callback function: Setting */
-#define  TRIM_DIR_6                       107     /* control type: ring, callback function: Setting */
-#define  TRIM_DIR_7                       108     /* control type: ring, callback function: Setting */
-#define  TRIM_DIR_8                       109     /* control type: ring, callback function: Setting */
-#define  TRIM_DIR_9                       110     /* control type: ring, callback function: Setting */
-#define  TRIM_DIR_10                      111     /* control type: ring, callback function: Setting */
-#define  TRIM_BREAK_1                     112     /* control type: ring, callback function: Setting */
-#define  TRIM_BREAK_2                     113     /* control type: ring, callback function: Setting */
-#define  TRIM_BREAK_3                     114     /* control type: ring, callback function: Setting */
-#define  TRIM_BREAK_4                     115     /* control type: ring, callback function: Setting */
-#define  TRIM_BREAK_5                     116     /* control type: ring, callback function: Setting */
-#define  TRIM_BREAK_6                     117     /* control type: ring, callback function: Setting */
-#define  TRIM_BREAK_7                     118     /* control type: ring, callback function: Setting */
-#define  TRIM_BREAK_8                     119     /* control type: ring, callback function: Setting */
-#define  TRIM_BREAK_9                     120     /* control type: ring, callback function: Setting */
-#define  TRIM_BREAK_10                    121     /* control type: ring, callback function: Setting */
-#define  TRIM_DISPLAY_1                   122     /* control type: binary, callback function: Setting */
-#define  TRIM_DISPLAY_2                   123     /* control type: binary, callback function: Setting */
-#define  TRIM_DISPLAY_3                   124     /* control type: binary, callback function: Setting */
-#define  TRIM_DISPLAY_4                   125     /* control type: binary, callback function: Setting */
-#define  TRIM_DISPLAY_5                   126     /* control type: binary, callback function: Setting */
-#define  TRIM_DISPLAY_6                   127     /* control type: binary, callback function: Setting */
-#define  TRIM_DISPLAY_7                   128     /* control type: binary, callback function: Setting */
-#define  TRIM_DISPLAY_8                   129     /* control type: binary, callback function: Setting */
-#define  TRIM_DISPLAY_9                   130     /* control type: binary, callback function: Setting */
-#define  TRIM_DISPLAY_10                  131     /* control type: binary, callback function: Setting */
-#define  TRIM_STATUS_1                    132     /* control type: binary, callback function: Setting */
-#define  TRIM_STATUS_2                    133     /* control type: binary, callback function: Setting */
-#define  TRIM_STATUS_3                    134     /* control type: binary, callback function: Setting */
-#define  TRIM_STATUS_4                    135     /* control type: binary, callback function: Setting */
-#define  TRIM_STATUS_5                    136     /* control type: binary, callback function: Setting */
-#define  TRIM_STATUS_6                    137     /* control type: binary, callback function: Setting */
-#define  TRIM_STATUS_7                    138     /* control type: binary, callback function: Setting */
-#define  TRIM_STATUS_8                    139     /* control type: binary, callback function: Setting */
-#define  TRIM_STATUS_9                    140     /* control type: binary, callback function: Setting */
-#define  TRIM_STATUS_10                   141     /* control type: binary, callback function: Setting */
-#define  TRIM_PROMPT_1                    142     /* control type: binary, callback function: Setting */
-#define  TRIM_PROMPT_2                    143     /* control type: binary, callback function: Setting */
-#define  TRIM_PROMPT_3                    144     /* control type: binary, callback function: Setting */
-#define  TRIM_PROMPT_4                    145     /* control type: binary, callback function: Setting */
-#define  TRIM_PROMPT_5                    146     /* control type: binary, callback function: Setting */
-#define  TRIM_PROMPT_6                    147     /* control type: binary, callback function: Setting */
-#define  TRIM_PROMPT_7                    148     /* control type: binary, callback function: Setting */
-#define  TRIM_PROMPT_8                    149     /* control type: binary, callback function: Setting */
-#define  TRIM_PROMPT_9                    150     /* control type: binary, callback function: Setting */
-#define  TRIM_PROMPT_10                   151     /* control type: binary, callback function: Setting */
-#define  TRIM_FNAME_1                     152     /* control type: string, callback function: Setting */
-#define  TRIM_FNAME_2                     153     /* control type: string, callback function: Setting */
-#define  TRIM_FNAME_3                     154     /* control type: string, callback function: Setting */
-#define  TRIM_FNAME_4                     155     /* control type: string, callback function: Setting */
-#define  TRIM_FNAME_5                     156     /* control type: string, callback function: Setting */
-#define  TRIM_FNAME_6                     157     /* control type: string, callback function: Setting */
-#define  TRIM_FNAME_7                     158     /* control type: string, callback function: Setting */
-#define  TRIM_FNAME_8                     159     /* control type: string, callback function: Setting */
-#define  TRIM_FNAME_9                     160     /* control type: string, callback function: Setting */
-#define  TRIM_FNAME_10                    161     /* control type: string, callback function: Setting */
-#define  TRIM_TEXTMSG_1                   162     /* control type: textMsg, callback function: (none) */
-#define  TRIM_TEXTMSG_2                   163     /* control type: textMsg, callback function: (none) */
-#define  TRIM_TEXTMSG_3                   164     /* control type: textMsg, callback function: (none) */
-#define  TRIM_TEXTMSG_4                   165     /* control type: textMsg, callback function: (none) */
-#define  TRIM_TEXTMSG_5                   166     /* control type: textMsg, callback function: (none) */
-#define  TRIM_TEXTMSG_6                   167     /* control type: textMsg, callback function: (none) */
-#define  TRIM_TEXTMSG_7                   168     /* control type: textMsg, callback function: (none) */
-#define  TRIM_TEXTMSG_8                   169     /* control type: textMsg, callback function: (none) */
-#define  TRIM_TEXTMSG_9                   170     /* control type: textMsg, callback function: (none) */
-#define  TRIM_TEXTMSG_10                  171     /* control type: textMsg, callback function: (none) */
-#define  TRIM_TITLE                       172     /* control type: textMsg, callback function: (none) */
+#define  TRIM                             13      /* callback function: ClosePanel */
+#define  TRIM_LOOP_10                     2       /* control type: ring, callback function: Setting */
+#define  TRIM_LOOP_9                      3       /* control type: ring, callback function: Setting */
+#define  TRIM_LOOP_8                      4       /* control type: ring, callback function: Setting */
+#define  TRIM_LOOP_7                      5       /* control type: ring, callback function: Setting */
+#define  TRIM_LOOP_6                      6       /* control type: ring, callback function: Setting */
+#define  TRIM_LOOP_5                      7       /* control type: ring, callback function: Setting */
+#define  TRIM_LOOP_4                      8       /* control type: ring, callback function: Setting */
+#define  TRIM_LOOP_3                      9       /* control type: ring, callback function: Setting */
+#define  TRIM_LOOP_2                      10      /* control type: ring, callback function: Setting */
+#define  TRIM_LOOP_1                      11      /* control type: ring, callback function: Setting */
+#define  TRIM_STEP_1                      12      /* control type: ring, callback function: Setting */
+#define  TRIM_STEP_2                      13      /* control type: ring, callback function: Setting */
+#define  TRIM_STEP_3                      14      /* control type: ring, callback function: Setting */
+#define  TRIM_STEP_4                      15      /* control type: ring, callback function: Setting */
+#define  TRIM_STEP_5                      16      /* control type: ring, callback function: Setting */
+#define  TRIM_STEP_6                      17      /* control type: ring, callback function: Setting */
+#define  TRIM_STEP_7                      18      /* control type: ring, callback function: Setting */
+#define  TRIM_STEP_8                      19      /* control type: ring, callback function: Setting */
+#define  TRIM_STEP_9                      20      /* control type: ring, callback function: Setting */
+#define  TRIM_STEP_10                     21      /* control type: ring, callback function: Setting */
+#define  TRIM_TYPE_1                      22      /* control type: ring, callback function: Setting */
+#define  TRIM_TYPE_2                      23      /* control type: ring, callback function: Setting */
+#define  TRIM_TYPE_3                      24      /* control type: ring, callback function: Setting */
+#define  TRIM_TYPE_4                      25      /* control type: ring, callback function: Setting */
+#define  TRIM_TYPE_5                      26      /* control type: ring, callback function: Setting */
+#define  TRIM_TYPE_6                      27      /* control type: ring, callback function: Setting */
+#define  TRIM_TYPE_7                      28      /* control type: ring, callback function: Setting */
+#define  TRIM_TYPE_8                      29      /* control type: ring, callback function: Setting */
+#define  TRIM_TYPE_9                      30      /* control type: ring, callback function: Setting */
+#define  TRIM_TYPE_10                     31      /* control type: ring, callback function: Setting */
+#define  TRIM_WAIT_1                      32      /* control type: ring, callback function: Setting */
+#define  TRIM_WAIT_2                      33      /* control type: ring, callback function: Setting */
+#define  TRIM_WAIT_3                      34      /* control type: ring, callback function: Setting */
+#define  TRIM_WAIT_4                      35      /* control type: ring, callback function: Setting */
+#define  TRIM_WAIT_5                      36      /* control type: ring, callback function: Setting */
+#define  TRIM_WAIT_6                      37      /* control type: ring, callback function: Setting */
+#define  TRIM_WAIT_7                      38      /* control type: ring, callback function: Setting */
+#define  TRIM_WAIT_8                      39      /* control type: ring, callback function: Setting */
+#define  TRIM_WAIT_9                      40      /* control type: ring, callback function: Setting */
+#define  TRIM_WAIT_10                     41      /* control type: ring, callback function: Setting */
+#define  TRIM_TARGET_1                    42      /* control type: ring, callback function: Setting */
+#define  TRIM_TARGET_2                    43      /* control type: ring, callback function: Setting */
+#define  TRIM_TARGET_3                    44      /* control type: ring, callback function: Setting */
+#define  TRIM_TARGET_4                    45      /* control type: ring, callback function: Setting */
+#define  TRIM_TARGET_5                    46      /* control type: ring, callback function: Setting */
+#define  TRIM_TARGET_6                    47      /* control type: ring, callback function: Setting */
+#define  TRIM_TARGET_7                    48      /* control type: ring, callback function: Setting */
+#define  TRIM_TARGET_8                    49      /* control type: ring, callback function: Setting */
+#define  TRIM_TARGET_9                    50      /* control type: ring, callback function: Setting */
+#define  TRIM_TARGET_10                   51      /* control type: ring, callback function: Setting */
+#define  TRIM_LOW_1                       52      /* control type: numeric, callback function: Setting */
+#define  TRIM_LOW_2                       53      /* control type: numeric, callback function: Setting */
+#define  TRIM_LOW_3                       54      /* control type: numeric, callback function: Setting */
+#define  TRIM_LOW_4                       55      /* control type: numeric, callback function: Setting */
+#define  TRIM_LOW_5                       56      /* control type: numeric, callback function: Setting */
+#define  TRIM_LOW_6                       57      /* control type: numeric, callback function: Setting */
+#define  TRIM_LOW_7                       58      /* control type: numeric, callback function: Setting */
+#define  TRIM_LOW_8                       59      /* control type: numeric, callback function: Setting */
+#define  TRIM_LOW_9                       60      /* control type: numeric, callback function: Setting */
+#define  TRIM_LOW_10                      61      /* control type: numeric, callback function: Setting */
+#define  TRIM_GOAL_1                      62      /* control type: numeric, callback function: Setting */
+#define  TRIM_GOAL_2                      63      /* control type: numeric, callback function: Setting */
+#define  TRIM_GOAL_3                      64      /* control type: numeric, callback function: Setting */
+#define  TRIM_GOAL_4                      65      /* control type: numeric, callback function: Setting */
+#define  TRIM_GOAL_5                      66      /* control type: numeric, callback function: Setting */
+#define  TRIM_GOAL_6                      67      /* control type: numeric, callback function: Setting */
+#define  TRIM_GOAL_7                      68      /* control type: numeric, callback function: Setting */
+#define  TRIM_GOAL_8                      69      /* control type: numeric, callback function: Setting */
+#define  TRIM_GOAL_9                      70      /* control type: numeric, callback function: Setting */
+#define  TRIM_GOAL_10                     71      /* control type: numeric, callback function: Setting */
+#define  TRIM_HIGH_1                      72      /* control type: numeric, callback function: Setting */
+#define  TRIM_HIGH_2                      73      /* control type: numeric, callback function: Setting */
+#define  TRIM_HIGH_3                      74      /* control type: numeric, callback function: Setting */
+#define  TRIM_HIGH_4                      75      /* control type: numeric, callback function: Setting */
+#define  TRIM_HIGH_5                      76      /* control type: numeric, callback function: Setting */
+#define  TRIM_HIGH_6                      77      /* control type: numeric, callback function: Setting */
+#define  TRIM_HIGH_7                      78      /* control type: numeric, callback function: Setting */
+#define  TRIM_HIGH_8                      79      /* control type: numeric, callback function: Setting */
+#define  TRIM_HIGH_9                      80      /* control type: numeric, callback function: Setting */
+#define  TRIM_HIGH_10                     81      /* control type: numeric, callback function: Setting */
+#define  TRIM_SIGN_1                      82      /* control type: ring, callback function: Setting */
+#define  TRIM_SIGN_2                      83      /* control type: ring, callback function: Setting */
+#define  TRIM_SIGN_3                      84      /* control type: ring, callback function: Setting */
+#define  TRIM_SIGN_4                      85      /* control type: ring, callback function: Setting */
+#define  TRIM_SIGN_5                      86      /* control type: ring, callback function: Setting */
+#define  TRIM_SIGN_6                      87      /* control type: ring, callback function: Setting */
+#define  TRIM_SIGN_7                      88      /* control type: ring, callback function: Setting */
+#define  TRIM_SIGN_8                      89      /* control type: ring, callback function: Setting */
+#define  TRIM_SIGN_9                      90      /* control type: ring, callback function: Setting */
+#define  TRIM_SIGN_10                     91      /* control type: ring, callback function: Setting */
+#define  TRIM_REGION_1                    92      /* control type: ring, callback function: Setting */
+#define  TRIM_REGION_2                    93      /* control type: ring, callback function: Setting */
+#define  TRIM_REGION_3                    94      /* control type: ring, callback function: Setting */
+#define  TRIM_REGION_4                    95      /* control type: ring, callback function: Setting */
+#define  TRIM_REGION_5                    96      /* control type: ring, callback function: Setting */
+#define  TRIM_REGION_6                    97      /* control type: ring, callback function: Setting */
+#define  TRIM_REGION_7                    98      /* control type: ring, callback function: Setting */
+#define  TRIM_REGION_8                    99      /* control type: ring, callback function: Setting */
+#define  TRIM_REGION_9                    100     /* control type: ring, callback function: Setting */
+#define  TRIM_REGION_10                   101     /* control type: ring, callback function: Setting */
+#define  TRIM_FRACT_1                     102     /* control type: numeric, callback function: Setting */
+#define  TRIM_FRACT_2                     103     /* control type: numeric, callback function: Setting */
+#define  TRIM_FRACT_3                     104     /* control type: numeric, callback function: Setting */
+#define  TRIM_FRACT_4                     105     /* control type: numeric, callback function: Setting */
+#define  TRIM_FRACT_5                     106     /* control type: numeric, callback function: Setting */
+#define  TRIM_FRACT_6                     107     /* control type: numeric, callback function: Setting */
+#define  TRIM_FRACT_7                     108     /* control type: numeric, callback function: Setting */
+#define  TRIM_FRACT_8                     109     /* control type: numeric, callback function: Setting */
+#define  TRIM_FRACT_9                     110     /* control type: numeric, callback function: Setting */
+#define  TRIM_FRACT_10                    111     /* control type: numeric, callback function: Setting */
+#define  TRIM_TIME_1                      112     /* control type: numeric, callback function: Setting */
+#define  TRIM_TIME_2                      113     /* control type: numeric, callback function: Setting */
+#define  TRIM_TIME_3                      114     /* control type: numeric, callback function: Setting */
+#define  TRIM_TIME_4                      115     /* control type: numeric, callback function: Setting */
+#define  TRIM_TIME_5                      116     /* control type: numeric, callback function: Setting */
+#define  TRIM_TIME_6                      117     /* control type: numeric, callback function: Setting */
+#define  TRIM_TIME_7                      118     /* control type: numeric, callback function: Setting */
+#define  TRIM_TIME_8                      119     /* control type: numeric, callback function: Setting */
+#define  TRIM_TIME_9                      120     /* control type: numeric, callback function: Setting */
+#define  TRIM_TIME_10                     121     /* control type: numeric, callback function: Setting */
+#define  TRIM_DELTA_1                     122     /* control type: numeric, callback function: Setting */
+#define  TRIM_DELTA_2                     123     /* control type: numeric, callback function: Setting */
+#define  TRIM_DELTA_3                     124     /* control type: numeric, callback function: Setting */
+#define  TRIM_DELTA_4                     125     /* control type: numeric, callback function: Setting */
+#define  TRIM_DELTA_5                     126     /* control type: numeric, callback function: Setting */
+#define  TRIM_DELTA_6                     127     /* control type: numeric, callback function: Setting */
+#define  TRIM_DELTA_7                     128     /* control type: numeric, callback function: Setting */
+#define  TRIM_DELTA_8                     129     /* control type: numeric, callback function: Setting */
+#define  TRIM_DELTA_9                     130     /* control type: numeric, callback function: Setting */
+#define  TRIM_DELTA_10                    131     /* control type: numeric, callback function: Setting */
+#define  TRIM_NUM_1                       132     /* control type: numeric, callback function: Setting */
+#define  TRIM_NUM_2                       133     /* control type: numeric, callback function: Setting */
+#define  TRIM_NUM_3                       134     /* control type: numeric, callback function: Setting */
+#define  TRIM_NUM_4                       135     /* control type: numeric, callback function: Setting */
+#define  TRIM_NUM_5                       136     /* control type: numeric, callback function: Setting */
+#define  TRIM_NUM_6                       137     /* control type: numeric, callback function: Setting */
+#define  TRIM_NUM_7                       138     /* control type: numeric, callback function: Setting */
+#define  TRIM_NUM_8                       139     /* control type: numeric, callback function: Setting */
+#define  TRIM_NUM_9                       140     /* control type: numeric, callback function: Setting */
+#define  TRIM_NUM_10                      141     /* control type: numeric, callback function: Setting */
+#define  TRIM_SCAN_10                     142     /* control type: ring, callback function: Setting */
+#define  TRIM_SCAN_9                      143     /* control type: ring, callback function: Setting */
+#define  TRIM_SCAN_8                      144     /* control type: ring, callback function: Setting */
+#define  TRIM_SCAN_7                      145     /* control type: ring, callback function: Setting */
+#define  TRIM_SCAN_6                      146     /* control type: ring, callback function: Setting */
+#define  TRIM_SCAN_5                      147     /* control type: ring, callback function: Setting */
+#define  TRIM_SCAN_4                      148     /* control type: ring, callback function: Setting */
+#define  TRIM_SCAN_3                      149     /* control type: ring, callback function: Setting */
+#define  TRIM_SCAN_2                      150     /* control type: ring, callback function: Setting */
+#define  TRIM_SCAN_1                      151     /* control type: ring, callback function: Setting */
+#define  TRIM_BREAK_1                     152     /* control type: ring, callback function: Setting */
+#define  TRIM_BREAK_2                     153     /* control type: ring, callback function: Setting */
+#define  TRIM_BREAK_3                     154     /* control type: ring, callback function: Setting */
+#define  TRIM_BREAK_4                     155     /* control type: ring, callback function: Setting */
+#define  TRIM_BREAK_5                     156     /* control type: ring, callback function: Setting */
+#define  TRIM_BREAK_6                     157     /* control type: ring, callback function: Setting */
+#define  TRIM_BREAK_7                     158     /* control type: ring, callback function: Setting */
+#define  TRIM_BREAK_8                     159     /* control type: ring, callback function: Setting */
+#define  TRIM_BREAK_9                     160     /* control type: ring, callback function: Setting */
+#define  TRIM_BREAK_10                    161     /* control type: ring, callback function: Setting */
+#define  TRIM_DISPLAY_1                   162     /* control type: binary, callback function: Setting */
+#define  TRIM_DISPLAY_2                   163     /* control type: binary, callback function: Setting */
+#define  TRIM_DISPLAY_3                   164     /* control type: binary, callback function: Setting */
+#define  TRIM_DISPLAY_4                   165     /* control type: binary, callback function: Setting */
+#define  TRIM_DISPLAY_5                   166     /* control type: binary, callback function: Setting */
+#define  TRIM_DISPLAY_6                   167     /* control type: binary, callback function: Setting */
+#define  TRIM_DISPLAY_7                   168     /* control type: binary, callback function: Setting */
+#define  TRIM_DISPLAY_8                   169     /* control type: binary, callback function: Setting */
+#define  TRIM_DISPLAY_9                   170     /* control type: binary, callback function: Setting */
+#define  TRIM_DISPLAY_10                  171     /* control type: binary, callback function: Setting */
+#define  TRIM_STATUS_1                    172     /* control type: binary, callback function: Setting */
+#define  TRIM_STATUS_2                    173     /* control type: binary, callback function: Setting */
+#define  TRIM_STATUS_3                    174     /* control type: binary, callback function: Setting */
+#define  TRIM_STATUS_4                    175     /* control type: binary, callback function: Setting */
+#define  TRIM_STATUS_5                    176     /* control type: binary, callback function: Setting */
+#define  TRIM_STATUS_6                    177     /* control type: binary, callback function: Setting */
+#define  TRIM_STATUS_7                    178     /* control type: binary, callback function: Setting */
+#define  TRIM_STATUS_8                    179     /* control type: binary, callback function: Setting */
+#define  TRIM_STATUS_9                    180     /* control type: binary, callback function: Setting */
+#define  TRIM_STATUS_10                   181     /* control type: binary, callback function: Setting */
+#define  TRIM_PROMPT_1                    182     /* control type: binary, callback function: Setting */
+#define  TRIM_PROMPT_2                    183     /* control type: binary, callback function: Setting */
+#define  TRIM_PROMPT_3                    184     /* control type: binary, callback function: Setting */
+#define  TRIM_PROMPT_4                    185     /* control type: binary, callback function: Setting */
+#define  TRIM_PROMPT_5                    186     /* control type: binary, callback function: Setting */
+#define  TRIM_PROMPT_6                    187     /* control type: binary, callback function: Setting */
+#define  TRIM_PROMPT_7                    188     /* control type: binary, callback function: Setting */
+#define  TRIM_PROMPT_8                    189     /* control type: binary, callback function: Setting */
+#define  TRIM_PROMPT_9                    190     /* control type: binary, callback function: Setting */
+#define  TRIM_PROMPT_10                   191     /* control type: binary, callback function: Setting */
+#define  TRIM_FNAME_1                     192     /* control type: string, callback function: Setting */
+#define  TRIM_FNAME_2                     193     /* control type: string, callback function: Setting */
+#define  TRIM_FNAME_3                     194     /* control type: string, callback function: Setting */
+#define  TRIM_FNAME_4                     195     /* control type: string, callback function: Setting */
+#define  TRIM_FNAME_5                     196     /* control type: string, callback function: Setting */
+#define  TRIM_FNAME_6                     197     /* control type: string, callback function: Setting */
+#define  TRIM_FNAME_7                     198     /* control type: string, callback function: Setting */
+#define  TRIM_FNAME_8                     199     /* control type: string, callback function: Setting */
+#define  TRIM_FNAME_9                     200     /* control type: string, callback function: Setting */
+#define  TRIM_FNAME_10                    201     /* control type: string, callback function: Setting */
+#define  TRIM_TEXTMSG_1                   202     /* control type: textMsg, callback function: (none) */
+#define  TRIM_TEXTMSG_2                   203     /* control type: textMsg, callback function: (none) */
+#define  TRIM_TEXTMSG_3                   204     /* control type: textMsg, callback function: (none) */
+#define  TRIM_TEXTMSG_4                   205     /* control type: textMsg, callback function: (none) */
+#define  TRIM_TEXTMSG_5                   206     /* control type: textMsg, callback function: (none) */
+#define  TRIM_TEXTMSG_6                   207     /* control type: textMsg, callback function: (none) */
+#define  TRIM_TEXTMSG_7                   208     /* control type: textMsg, callback function: (none) */
+#define  TRIM_TEXTMSG_8                   209     /* control type: textMsg, callback function: (none) */
+#define  TRIM_TEXTMSG_9                   210     /* control type: textMsg, callback function: (none) */
+#define  TRIM_TEXTMSG_10                  211     /* control type: textMsg, callback function: (none) */
+#define  TRIM_TITLE                       212     /* control type: textMsg, callback function: (none) */
 
-#define  TRS                              13      /* callback function: ClosePanel */
+#define  TRS                              14      /* callback function: ClosePanel */
 
 
      /* Control Arrays: */
@@ -919,45 +989,48 @@
 #define  MENU_FILE_SAVE_TRIM              15      /* callback function: SaveSetting */
 #define  MENU_FILE_SAVE_STEP              16      /* callback function: SaveSetting */
 #define  MENU_FILE_SAVE_SWITCH            17      /* callback function: SaveSetting */
-#define  MENU_FILE_SAVE_GEOMETRY          18      /* callback function: SaveSetting */
-#define  MENU_FILE_LOAD                   19
-#define  MENU_FILE_LOAD_SUBMENU           20
-#define  MENU_FILE_LOAD_ALL               21      /* callback function: LoadSetting */
-#define  MENU_FILE_LOAD_SEPARATOR_4       22
-#define  MENU_FILE_LOAD_DISPLAY           23      /* callback function: LoadSetting */
-#define  MENU_FILE_LOAD_DOSTEP            24      /* callback function: LoadSetting */
-#define  MENU_FILE_LOAD_LABEL             25      /* callback function: LoadSetting */
-#define  MENU_FILE_LOAD_LAYOUT            26      /* callback function: LoadSetting */
-#define  MENU_FILE_LOAD_MAMM              27      /* callback function: LoadSetting */
-#define  MENU_FILE_LOAD_PARM              28      /* callback function: LoadSetting */
-#define  MENU_FILE_LOAD_PRESENT           29      /* callback function: LoadSetting */
-#define  MENU_FILE_LOAD_MOXY              30      /* callback function: LoadSetting */
-#define  MENU_FILE_LOAD_TRIM              31      /* callback function: LoadSetting */
-#define  MENU_FILE_LOAD_STEP              32      /* callback function: LoadSetting */
-#define  MENU_FILE_LOAD_SWITCH            33      /* callback function: LoadSetting */
-#define  MENU_FILE_LOAD_GEOMETRY          34      /* callback function: LoadSetting */
-#define  MENU_FILE_SEPARATOR              35
-#define  MENU_FILE_PRINT                  36      /* callback function: Print */
-#define  MENU_FILE_SEPARATOR_2            37
-#define  MENU_FILE_QUIT                   38      /* callback function: Quit */
-#define  MENU_WINDOW                      39
-#define  MENU_WINDOW_PARM                 40      /* callback function: ShowPanel */
-#define  MENU_WINDOW_DISPLAY              41      /* callback function: ShowPanel */
-#define  MENU_WINDOW_TRIM                 42      /* callback function: ShowPanel */
-#define  MENU_WINDOW_STEP                 43      /* callback function: ShowPanel */
-#define  MENU_WINDOW_SWITCH               44      /* callback function: ShowPanel */
-#define  MENU_WINDOW_GEOMETRY             45      /* callback function: ShowPanel */
-#define  MENU_WINDOW_LAYOUT               46      /* callback function: ShowPanel */
-#define  MENU_WINDOW_PRESENT              47      /* callback function: ShowPanel */
-#define  MENU_WINDOW_MOXY                 48      /* callback function: ShowPanel */
-#define  MENU_WINDOW_MAMM                 49      /* callback function: ShowPanel */
-#define  MENU_WINDOW_LABEL                50      /* callback function: ShowPanel */
-#define  MENU_WINDOW_DO_STEP              51      /* callback function: ShowPanel */
-#define  MENU_RUN                         52
-#define  MENU_RUN_MEASURE                 53      /* callback function: Measure */
-#define  MENU_RUN_OSCILLOSCOPE            54      /* callback function: RunOscilloscope */
-#define  MENU_HELP                        55
-#define  MENU_HELP_ABOUT                  56      /* callback function: About */
+#define  MENU_FILE_SAVE_NIRS              18      /* callback function: SaveSetting */
+#define  MENU_FILE_SAVE_GEOMETRY          19      /* callback function: SaveSetting */
+#define  MENU_FILE_LOAD                   20
+#define  MENU_FILE_LOAD_SUBMENU           21
+#define  MENU_FILE_LOAD_ALL               22      /* callback function: LoadSetting */
+#define  MENU_FILE_LOAD_SEPARATOR_4       23
+#define  MENU_FILE_LOAD_DISPLAY           24      /* callback function: LoadSetting */
+#define  MENU_FILE_LOAD_DOSTEP            25      /* callback function: LoadSetting */
+#define  MENU_FILE_LOAD_LABEL             26      /* callback function: LoadSetting */
+#define  MENU_FILE_LOAD_LAYOUT            27      /* callback function: LoadSetting */
+#define  MENU_FILE_LOAD_MAMM              28      /* callback function: LoadSetting */
+#define  MENU_FILE_LOAD_PARM              29      /* callback function: LoadSetting */
+#define  MENU_FILE_LOAD_PRESENT           30      /* callback function: LoadSetting */
+#define  MENU_FILE_LOAD_MOXY              31      /* callback function: LoadSetting */
+#define  MENU_FILE_LOAD_TRIM              32      /* callback function: LoadSetting */
+#define  MENU_FILE_LOAD_STEP              33      /* callback function: LoadSetting */
+#define  MENU_FILE_LOAD_SWITCH            34      /* callback function: LoadSetting */
+#define  MENU_FILE_LOAD_NIRS              35      /* callback function: LoadSetting */
+#define  MENU_FILE_LOAD_GEOMETRY          36      /* callback function: LoadSetting */
+#define  MENU_FILE_SEPARATOR              37
+#define  MENU_FILE_PRINT                  38      /* callback function: Print */
+#define  MENU_FILE_SEPARATOR_2            39
+#define  MENU_FILE_QUIT                   40      /* callback function: Quit */
+#define  MENU_WINDOW                      41
+#define  MENU_WINDOW_PARM                 42      /* callback function: ShowPanel */
+#define  MENU_WINDOW_DISPLAY              43      /* callback function: ShowPanel */
+#define  MENU_WINDOW_TRIM                 44      /* callback function: ShowPanel */
+#define  MENU_WINDOW_STEP                 45      /* callback function: ShowPanel */
+#define  MENU_WINDOW_SWITCH               46      /* callback function: ShowPanel */
+#define  MENU_WINDOW_GEOMETRY             47      /* callback function: ShowPanel */
+#define  MENU_WINDOW_LAYOUT               48      /* callback function: ShowPanel */
+#define  MENU_WINDOW_PRESENT              49      /* callback function: ShowPanel */
+#define  MENU_WINDOW_MOXY                 50      /* callback function: ShowPanel */
+#define  MENU_WINDOW_MAMM                 51      /* callback function: ShowPanel */
+#define  MENU_WINDOW_LABEL                52      /* callback function: ShowPanel */
+#define  MENU_WINDOW_DO_STEP              53      /* callback function: ShowPanel */
+#define  MENU_WINDOW_NIRS                 54      /* callback function: ShowPanel */
+#define  MENU_RUN                         55
+#define  MENU_RUN_MEASURE                 56      /* callback function: Measure */
+#define  MENU_RUN_OSCILLOSCOPE            57      /* callback function: RunOscilloscope */
+#define  MENU_HELP                        58
+#define  MENU_HELP_ABOUT                  59      /* callback function: About */
 
 
      /* Callback Prototypes: */
@@ -969,6 +1042,8 @@ int  CVICALLBACK GetCommand(int panel, int control, int event, void *callbackDat
 int  CVICALLBACK LoadGeom(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);
 void CVICALLBACK LoadSetting(int menubar, int menuItem, void *callbackData, int panel);
 void CVICALLBACK Measure(int menubar, int menuItem, void *callbackData, int panel);
+int  CVICALLBACK NirsBoxCbk(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);
+int  CVICALLBACK NirsLasersCbk(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);
 void CVICALLBACK Print(int menubar, int menuItem, void *callbackData, int panel);
 int  CVICALLBACK PropPad(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);
 void CVICALLBACK Quit(int menubar, int menuItem, void *callbackData, int panel);

@@ -1,20 +1,20 @@
 -nologo
--out:c:\Users\Laboratorio\Desktop\TRS\cvibuild.TRS\Debug\TRS_dbg.exe
+-out:c:\Program Files (x86)\TRS_MERGE\cvibuild.TRS\Debug\TRS_dbg.exe
 -arch:x86
 -timestamp
 -debug:2
 -loadextmod
--res:c:\Users\Laboratorio\Desktop\TRS\cvibuild.TRS\Debug\resources.res
+-res:c:\Program Files (x86)\TRS_MERGE\cvibuild.TRS\Debug\resources.res
 -entry:_CVIWinMainStartupCodeForDebugging@0
 -base:0x400000
--linked:c:\Users\Laboratorio\Desktop\TRS\cvibuild.TRS\Debug\linkersummary.txt
--dlldeps:c:\Users\Laboratorio\Desktop\TRS\cvibuild.TRS\Debug\dlldependencies.txt
--licensing:c:\Users\Laboratorio\Desktop\TRS\cvibuild.TRS\Debug\linkerlicensing.txt
--browsedeps:c:\Users\Laboratorio\Desktop\TRS\cvibuild.TRS\Debug\moduledependencies.txt
+-linked:c:\Program Files (x86)\TRS_MERGE\cvibuild.TRS\Debug\linkersummary.txt
+-dlldeps:c:\Program Files (x86)\TRS_MERGE\cvibuild.TRS\Debug\dlldependencies.txt
+-licensing:c:\Program Files (x86)\TRS_MERGE\cvibuild.TRS\Debug\linkerlicensing.txt
+-browsedeps:c:\Program Files (x86)\TRS_MERGE\cvibuild.TRS\Debug\moduledependencies.txt
 -stackreserve:3895728
 -stackcommit:500000
--in:c:\Users\Laboratorio\Desktop\TRS\cvibuild.TRS\Debug\Measure.obj
--in:c:\Users\Laboratorio\Desktop\TRS\cvibuild.TRS\Debug\Trs.obj
+-in:c:\Program Files (x86)\TRS_MERGE\cvibuild.TRS\Debug\Measure.obj
+-in:c:\Program Files (x86)\TRS_MERGE\cvibuild.TRS\Debug\Trs.obj
 -more:c:\program files (x86)\national instruments\cvi2013\bin\msvc\cvistart.lib
 -more:c:\program files (x86)\national instruments\cvi2013\bin\msvc\cvi.lib
 -more:c:\program files (x86)\national instruments\cvi2013\sdk\lib\msvc\advapi32.lib
@@ -26,27 +26,28 @@
 -more:c:\Program Files (x86)\National Instruments\CVI2013\bin\msvc\cvinetv.lib
 -more:c:\Program Files (x86)\National Instruments\CVI2013\bin\msvc\cvintwrk.lib
 -more:c:\Program Files (x86)\National Instruments\CVI2013\bin\msvc\cvitdms.lib
--more:c:\Users\Laboratorio\Desktop\TRS\Library\easyio.lib
+-more:c:\Program Files (x86)\TRS_MERGE\Library\easyio.lib
 -more:c:\program files (x86)\national instruments\cvi2013\sdk\lib\msvc\gdi32.lib
 -more:c:\Program Files (x86)\National Instruments\CVI2013\bin\msvc\gpib.lib
--more:c:\Users\Laboratorio\Desktop\TRS\Library\hhlib.lib
+-more:c:\Program Files (x86)\TRS_MERGE\Library\hhlib.lib
 -more:c:\Program Files (x86)\National Instruments\Shared\CVI\Bin\msvc\ivi.lib
 -more:c:\program files (x86)\national instruments\cvi2013\sdk\lib\msvc\kernel32.lib
--more:c:\Users\Laboratorio\Desktop\TRS\Library\libximc.lib
--more:c:\Users\Laboratorio\Desktop\TRS\Library\MBC32.LIB
--more:c:\Users\Laboratorio\Desktop\TRS\Library\MercLib210_CVI.lib
+-more:c:\Program Files (x86)\TRS_MERGE\Library\libximc.lib
+-more:c:\Program Files (x86)\TRS_MERGE\Library\MBC32.LIB
+-more:c:\Program Files (x86)\TRS_MERGE\Library\MercLib210_CVI.lib
 -more:c:\Program Files (x86)\National Instruments\Shared\CVI\Bin\msvc\NIDAQmx.lib
+-more:c:\Program Files (x86)\TRS_MERGE\Library\NIRS_DLL_v2.lib
 -more:c:\Program Files (x86)\National Instruments\CVI2013\bin\msvc\nivxi.lib
 -more:c:\Program Files (x86)\National Instruments\CVI2013\bin\msvc\omp.lib
--more:c:\Users\Laboratorio\Desktop\TRS\Library\scTDCmod.lib
--more:c:\Users\Laboratorio\Desktop\TRS\Library\SPC_ISA.LIB
--more:c:\Users\Laboratorio\Desktop\TRS\Library\spcm32x64.lib
--more:c:\Users\Laboratorio\Desktop\TRS\Library\th260lib.lib
--more:c:\Users\Laboratorio\Desktop\TRS\Library\THLIB.LIB
+-more:c:\Program Files (x86)\TRS_MERGE\Library\scTDCmod.lib
+-more:c:\Program Files (x86)\TRS_MERGE\Library\SPC_ISA.LIB
+-more:c:\Program Files (x86)\TRS_MERGE\Library\spcm32x64.lib
+-more:c:\Program Files (x86)\TRS_MERGE\Library\th260lib.lib
+-more:c:\Program Files (x86)\TRS_MERGE\Library\THLIB.LIB
 -more:c:\Program Files (x86)\National Instruments\CVI2013\toolslib\toolbox\msvc\toolbox.obj
 -more:c:\program files (x86)\national instruments\cvi2013\sdk\lib\msvc\user32.lib
--more:c:\Users\Laboratorio\Desktop\TRS\Library\USMCDLL.lib
+-more:c:\Program Files (x86)\TRS_MERGE\Library\USMCDLL.lib
 -more:c:\program files (x86)\national instruments\cvi2013\sdk\lib\msvc\uuid.lib
 -more:c:\Program Files (x86)\National Instruments\Shared\CVI\Bin\msvc\visa.lib
--more:c:\Users\Laboratorio\Desktop\TRS\Library\w32nii3e.lib
+-more:c:\Program Files (x86)\TRS_MERGE\Library\w32nii3e.lib
 -more:c:\program files (x86)\national instruments\cvi2013\sdk\lib\msvc\winmm.lib

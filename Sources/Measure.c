@@ -1,6 +1,6 @@
 /* ######################################################################## */
 /* 									   														*/
-/* 		TRS Measure. Time-Resolved Spectroscopy	 Release 14.2  November  2015   */
+/* 		TRS Measure. Time-Resolved Spectroscopy	 Release 16.0  January  2018   */
 /* 									   														*/
 /* ######################################################################## */
 
@@ -22,6 +22,9 @@
 // SPCM32x64 bit DLL
 // refolding software SC1000
 // multichannel TDC
+// GitHub
+// NIRS Box
+// New TRIM
 
 /* ########################   HELP   ################################## */
 // Board = Physical TCSPC Board
@@ -75,6 +78,7 @@
 #include "spcm_def.h"
 #include "spc_isa_def.h"
 #include "ximc2.h" // Standa2 driver re-saved as ximic2.h since the ximc.h had a truncated line
+#include "NIRS_DLL_v2_mod.h"
 //#include "thlibc.h"
 //#include "thdefin.h"
 #include "W32nii3eMOD.h"
@@ -211,14 +215,20 @@ void KernelGen(){
 						for(is=0;is<MAX_STEP;is++)
 							if(P.Action.WaitStep[is]) WaitStep(&P.Step[is].Actual,CalcGoal(is),is,P.Action.Status);
 						int ir=0; //patch
-						for(it=0;it<MAX_TRIM;it++)
-							if((P.Action.Trim[it])&&!P.Trim[it].Break) { if(P.Action.ScReInit&&ir==0) ReInitSC1000(0,'T'); ir++;AutoTrim(it);} //patch
+						for(it=0;it<MAX_TRIM;it++) // Trim BEFORE Break
+							if((P.Action.Trim[it])&&!P.Trim[it].Break){
+								if(P.Action.ScReInit&&ir==0) ReInitSC1000(0,'T'); ir++; // patch
+								AutoTrim(it);
+								}
 						if(P.Action.DisplayStatus) DisplayStatus();
 						for(il=0;il<MAX_LOOP;il++)
 							if(P.Action.Break[il]){ if (P.Action.ScReInit) ReInitSC1000(0,'O'); Oscilloscope();if(P.Command.Abort) break;}
 						ir = 0; //patch
-						for(it=0;it<MAX_TRIM;it++)
-							if((P.Action.Trim[it])&&P.Trim[it].Break) {if (P.Action.ScReInit&&ir==0) ReInitSC1000(0,'T'); AutoTrim(it);}   //patch
+						for(it=0;it<MAX_TRIM;it++) // Trim AFTER Break
+							if((P.Action.Trim[it])&&P.Trim[it].Break){
+								if(P.Action.ScReInit&&ir==0) ReInitSC1000(0,'T'); // patch
+								AutoTrim(it);
+								}
 						if(P.Action.ScReInit) ReInitSC1000(0,'M');  //patch
 						if(P.Action.StartOma) StartOma();
 						if(P.Action.Ophir) GetOphir();
@@ -254,11 +264,6 @@ void KernelGen(){
 	    		}
 			}
 		}
-
-/*for(int temporaneo=0;temporaneo<timer;temporaneo++) 
-			fprintf(fid2,"%.8f\t%.8f\t%.8f\n",now[temporaneo],now2[temporaneo],now2[temporaneo]-now[temporaneo]);
-		fclose(fid2);   */ 
-						
 	}
 
 
@@ -313,8 +318,6 @@ void Oscilloscope(void){
 	P.Command.Continue=FALSE;
 	P.Contest.Function = CONTEST_OSC;
 	SpcTime(P.Spc.TimeO);
-	/*patch*/
-	
 	while(!P.Command.Continue && !P.Command.Abort){
 		GetUserEvent (0, &panel, &control);
 		SpcReset(status,P.Meas.Clear,P.Meas.Stop);
@@ -456,10 +459,10 @@ void DecideAction(void){
 	// Trim
    	for(it=0;it<MAX_TRIM;it++){
    		if(!P.Trim[it].Trim) P.Action.Trim[it]=FALSE;
-		else P.Action.Trim[it]=(new[P.Step[P.Trim[it].Step].Loop]&&P.Trim[it].Trim);
+		else P.Action.Trim[it]=(new[P.Trim[it].Loop]&&P.Trim[it].Trim);
 		if(P.Trim[it].Trim)
 			if(P.Trim[it].FileTrim){
-				idxloop=P.Loop[P.Step[P.Trim[it].Step].Loop].Idx;
+				idxloop=P.Loop[P.Trim[it].Loop].Idx;
 				regionfile=P.Trim[it].RegionFile[idxloop];
     			if(regionfile==NEG) P.Action.Trim[it]=FALSE;
 				}
@@ -701,8 +704,7 @@ void InitMem(void){
 	if(P.Moxy.Moxy) D.Bank=DAlloc2D(P.Num.Board,SPC_BANK_DIM); 
 	if(P.Info.SubHeader) D.Sub=SAlloc2D(P.Frame.Num,P.Num.Page);
 	D.Data=DAlloc3D(P.Frame.Num,P.Num.Page,P.Chann.Num); 
-    if(P.Mamm.PostProcess) D.BufferTDC=DAlloc3D_SC1000(P.Frame.Num,P.Num.Page,P.Mamm.SC1000_MAXBIN);	//patch
-	Passed();
+    Passed();
 	}
 
 
@@ -877,8 +879,9 @@ void CompleteParmS(void){
 		case SPC130:P.Spc.Calib=CALIB_SPC130;break;
 		case HYDRA:break;
 		case TH260:break;
-		case TEST:P.Spc.Calib=TEST_CALIB;
-		case DEMO:P.Spc.Calib=TEST_CALIB;
+		case TEST:P.Spc.Calib=TEST_CALIB; break;
+		case DEMO:P.Spc.Calib=TEST_CALIB; break;
+		case SPC_NIRS:P.Spc.Calib=NIRS_DT; break;
 		default: break;
 		}
 	/* READ INI FROM UIR WITH NO DIR
@@ -910,12 +913,25 @@ void CompleteParmS(void){
 		P.Chann.Last=1024*16-1;
 		} */
 	P.Chann.Num = P.Chann.Last-P.Chann.First+1;
+	if(P.Spc.Type==SPC_NIRS){
+		P.Chann.First=0;
+		P.Chann.Last=NIRS_HISTLEN-1;
+		P.Chann.Num=NIRS_HISTLEN;
+		}
+
 	P.Spc.Started=FALSE;
 	P.Spc.Trash=TRUE;
-	if((P.Spc.Type==SPC300)||(P.Spc.Type==SPC630)||(P.Spc.Type==SPC130)||(P.Spc.Type==HYDRA)||(P.Spc.Type==TH260)) P.Meas.Stop=TRUE;
-	if((P.Spc.Type==SPC300)||(P.Spc.Type==SPC630)||(P.Spc.Type==SPC130)||(P.Spc.Type==HYDRA)||(P.Spc.Type==TH260)||(P.Spc.Type==TEST)||(P.Spc.Type==DEMO)) P.Spc.Format=SPC_SHORT;
-	else P.Spc.Format=SPC_LONG;
+	if((P.Spc.Type==SPC300)||(P.Spc.Type==SPC630)||(P.Spc.Type==SPC130)||(P.Spc.Type==HYDRA)||(P.Spc.Type==TH260))
+		P.Meas.Stop=TRUE;
+	if((P.Spc.Type==SPC300)||(P.Spc.Type==SPC630)||(P.Spc.Type==SPC130)||(P.Spc.Type==HYDRA)||(P.Spc.Type==TH260)||(P.Spc.Type==TEST)||(P.Spc.Type==DEMO))
+		P.Spc.Format=SPC_SHORT;
+	else
+		P.Spc.Format=SPC_LONG;
 	P.Spc.Subtract=(P.Meas.Stop?FALSE:TRUE);
+	if((P.Spc.Type==SPC_NIRS)){
+		P.Meas.Stop=FALSE;
+		P.Spc.Subtract=FALSE;
+		}
 
     P.Oscill.Zoom.Last=MIN(P.Oscill.Zoom.Last,P.Chann.Num-1);
     P.Oscill.Zoom.First=MAX(P.Oscill.Zoom.First,0);
@@ -925,7 +941,7 @@ void CompleteParmS(void){
     	P.Oscill.First[ir]=MAX(P.Oscill.First[ir],0);
     	}
 	if(P.Spc.Type==SPC_SC1000) {
-		Period = (double) (1/(P.Spc.RepRate*1e6))*1e12;
+		Period = (double) (1/(P.Spc.RepRate*1e6))*1e12;		// in ps   //EDO
 		if(P.Spc.Refolding==2||P.Spc.Refolding==4) {
 			//P.Spc.Factor=Period/P.Chann.Num; //if the chann num defines the factor
 			//P.Chann.Num=Period/P.Spc.Factor; //if the factor defines the chann num
@@ -949,6 +965,8 @@ void CompleteParmS(void){
 	
 	// Detector
 	P.Num.Det = 1;
+	if(P.Spc.Type==SPC_NIRS)
+		if(P.Spc.Nirs[0].Lambda==NIRS_LAMBDA12) P.Spc.RoutingBits=1; else P.Spc.RoutingBits=0;
 	for(ir=0;ir<P.Spc.RoutingBits;ir++) P.Num.Det*=2;
 	
 	// Filter-Page-Acq
@@ -978,8 +996,7 @@ void CompleteParmS(void){
 	// Frame
 	P.Frame.Num = CEIL(P.Ram.Loop,P.Num.LoopxFrame);
 	if (P.Info.Appl==APPL_MAMM) P.Frame.Num = P.Loop[LOOP5].Num;
-	//patch
-	if(P.Mamm.Status) P.Frame.Num = P.Loop[P.Mamm.Loop[X]].Num;
+	if(P.Mamm.Status) P.Frame.Num = P.Loop[P.Mamm.Loop[X]].Num;		   //EDO
 	
 	P.Frame.Actual = 0;
 	
@@ -1114,10 +1131,7 @@ void CompleteParmS(void){
     	else{
     		sprintf(P.Trim[it].FPath,"%s\\%s%s",DIRFILETRIM,P.Trim[it].FName,EXTFILETRIM);
     		P.Trim[it].Trim=TRUE;
-        	P.Trim[it].Loop=P.Step[P.Trim[it].Step].Loop;
         	P.Trim[it].Delta=(long)(P.Trim[it].DeltaU*P.Step[P.Trim[it].Step].Factor);
-        	//P.Trim[it].Roi.First=P.Roi.First[P.Trim[it].Region];
-       		//P.Trim[it].Roi.Last=P.Roi.Last[P.Trim[it].Region];
 			P.Trim[it].FileTrim=(strlen(P.Trim[it].FName)>0);
 			}
 		}
@@ -1311,7 +1325,7 @@ void InitPres(void) {
 	sprintf(StimuliFileName,"%s\\%s", P.Presentation.FStimuliDir, P.Presentation.FStimuliName);
 	sprintf(PresentationFileName,"%s\\%s", P.Presentation.FInitPresentationDir, P.Presentation.FInitPresentationName);
 	StimuliFile = fopen (StimuliFileName, "w");
-	PresentationFile = fopen ("C:\Program Files (x86)\TRS 14.2 - Copy\prova.txt", "w");
+	PresentationFile = fopen (PresentationFileName, "w");
 	fprintf (StimuliFile,"AbsTime\tType\tRepeat\tBaseL\tTask\tRecov\tRelTime\tParam1\tParam2\tParam3\n");
 	for (ips=0;ips<P.TSequence.FrameTot;ips++) {
 		fprintf (StimuliFile,"%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n",*(AbsoluteTime+ips),*(Block+ips),*(Repeat+ips),
@@ -1839,7 +1853,6 @@ void DisplayRoi(void){
 /* CALCULATE AREA */
 long CalcArea(long First, long Last){
 	long area=0;
-	//short ic;
 	int ic;
 	for(ic=First;ic<=Last;ic++) area+=D.Curve[ic];
 	return(area);
@@ -1870,7 +1883,6 @@ double CalcWidth(long First,long Last,double Treshold){
 
 /* CALCULATE RANGE HIGHER THAN PEAK FRACTION */
 void GetRange(long RoiFirst,long RoiLast,double Fract,long *Max, long *Peak, long *pRangeFirst,long *pRangeLast,double *Treshold){
-	//short ic;
 	int ic;
 	*Max=0;
 	*Peak=RoiFirst;
@@ -1971,8 +1983,9 @@ void SpcInit(void){
 		case SPC130: for(ib=0;ib<P.Num.Board;ib++) InitSpcm(ib);break;
 		case HYDRA: for(ib=0;ib<P.Num.Board;ib++) InitHydra(ib);break;
 		case TH260: for(ib=0;ib<P.Num.Board;ib++) InitTH260(ib);break;
-		case SPC_SC1000: for(ib=0;ib<P.Num.Board;ib++) InitSC1000(ib);break;
+		case SPC_SC1000: for(ib=0;ib<P.Num.Board;ib++) InitSC1000(ib);break;//EDO
 		case SPC_SPADLAB: for(ib=0;ib<P.Num.Board;ib++) InitSpad(ib);break;
+		case SPC_NIRS: for(ib=0;ib<P.Num.Board;ib++) InitNirs(ib);break;
 		case TEST: break;
 		case DEMO: InitDemo(); break;
 		}
@@ -1994,6 +2007,7 @@ void SpcClose(void){
 		case TH260: CloseTH260(); break;
 		case SPC_SC1000: CloseSC1000(); break;
 		case SPC_SPADLAB: CloseSpad(); break;
+		case SPC_NIRS: CloseNirs(); break;
 		case TEST: break;
 		case DEMO: CloseDemo(); break;
 		}
@@ -2017,6 +2031,7 @@ void SpcPause(void){
 		case SPC_SPADLAB: for(ib=0;ib<P.Num.Board;ib++) PauseSpad(ib); break;
 		case TEST: break;
 		case DEMO: break;
+		default: break;
 		}
 	}
 	
@@ -2045,6 +2060,7 @@ void SpcClear(void){
 			break; /*patch*/
 		case TEST: break;
 		case DEMO: break;
+		default: break;
 		}
 	P.Spc.Zero=TimerN();
 	P.Spc.Trash=FALSE;
@@ -2067,6 +2083,7 @@ void SpcIn(){
 		case TH260: TH260_StartMeas(TH260_DEV0,P.Spc.TimeTH260); break;
 		case SPC_SC1000: for(ib=0;ib<P.Num.Board;ib++){} break;
 		case SPC_SPADLAB: for(ib=0;ib<P.Num.Board;ib++) StartSpad(ib); break;
+		case SPC_NIRS: for(ib=0;ib<P.Num.Board;ib++) StartNirs(ib); break;
 		case TEST: break;
 		case DEMO: break;
 		}
@@ -2090,6 +2107,7 @@ void SpcRestart(void){  //TODO: check
 		case TH260: TH260_StartMeas(TH260_DEV0,P.Spc.TimeHydra); break;
 		case SPC_SC1000: for(ib=0;ib<P.Num.Board;ib++) P.Spc.AcqTimeSC1000=StartSC1000(P.Spc.ScBoard[ib],P.Mamm.Status?(abs(P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx-1]-P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx-1])+1+20)*P.Spc.TimeM:SC1000_TIME_INFINITY); break;
 		case SPC_SPADLAB: for(ib=0;ib<P.Num.Board;ib++) StartSpad(ib); break;
+		case SPC_NIRS: for(ib=0;ib<P.Num.Board;ib++) StartNirs(ib); break;
 		case TEST: break;
 		case DEMO: break;
 		}
@@ -2099,6 +2117,7 @@ void SpcRestart(void){  //TODO: check
 /* OPTIMIZED DATA CLEAR & DATA IN */
 void SpcReset(char Status, char Clear, char Stop){
 	if(Clear) SpcClear();
+	if((P.Spc.Type==SPC_NIRS)&&P.Spc.Trash) TrashNirs(); // note Trash clear for SPC_NIRS is inserted here  
 	if(P.Spc.Trash) SpcOut(FALSE);
 	if(Stop||(!P.Spc.Started)) SpcIn();
 	if(Status) SetCtrlVal (hDisplay, DISPLAY_MEASURE, ON);
@@ -2122,6 +2141,7 @@ void SpcTime(float Time){
 		case TH260: P.Spc.TimeTH260 = (int) (Time*SEC_2_MILLISEC); break;
 		case SPC_SC1000: P.Spc.TimeSC1000 = (int) (Time*SEC_2_MILLISEC); break;
 		case SPC_SPADLAB: for(ib=0;ib<P.Num.Board;ib++) TimeSpad(ib,Time); break;
+		case SPC_NIRS: for(ib=0;ib<P.Num.Board;ib++) TimeNirs(ib,Time); break;
 		case TEST: break;
 		case DEMO: break;
 		}
@@ -2144,8 +2164,10 @@ void SpcStop(char Status){
 		case TH260: TH260_StopMeas(TH260_DEV0); break;
 		case SPC_SC1000: break;//if(P.Contest.Function = CONTEST_MEAS); for(ib=0;ib<P.Num.Board;ib++) StopSC1000(ib); break;	 /*patch*/
 		case SPC_SPADLAB: for(ib=0;ib<P.Num.Board;ib++) StopSpad(ib);break;
+		case SPC_NIRS: for(ib=0;ib<P.Num.Board;ib++) StopNirs(ib);break;
 		case TEST: break;
 		case DEMO: break;
+		default: break;
 		}
 	CalcTime();
 	if(Status) SetCtrlVal (hDisplay, DISPLAY_MEASURE, OFF);
@@ -2183,6 +2205,7 @@ void SpcWait(void){
     					do  sc_tdc_get_status2(P.Spc.ScBoard[ib],&mod_state2);
 						while(mod_state2==0);break; */
  		case SPC_SPADLAB: for(ib=0;ib<P.Num.Board;ib++) WaitSpad(ib); break;
+		case SPC_NIRS: for(ib=0;ib<P.Num.Board;ib++) WaitNirs(ib); break;
 		case DEMO:
 		case TEST: Delay((P.Contest.Function==CONTEST_OSC?P.Spc.TimeO:P.Spc.TimeM));break;
 		}
@@ -2203,6 +2226,7 @@ void SpcGet(void){
 		case TH260: GetDataTH260();break;
 		case SPC_SC1000: GetDataSC1000();break;
 		case SPC_SPADLAB: GetDataSpad();break;
+		case SPC_NIRS: GetDataNirs();break;
 		case TEST:  GetDataTest();break;
 		case DEMO:  GetDataDemo();break;
 		}
@@ -2272,6 +2296,10 @@ void CalcTime(void){
 			TH260_GetElapsedMeasTime(TH260_DEV0,&elapsed_time);
 			for(ib=0;ib<P.Num.Board;ib++) P.Spc.EffTime[ib] = elapsed_time;
 			break;
+		case SPC_NIRS:
+			for(ib=0;ib<P.Num.Board;ib++)
+				P.Spc.EffTime[ib]=(double)(P.Spc.Nirs[ib].IntTime)/SEC_2_MILLISEC;
+			break;  
 		default:
 			now=TimerN();
 			P.Spc.EffTime[0]=now-P.Spc.Zero;
@@ -2792,8 +2820,8 @@ void ReInitSC1000(int Board, char Operation){
 }
 
 /* INIT SC1000 */	
-void InitSC1000(int Board){
-	//CVIProfSetCurrentThreadProfiling(1);	/*patch*/
+void InitSC1000(int Board){			   //EDO
+	//CVIProfSetCurrentThreadProfiling(1); //for code profiling
 	CompleteClosureSC1000(Board);	
 	
 	int ret=0,id,it,il;
@@ -2883,6 +2911,7 @@ void InitSC1000(int Board){
 	// start acquisition
 	if(StartMeasure) 
 		P.Spc.AcqTimeSC1000=StartSC1000(Board,SC1000_TIME_INFINITY);
+	if(P.Spc.AcqTimeSC1000<0) return;
 	Passed();
 	
 } 
@@ -2891,7 +2920,7 @@ void InitSC1000(int Board){
 float StartSC1000(int Board,float AcqTime){   /*patch*/
 	int Time=AcqTime*SEC_2_MILLISEC;
 	int ret=sc_tdc_start_measure2(P.Spc.ScBoard[Board],Time);
-	if(ret<0) ErrHandler(ERR_SC1000,ret,"StartSC1000");
+	if(ret<0) {ErrHandler(ERR_SC1000,ret,"StartSC1000"); Failure("Error in starting acquisition"); return -1;}
 	return AcqTime;
 }
 
@@ -2931,8 +2960,6 @@ void CloseSC1000(void){
 	doubleFree1D(LinArray);
 	SC1000Free1D(DCR_raw_count);
 	doubleFree1D(DCR_raw_time);
-	SC1000Free1D(IRF_raw_count);
-	doubleFree1D(IRF_raw_time);
 	doubleFree3D(NonLinDt,P.Num.Board,P.Num.Det);
 } 
 
@@ -3056,7 +3083,7 @@ int id,ret=0;
 }
 
 /* CALCULATE COEFFICIENTS FOR NON-LIN COMPENSATION */
-void CalcNonlinSC1000(void){
+void CalcNonlinSC1000(void){	   //EDO
 	char trash[STRLEN];
 	double meanDCR;
 	int id,icc,ib;
@@ -3331,6 +3358,181 @@ void WaitSpad(int Board){
 	while(!(status == CNVNewData || status == CNVDataWasLost)); // Check for new data; ignore empty buffer (CNVNoData) and stale data (CNVStaleData)
 	}
 
+
+/* ########################    NIRS TDC FUNCTIONS (NIRS)  ####################### */
+
+
+int NirsBox(int Start){return(0);}
+int NirsLasers(int Start){return(0);}
+void InitNirs(int Board){}
+void TimeNirs(int Board, double Time){}
+void TrashNirs(void){}
+void CloseNirs(void){}
+void StartNirs(int Board){}
+void StopNirs(int Board){}
+void GetDataNirs(void){}
+void WaitNirs(int Board){}
+
+
+
+/* START/STOP NIRS BOX */
+/*
+int NirsBox(int Start){
+	int ret;
+	char message[STRLEN];
+	static const char sSTART[] = "START";
+	static const char sSTOP[] = "STOP";
+	
+	sprintf (message, "Do you want to %s NirsBox?",(Start==TRUE?sSTART:sSTOP));
+	int answer = ConfirmPopup ("NIRS BOX: ON/OFF",message);
+	
+	if(answer==TRUE){ 
+		if(Start==TRUE){ // START NIRS BOX 
+			// initialise communication
+			ret = NIRS_OPEN(&P.Spc.Nirs[0].Handle, P.Spc.Nirs[0].RegOut, NIRS_REGLEN);
+			if(ret!=1){ MessagePopup("ERROR WITH NIRS BOX", "Error in Initializing Communication"); return FALSE; }
+			// start operation
+			ret = NIRS_ON(&P.Spc.Nirs[0].Handle, P.Spc.Nirs[0].RegOut, P.Spc.Nirs[0].RegOut, NIRS_REGLEN, NIRS_REGLEN, TRUE);
+			if(ret!=1){ MessagePopup("ERROR WITH NIRS BOX", "Error in START NIRS Box"); return FALSE; }
+			// message
+			MessagePopup("STARTING NIRS BOX", "Action Completed Successfully!");
+			return TRUE;
+			}
+		else{			// STOP NIRS BOX 
+			// stop operation
+			ret = NIRS_ON(&P.Spc.Nirs[0].Handle, P.Spc.Nirs[0].RegOut, P.Spc.Nirs[0].RegOut, NIRS_REGLEN, NIRS_REGLEN, FALSE);
+			if(ret!=1){ MessagePopup("ERROR WITH NIRS BOX", "Error in STOP NIRS Box"); return FALSE; }
+			// stop communication
+			ret = NIRS_CLOSE(&P.Spc.Nirs[0].Handle);
+			if(ret!=1){ MessagePopup("ERROR WITH NIRS BOX", "Error in Closing Communication"); return FALSE; }
+			// message
+			MessagePopup("STOPPING NIRS BOX", "Action Completed Successfully!");
+			return TRUE;
+			}
+		}
+	else
+		return FALSE;	
+
+	}
+*/
+
+/* START/STOP NIRS LASER */	
+/*int NirsLasers(int Start){
+	int ret;
+	char message[STRLEN];
+	static const char sSTART[] = "START";
+	static const char sSTOP[] = "STOP";
+	uint32_t int_time = (uint32_t) (P.Spc.Nirs[0].UirTime/P.Num.Det);
+	uint32_t freq = (uint32_t) (P.Spc.Nirs[0].Freq);
+	uint32_t lambda = (uint32_t) (P.Spc.Nirs[0].Lambda);
+
+	sprintf (message, "Do you want to %s Laser?",(Start==TRUE?sSTART:sSTOP));
+	int answer = ConfirmPopup ("NIRS LASER: ON/OFF",message);
+	
+	if(answer==TRUE){ 
+		if(Start==TRUE){ // START NIRS LASER 
+			// start laser
+			ret = NIRS_LASER(&P.Spc.Nirs[0].Handle, P.Spc.Nirs[0].RegOut, P.Spc.Nirs[0].RegOut, NIRS_REGLEN, NIRS_REGLEN, TRUE);
+			if(ret!=1){ MessagePopup("ERROR WITH NIRS LASER", "Error in START Laser"); return FALSE; }
+			// set specs
+			ret = NIRS_SET(&P.Spc.Nirs[0].Handle, P.Spc.Nirs[0].RegOut, P.Spc.Nirs[0].RegOut, NIRS_REGLEN, NIRS_REGLEN, freq, int_time, lambda);
+			if(ret!=1){ MessagePopup("ERROR WITH NIRS LASER", "Error in setting FREQ, TIME, LAMBDA"); return FALSE; }
+			// message
+			MessagePopup("START NIRS LASER", "Action Completed Successfully!");
+			return TRUE;
+			}
+		else{			// STOP NIRS BOX 
+			// stop laser
+			ret = NIRS_LASER(&P.Spc.Nirs[0].Handle, P.Spc.Nirs[0].RegOut, P.Spc.Nirs[0].RegOut, NIRS_REGLEN, NIRS_REGLEN, FALSE);
+			if(ret!=1){ MessagePopup("ERROR WITH NIRS LASER", "Error in STOP Laser"); return FALSE; }
+			// message
+			MessagePopup("STOP NIRS LASER", "Action Completed Successfully!");
+			return TRUE;
+			}
+		}
+	else
+		return FALSE;	
+
+	}
+*/
+
+
+/* INIT NIRS */	
+/*void InitNirs(int Board){
+	int ret;
+	char message[STRLEN];
+
+	sprintf (message, "Initializing NIRS, Module #%d, ...", Board);
+	SetCtrlVal (hDisplay, DISPLAY_MESSAGE, message); 
+	
+	// initialize buffer
+	P.Spc.Nirs[Board].Hist = (uint32_t *) calloc(NIRS_HISTLEN, sizeof(uint32_t));
+	
+	P.Spc.TimeInit=TimerN();   // era Timer() 
+	}
+*/
+
+
+/* SET TIME NIRS */	
+/*void TimeNirs(int Board, double Time){
+	int ret;
+	
+	uint32_t freq = (uint32_t) (P.Spc.Nirs[0].Freq);
+	uint32_t lambda = (uint32_t) (P.Spc.Nirs[0].Lambda);
+	P.Spc.Nirs[Board].IntTime = (uint32_t) (Time/P.Num.Det*SEC_2_MILLISEC);
+	ret = NIRS_SET(&P.Spc.Nirs[Board].Handle, P.Spc.Nirs[Board].RegOut, P.Spc.Nirs[Board].RegOut, NIRS_REGLEN, NIRS_REGLEN, freq, P.Spc.Nirs[Board].IntTime, lambda);
+	}
+*/
+/* CLOSE NIRS */	
+/*void CloseNirs(void){
+	int ib, ret;
+	for(ib=0;ib<P.Num.Board;ib++){
+		free(P.Spc.Nirs[ib].Hist);
+		}
+	} 
+*/
+/* CLEAR NIRS */	
+/*void TrashNirs(void){
+	if(P.Spc.Trash){
+		StopNirs(0);
+		StartNirs(0);
+		P.Spc.Trash=FALSE;
+		}
+	}
+*/
+/* START NIRS */	
+/*void StartNirs(int Board){
+	int ret;
+	ret = NIRS_MEASURE(&P.Spc.Nirs[Board].Handle, P.Spc.Nirs[Board].RegOut, P.Spc.Nirs[Board].RegOut, NIRS_REGLEN, NIRS_REGLEN, TRUE);
+	P.Spc.Started=TRUE;
+	}
+*/
+/* STOP NIRS */	
+/*void StopNirs(int Board){
+	int ret;
+	ret = NIRS_MEASURE(&P.Spc.Nirs[Board].Handle, P.Spc.Nirs[Board].RegOut, P.Spc.Nirs[Board].RegOut, NIRS_REGLEN, NIRS_REGLEN, FALSE);
+	P.Spc.Started=FALSE;
+	}
+*/
+/* TRANSFER DATA FROM NIRS */	
+/*void GetDataNirs(void){
+	}
+*/
+
+/* WAIT NIRS */	
+/*void WaitNirs(int Board){
+	int ret,ic,id;
+	uint32_t Stats[NIRS_STATLEN];
+	uint32_t Bank = 0;
+	int det=0;
+	
+	for(id=0;id<P.Num.Det;id++){
+		while(!(NIRS_ACQ(&P.Spc.Nirs[Board].Handle, P.Spc.Nirs[Board].Hist, Stats, NIRS_HISTLEN, NIRS_STATLEN, &Bank)));
+		det=Bank-1;
+		for(ic=0;ic<P.Chann.Num;ic++) D.Buffer[Board][det*P.Chann.Num+ic]=(T_DATA) P.Spc.Nirs[Board].Hist[P.Chann.Num-1-ic];
+		}
+	}
+*/
 
 /* ########################   THARP SPC FUNCTIONS   ####################### */
 
@@ -3649,7 +3851,7 @@ void InitTrim(char Trim){
 	int numread = 0;
 	long label;
 	int roi;
-	int loop=P.Step[P.Trim[Trim].Step].Loop;
+	int loop=P.Trim[Trim].Loop;
 	long num=P.Loop[loop].Num;
 	char message[STRLEN];
 	char row0[STRLEN];
@@ -3680,18 +3882,11 @@ void InitTrim(char Trim){
 
 /* AUTO TRIMMER */
 void AutoTrim(int Trim){
-	if(P.Spc.Type==SPC_SC1000) P.Spc.SCAutoTrim=1;
+	if(P.Spc.Type==SPC_SC1000) P.Spc.SCAutoTrim=1;   //patch
 	struct TrimS *T = &P.Trim[Trim];
 	char si=T->Step;
 	char datareset,tellpos,movestep,startstep,dataclear,datain,typewait,datastop,dataout;
-	char versus=(T->Dir==TRIM_DIR_DOWN?-1:1);
-	long jump=(T->Dir==TRIM_DIR_MIDDLE?1:0);
-	/*TellPos(si,&P.Step[si].Actual);
-	int buffer = T->Num;
-	T->Num = T->Num-P.Step[si].Actual;
-	if (T->Num <= 0){	 //patch
-	  T ->Num = buffer;
-	return;}*/ 
+	long jump=(T->Scan==TRIM_SCAN_MIDDLE?1:0);
 	long Origin=P.Step[si].Actual-jump*(T->Delta*T->Num)/2;
 	long oldpos=P.Step[si].Actual;
 	long label;
@@ -3709,26 +3904,27 @@ void AutoTrim(int Trim){
 		T->RegionActual=T->Region;
 
 	// Initialize
-	//P.Contest.Function=CONTEST_TRIM;
+	T->Dir=(T->Scan==TRIM_SCAN_DOWN?-1:1);
 	page=P.Roi.Page[T->RegionActual];
 	P.Contest.Function=CONTEST_OSC;
 	if(T->Type==CONT) SpcTime((float) 5*T->Num*T->Time);
 	else SpcTime((float) INFINITY);
+	if(T->Wait==TRIM_WAIT_SPC) SpcTime(T->Time);
 	if(P.Action.Status) SetCtrlVal (hDisplay, DISPLAY_TRIM, ON);
 	T->ImprovedA=FALSE;
 	T->ImprovedW=FALSE;
 	T->PosAct=0;
 	T->Trial=0;
 	T->Set=0;
-	T->Best=((T->Sign==LOWER)?INIT_LOWER:INIT_HIGHER);
+	T->Best=((T->Sign==TRIM_DIR_NEG)?INIT_LOWER:INIT_HIGHER); // not correct for TRIM_SCAN_RANGE
 	T->BestA=INIT_HIGHER;
 	T->BestW=INIT_LOWER;
-	//MoveStep(&P.Step[si].Actual,Origin,si,TRUE,FALSE);
+	MoveStep(&P.Step[si].Actual,Origin,si,TRUE,FALSE);
 	T->PosBest = P.Step[si].Actual;
 	
-	// If already Success, then exit
+	// If already Success or Maximum Boundary for Step then smart exit
 	SpcReset(FALSE,is_any_SPC,is_any_SPC); //patch SpcReset(FALSE,is_any_SPC||P.Spc.Type==SPC_SC1000,is_any_SPC); //patch
-	WaitEnd(T->Time,0,WAIT_TIME,si);
+	WaitEnd(T->Time,0,(T->Wait==TRIM_WAIT_SPC?WAIT_SPC:WAIT_TIME),si);
 	SpcStop(FALSE);
 	SpcOut(FALSE);
 	D.Curve=D.Osc[page];
@@ -3738,7 +3934,8 @@ void AutoTrim(int Trim){
 	if(T->Status) SetTableCellVal(hDisplay,DISPLAY_T_TRIS,MakePoint(COL_TRIS_TRIM,Trim+1),T->Trial);
 	if(T->Status) ProcessDrawEvents ();
 	if(T->Display) DisplayPlot();
-	if(T->Success){
+	T->Boundary=(P.Step[si].Actual==(T->Dir>0?P.Step[si].Max:P.Step[si].Min)); // note: CheckTrimGoal can change T->Dir
+	if((T->Success)||(T->Boundary)){
 		if(P.Action.Status) SetTableCellVal(hDisplay,DISPLAY_T_TRIS,MakePoint(COL_TRIS_TRIM,Trim+1),T->Set);
 		if(P.Action.Status) SetCtrlVal (hDisplay, DISPLAY_TRIM, OFF);
 		loop_index=P.Loop[loop].Actual;
@@ -3750,7 +3947,6 @@ void AutoTrim(int Trim){
 		P.Contest.Function=CONTEST_MEAS;
 		return;
 		}
-
 
 	// Continue with standard procedure
 	if(T->Type==CONT) SetVel(si,(T->Delta/T->Time));
@@ -3778,8 +3974,12 @@ void AutoTrim(int Trim){
 				dataclear=is_any_SPC; //||P.Spc.Type==SPC_SC1000;//(isfirst&&P.Spc.Type==SPC_SC1000);   //patch
 				datain=is_any_SPC;
 				datareset=(isfirst||is_any_SPC);
-				typewait=WAIT_POS;
-				tellpos=TRUE;
+				switch (T->Wait){
+					case TRIM_WAIT_POS: typewait=WAIT_POS; break;
+					case TRIM_WAIT_TIME: typewait=WAIT_TIME; break;
+					case TRIM_WAIT_SPC: typewait=WAIT_SPC; break;
+					}
+				tellpos=((T->Wait==TRIM_WAIT_POS)?TRUE:FALSE);
 				datastop=((P.Meas.Stop?islast:FALSE)||is_any_SPC);
 				dataout=TRUE;
 				break;
@@ -3787,9 +3987,9 @@ void AutoTrim(int Trim){
 			
 		// Do Action
 		T->Trial++;
-		goalstep=Origin+versus*T->Trial*T->Delta;
+		goalstep=Origin+T->Dir*T->Trial*T->Delta;
 		if(movestep) MoveStep(&P.Step[si].Actual,goalstep,si,TRUE,FALSE);
-		if(startstep) MoveStep(&P.Step[si].Actual,Origin+versus*T->Num*T->Delta,si,FALSE,FALSE);
+		if(startstep) MoveStep(&P.Step[si].Actual,Origin+T->Dir*T->Num*T->Delta,si,FALSE,FALSE);
 		if(datareset) SpcReset(FALSE,dataclear,datain);
 		WaitEnd(T->Time,goalstep,typewait,si);
 		if(tellpos) TellPos(si,&T->PosAct);
@@ -3803,19 +4003,14 @@ void AutoTrim(int Trim){
 		if(T->Status) ProcessDrawEvents ();
 		if(T->Display) DisplayPlot();
 		T->Stop=(T->Trial>T->Num);
+		T->Boundary=(T->Dir>0?goalstep>=P.Step[si].Max:goalstep<=P.Step[si].Min);
 		}
-	while(!T->Success && !T->Stop);
+	while(!T->Success && !T->Stop && !T->Boundary);
 	
 /*	if(T->Type==CONT)
 		if((T->Stop)&&((P.Step[si].Type==MICRO)||(P.Step[si].Type==MICRO2))) GetMicro(P.Step[si].Com,&P.Step[si].Actual); //WaitStep()????!
 		else StopStep(si);	  */ //original
-	
-	if(T->Type==CONT)			//patch
-		if((T->Stop)&&((P.Step[si].Type==MICRO)||(P.Step[si].Type==MICRO2))) StopStep(si);
-		else StopStep(si);
-	
-//	if(T->Type==CONT) 	WaitMicro(si,Origin+versus*T->Num*T->Delta);
-
+	if(T->Type==CONT) StopStep(si); // patch??
 	
 	if(T->Type==CONT) SetVel(si,P.Step[si].Freq);
 	if(T->Target==TARGET_AREAWIDTH){
@@ -3834,11 +4029,10 @@ void AutoTrim(int Trim){
 		}
 	
 	if(P.Action.Status) SetTableCellVal(hDisplay,DISPLAY_T_TRIS,MakePoint(COL_TRIS_TRIM,Trim+1),T->Set);
-	if(T->Type==LIGTH) T->PosBest=Origin+versus*T->Delta*T->Set;
-	/*long DeltaPos = -1;//P.Step[si].Actual-(T->Trial*T->Delta+Origin);
-	if(DeltaPos>0) MoveStep(&P.Step[si].Actual,T->PosBest-versus*DeltaPos-versus*T->Delta/2,si,TRUE,TRUE);  //patch
-		else */MoveStep(&P.Step[si].Actual,T->PosBest-versus*T->Delta/2,si,TRUE,TRUE);  //T->PosBest da sostituire con P.Step[si].Actual? 
-	//**if(!T->Success) MoveStep(&P.Step[si].Actual,T->PosBest-versus*T-Delta/2,si,TRUE,TRUE);
+	if(T->Type==LIGTH) T->PosBest=Origin+T->Dir*T->Delta*T->Set;
+	//if((T->Wait==TRIM_WAIT_POS)||!T->Success) MoveStep(&P.Step[si].Actual,T->PosBest-T->Dir*T->Delta/2,si,TRUE,TRUE);  //T->PosBest da sostituire con P.Step[si].Actual? 
+	if(T->Wait==TRIM_WAIT_POS) MoveStep(&P.Step[si].Actual,T->PosBest-T->Dir*T->Delta/2,si,TRUE,TRUE);  // OK ONLY FOR MONOTONOUS CASES
+	else TellPos(si,&P.Step[si].Actual);
 	if(P.Action.Status) SetCtrlVal (hDisplay, DISPLAY_TRIM, OFF);
 	loop_index=P.Loop[loop].Actual;
 	label = loop_index*P.Loop[loop].Delta+P.Loop[loop].First;
@@ -3848,7 +4042,6 @@ void AutoTrim(int Trim){
 	SpcTime(P.Spc.TimeM);
 	P.Contest.Function=CONTEST_MEAS;
 	if(P.Spc.Type==SPC_SC1000) P.Spc.SCAutoTrim=0;
-	//T->Num = buffer;
 	}
 
 
@@ -3860,6 +4053,7 @@ void CheckTrimGoal(int Trim){
 	double Treshold,area,width;
 	short board=P.Page[P.Roi.Page[T->RegionActual]].Board;
 	
+	// this section only for TARGET_AREAWIDTH, then return
 	if(T->Target==TARGET_AREAWIDTH){
 		T->Success=FALSE;
 		GetRange(P.Roi.First[T->RegionActual],P.Roi.Last[T->RegionActual],T->Fract,&max,&peak,&T->Range.First,&T->Range.Last,&Treshold);
@@ -3881,23 +4075,31 @@ void CheckTrimGoal(int Trim){
 			}
 		return;
 		}
+	
+	// all other cases
 	GetRange(P.Roi.First[T->RegionActual],P.Roi.Last[T->RegionActual],T->Fract,&max,&peak,&T->Range.First,&T->Range.Last,&Treshold);
 	switch (T->Target) {
 		case TARGET_WIDTH: T->Value = CalcWidth(T->Range.First,T->Range.Last,Treshold);break;
-		//case TARGET_AREA: T->Value = CalcArea(T->Roi.First,T->Roi.Last);break;
-		case TARGET_AREA: T->Value = CalcArea(P.Roi.First[T->RegionActual],P.Roi.Last[T->RegionActual]);break;
-		case TARGET_MAX_BOARD_AREA:	// Take max of all Pages
+		case TARGET_AREA: T->Value = CalcArea(P.Roi.First[T->RegionActual],P.Roi.Last[T->RegionActual])/T->Time;break;
+		case TARGET_MAX_BOARD_AREA:
 			T->Value=0;
 			for(ib=0;ib<P.Num.Board;ib++){
 				D.Curve=D.Osc[P.Roi.Page[2*ib+T->RegionActual]];
-				area=CalcArea(P.Roi.First[T->RegionActual],P.Roi.Last[T->RegionActual]);
+				area=CalcArea(P.Roi.First[T->RegionActual],P.Roi.Last[T->RegionActual])/T->Time;
 				if(area>T->Value) T->Value=area;
 				}
-				//area/=P.Spc.TimeO;
-			
 			break;
 		}
-	if(T->Sign == LOWER) {
+	
+	// case TRIM_SCAN_RANGE (i.e. up and down depending on value) & First Check before any movement
+	if((T->Scan==TRIM_SCAN_RANGE)&&(T->Trial==0)){
+		T->Success = ((T->Value>T->Low)&&(T->Value<T->High));
+		T->Dir = ((T->Value<T->Goal)?TRIM_DIR_POS:TRIM_DIR_NEG);
+		return;
+		}
+
+	// standard operation 
+	if(T->Dir == TRIM_DIR_NEG) {
 		T->Success = (T->Value<T->Goal);
 		T->Improved = (T->Value<T->Best);
 		}
@@ -5186,11 +5388,13 @@ void MoveStep(long *Actual,long Goal,char Step,char Wait,char Status){
 	long delta;
 	int is;
 	char on = FALSE;
-	if(Status) SetCtrlVal (hDisplay, DISPLAY_MOVE, ON);
+	if (*Actual==Goal) return;
 	P.Step[Step].Moving = TRUE;
 	delta=Goal-*Actual;
-	if(delta>0) P.Step[Step].Dir=1; else P.Step[Step].Dir=-1;
-	dir=P.Step[Step].Dir;
+	dir=(delta>0?1:-1);
+	P.Step[Step].Dir=dir;
+	Goal=(dir>0?min(Goal,P.Step[Step].Max):max(Goal,P.Step[Step].Min));
+	if(Status) SetCtrlVal (hDisplay, DISPLAY_MOVE, ON);
 	switch (P.Step[Step].Type){
 		case NONE: break;
 		case LPT:  MoveLpt(Step,abs(delta),dir); break;

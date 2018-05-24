@@ -62,6 +62,14 @@ Prototype="void AddTab(int Class, int Type, int Panel, int Control, char *Label,
 Class="Function"
 Prototype="void CreateTable();"
 
+[NirsBoxCbk]
+Class="Function"
+Prototype="int NirsBoxCbk(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);"
+
+[NirsLasersCbk]
+Class="Function"
+Prototype="int NirsLasersCbk(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);"
+
 [InitPad]
 Class="Function"
 Prototype="void InitPad();"

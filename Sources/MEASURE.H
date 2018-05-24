@@ -1,7 +1,7 @@
 /* ########################   CONSTANTS   ################################# */
 
 // VERSION
-#define MESSAGE_ABOUT   "Copyright: POLITECNICO DI MILANO\nVersion: 13.4\nDate: July 2015"
+#define MESSAGE_ABOUT   "Copyright: POLITECNICO DI MILANO\nVersion: 16.0\nDate: January 2018"
 
 // TYPE OF DATA
 // USE long for TimeHarp, Varro, Silena, USE short for all others SPC boards.
@@ -75,7 +75,7 @@
 #define RECOVERY_CONST				2
 
 /* TABLE CONSTANTS */  
-#define MAX_TABLE		1104
+#define MAX_TABLE		1169
 #define STRLEN_TABLE	20
 #define TCHAR			0
 #define TINT			1
@@ -85,7 +85,7 @@
 #define CT				1
 #define MAX_TTABLE		13
 #define STRLEN_TTABLE	20
-#define MAX_PANEL		13
+#define MAX_PANEL		14
 
 
 /* FILE CONSTANTS AND ENVIRONMENT SETTINGS */  
@@ -551,6 +551,7 @@
 #define DEMO		 9
 #define SPC_SC1000		 10
 #define SPC_SPADLAB		 11
+#define SPC_NIRS		 12
 #define WAIT_DELAY	 0
 #define WAIT_TIME	 1
 #define WAIT_COUNT	 2
@@ -707,7 +708,17 @@
 #define SPADLAB_DATAIN  1
 #define SPADLAB_MAXTIME  5000 // max wait time to be sent in transmit the DataIn command
 
+/* NIRS CONSTANTS */
+#define NIRS_HISTLEN  8192	   // number of channels per lambda (fixed)
+#define NIRS_DT	(10000.0/1024) // (ps) Time Bin
+#define NIRS_REGLEN ((int32_t) 128)
+#define NIRS_STATLEN ((uint32_t) 3)
+#define NIRS_DETNUM	2
+#define NIRS_LAMBDA1  1
+#define NIRS_LAMBDA2  2
+#define NIRS_LAMBDA12 3
 
+/* TEST CONSTANTS */
 #define TEST_MUS	10.0
 #define TEST_MUA	0.10
 #define TEST_RHO	2.0
@@ -724,11 +735,15 @@
 #define TARGET_WIDTH	2
 #define TARGET_AREAWIDTH 3
 #define TARGET_MAX_BOARD_AREA 4
-#define LOWER			0
-#define HIGHER			1
-#define TRIM_DIR_MIDDLE	0
-#define TRIM_DIR_UP		1
-#define TRIM_DIR_DOWN	2
+#define TRIM_DIR_NEG	-1
+#define TRIM_DIR_POS	1
+#define TRIM_SCAN_MIDDLE	0
+#define TRIM_SCAN_UP		1
+#define TRIM_SCAN_DOWN		2
+#define TRIM_SCAN_RANGE		3
+#define TRIM_WAIT_POS	 0
+#define TRIM_WAIT_TIME	 1
+#define TRIM_WAIT_SPC	 2
 #define INIT_HIGHER		0
 #define INIT_LOWER		1E20
 #define FNAME_TRIM		"POS\\TRIM"
@@ -1224,6 +1239,8 @@ struct StepS {
 	long Actual_std;
 	long Delta;
 	long Home;
+	long Min;
+	long Max;
 	double Factor;
 	struct TioS Tio;
 	struct MioS Mio;
@@ -1305,6 +1322,8 @@ struct TrimS {
 	struct ChannS Range;
 	int Control;
 	char Type;
+	char Wait;
+	char Scan;
 	char Dir;
 	char Region;
 	char Step;
@@ -1314,6 +1333,8 @@ struct TrimS {
 	double Fract;
 	char Target;
 	double Goal;
+	double Low;
+	double High;
 	double Best;
 	double BestW;
 	double BestA;
@@ -1324,6 +1345,7 @@ struct TrimS {
 	char ImprovedW;
 	char ImprovedA;
 	char Stop;
+	char Boundary;
 	char Increase;
 	double Time;
 	double DeltaU;
@@ -1356,6 +1378,16 @@ struct SpadS{
 	CNVData						DataTDC;
 	double						Time;
 	unsigned int				*Buffer;
+	};
+
+struct NirsS{
+	uint32_t Handle;
+	uint32_t IntTime; // ms
+	int		 UirTime; // ms
+	int		 Freq;	  //MHz
+	int		 Lambda; // 1 -> Laser1 always active, 2 -> Laser2 always active, 3 -> toggling Laser1/Laser2
+	uint32_t *Hist;
+	uint32_t RegOut[NIRS_REGLEN];
 	};
 
 struct SpcS {
@@ -1403,6 +1435,7 @@ struct SpcS {
 	int	 Pipe[MAX_BOARD][MAX_DET];
 	int ScInit;			   //patch
 	struct SpadS Spad[MAX_BOARD];
+	struct NirsS Nirs[MAX_BOARD];
 	};
 
 struct AcqS{
@@ -1808,6 +1841,7 @@ int hMoxy;
 int hTrim;
 int hStep;
 int hSwitch;
+int hNirs;
 int hMamm;
 int hSave;
 int hLabel;
@@ -1979,6 +2013,20 @@ void PauseSpad(int Board);
 void StartSpad(int Board);
 void StopSpad(int Board);
 void WaitSpad(int Board);
+
+/* ########################    NIRS TDC FUNCTIONS (NIRS)  ####################### */
+
+int NirsBox(int Start);
+int NirsLasers(int Start);
+void InitNirs(int Board);
+void TimeNirs(int Board, double Time);
+void TrashNirs(void);
+void CloseNirs(void);
+void StartNirs(int Board);
+void StopNirs(int Board);
+void GetDataNirs(void);
+void WaitNirs(int Board);
+
 
 /* ########################   VARRO SPC FUNCTIONS   ####################### */
 void InitVarro(void);
@@ -2382,4 +2430,3 @@ void ReadGeom(void);
 void InitPad (void);																						      //ALE
 void ReCreatePad (void);																						  //ALE
 /* END GEOMETRY FUNCTIONS DEFINITION */								   										      //ALE
-

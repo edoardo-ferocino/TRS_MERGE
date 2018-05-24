@@ -1,8 +1,6 @@
-#include "TRS.h"
-
 /* ######################################################################## */
 /* 									   										*/
-/* 		TRSInterface.C	Time-Resolved Spectroscopy   Release 13.4  July 2015  */
+/* 		TRSInterface.C	Time-Resolved Spectroscopy   Release 15.0  November 2017  */
 /* 									   										*/
 /* ######################################################################## */
 
@@ -48,6 +46,7 @@ int main (int argc, char *argv[])
 	if ((hDoStep = LoadPanel (hTrs, PATH_UIR, DO_STEP)) < 0) return -1;
 	if ((hStep = LoadPanel (hTrs, PATH_UIR, STEP)) < 0) return -1;
 	if ((hGeom = LoadPanel (hTrs, PATH_UIR, GEOMETRY)) < 0) return -1;//ALE
+	if ((hNirs = LoadPanel (hTrs, PATH_UIR, NIRS)) < 0) return -1;
 	
 	CreateTable();
 	
@@ -78,6 +77,7 @@ void CVICALLBACK SaveSetting (int menuBar, int menuItem, void *callbackData, int
 		case MENU_FILE_SAVE_TRIM: 			c_panel=TRIM; break;
 		case MENU_FILE_SAVE_STEP: 			c_panel=STEP; break;
 		case MENU_FILE_SAVE_SWITCH:			c_panel=SWITCH; break;
+		case MENU_FILE_SAVE_NIRS:			c_panel=NIRS; break;
 		case MENU_FILE_SAVE_GEOMETRY:		c_panel=GEOMETRY; break;//ALE
 		}
 	SaveSet(fpath,c_panel);
@@ -139,6 +139,7 @@ void CVICALLBACK LoadSetting (int menuBar, int menuItem, void *callbackData,int 
 		case MENU_FILE_LOAD_TRIM: 			c_panel=TRIM; break;
 		case MENU_FILE_LOAD_STEP: 			c_panel=STEP; break;
 		case MENU_FILE_LOAD_SWITCH:			c_panel=SWITCH; break;
+		case MENU_FILE_LOAD_NIRS:			c_panel=NIRS; break;
 		case MENU_FILE_LOAD_GEOMETRY:		c_panel=GEOMETRY; break;//ALE
 		}
 	LoadSet(fpath,c_panel);
@@ -216,6 +217,7 @@ void CVICALLBACK ShowPanel (int menuBar, int menuItem, void *callbackData,
 		case MENU_WINDOW_DO_STEP: DisplayPanel (hDoStep); break;
 		case MENU_WINDOW_DISPLAY: DisplayPanel (hDisplay); break;
 		case MENU_WINDOW_GEOMETRY:DisplayPanel (hGeom); break;//ALE
+		case MENU_WINDOW_NIRS:	  DisplayPanel (hNirs); break;
 		}
 	}
 
@@ -240,6 +242,7 @@ void InitPanel(void){
 	hPanel[DO_STEP]=hDoStep;    
 	hPanel[DISPLAY]=hDisplay;
 	hPanel[GEOMETRY]=hGeom;//ALE
+	hPanel[NIRS]=hNirs;
 	LoadSet(FILESET,NEG);
 	ReadAll();
 	CompleteParmS();
@@ -341,7 +344,6 @@ int CVICALLBACK ClosePanel (int panel, int event, void *callbackdata, int eventd
     HidePanel(panel);
     return(0);
     }
-
 
 /// TABLE
 void AddTab(int Class,int Type,int Panel,int Control,char *Label,int Row,int Col,void *Addr){
@@ -459,7 +461,7 @@ void CreateTable(void){
 	AddTab(CE,TCHAR,PARM,PARM_POWER_STEP,"PowerStep",0,0,&P.Power.Step);
 
 
-	// 15*11
+	// 17*11
 	for(is=0;is<MAX_STEP;is++){
 		AddTab(CE,TCHAR,STEP,STEP_TYPE_1+is,"StepType",is+1,0,&P.Step[is].Type);
 		AddTab(CE,TCHAR,STEP,STEP_COM_1+is,"StepCom",is+1,0,&P.Step[is].Com);
@@ -470,6 +472,8 @@ void CreateTable(void){
 		AddTab(CE,TCHAR,STEP,STEP_HOLD_1+is,"StepHold",is+1,0,&P.Step[is].Hold);
 		AddTab(CE,TCHAR,STEP,STEP_LCD_1+is,"StepLcd",is+1,0,&P.Step[is].Lcd);
 		AddTab(CE,TSTRING,STEP,STEP_FNAME_1+is,"StepFName",is+1,0,P.Step[is].FName);
+		AddTab(CE,TINT,STEP,STEP_MIN_1+is,"StepMin",is+1,0,&P.Step[is].Min);
+		AddTab(CE,TINT,STEP,STEP_MAX_1+is,"StepMax",is+1,0,&P.Step[is].Max);
 		AddTab(CE,TDOUBLE,STEP,STEP_FREQMIN_1+is,"StepFreqMin",is+1,0,&P.Step[is].FreqMin);
 		AddTab(CE,TDOUBLE,STEP,STEP_FREQMAX_1+is,"StepFreqMax",is+1,0,&P.Step[is].FreqMax);
 		AddTab(CE,TDOUBLE,STEP,STEP_FREQ_1+is,"StepFreq",is+1,0,&P.Step[is].Freq);
@@ -491,19 +495,23 @@ void CreateTable(void){
 		AddTab(CE,TSTRING,SWITCH,SWITCH_FNAME_1+is,"SwitchFName",is+1,0,P.Switch[is].FName);
 		}
 
-	// 16*10
+	// 20*10
 	for(it=0;it<MAX_TRIM;it++){
 		AddTab(CE,TCHAR,TRIM,TRIM_STEP_1+it,"TrimStep",it+1,0,&P.Trim[it].Step);
+		AddTab(CE,TCHAR,TRIM,TRIM_LOOP_1+it,"TrimLoop",it+1,0,&P.Trim[it].Loop);
 		AddTab(CE,TCHAR,TRIM,TRIM_TYPE_1+it,"TrimType",it+1,0,&P.Trim[it].Type);
+		AddTab(CE,TCHAR,TRIM,TRIM_WAIT_1+it,"TrimWait",it+1,0,&P.Trim[it].Wait);
 		AddTab(CE,TCHAR,TRIM,TRIM_TARGET_1+it,"TrimTarget",it+1,0,&P.Trim[it].Target);
+		AddTab(CE,TDOUBLE,TRIM,TRIM_LOW_1+it,"TrimLow",it+1,0,&P.Trim[it].Low);
 		AddTab(CE,TDOUBLE,TRIM,TRIM_GOAL_1+it,"TrimGoal",it+1,0,&P.Trim[it].Goal);
+		AddTab(CE,TDOUBLE,TRIM,TRIM_HIGH_1+it,"TrimHigh",it+1,0,&P.Trim[it].High);
 		AddTab(CE,TCHAR,TRIM,TRIM_SIGN_1+it,"TrimSign",it+1,0,&P.Trim[it].Sign);
 		AddTab(CE,TCHAR,TRIM,TRIM_REGION_1+it,"TrimRegion",it+1,0,&P.Trim[it].Region);
 		AddTab(CE,TDOUBLE,TRIM,TRIM_FRACT_1+it,"TrimFact",it+1,0,&P.Trim[it].Fract);
 		AddTab(CE,TDOUBLE,TRIM,TRIM_TIME_1+it,"TrimTime",it+1,0,&P.Trim[it].Time);
 		AddTab(CE,TDOUBLE,TRIM,TRIM_DELTA_1+it,"TrimDeltaU",it+1,0,&P.Trim[it].DeltaU);
 		AddTab(CE,TINT,TRIM,TRIM_NUM_1+it,"TrimNum",it+1,0,&P.Trim[it].Num);
-		AddTab(CE,TCHAR,TRIM,TRIM_DIR_1+it,"TrimDir",it+1,0,&P.Trim[it].Dir);
+		AddTab(CE,TCHAR,TRIM,TRIM_SCAN_1+it,"TrimScan",it+1,0,&P.Trim[it].Scan);
 		AddTab(CE,TCHAR,TRIM,TRIM_BREAK_1+it,"TrimBreak",it+1,0,&P.Trim[it].Break);
 		AddTab(CE,TCHAR,TRIM,TRIM_DISPLAY_1+it,"TrimDisplay",it+1,0,&P.Trim[it].Display);
 		AddTab(CE,TCHAR,TRIM,TRIM_STATUS_1+it,"TrimStatus",it+1,0,&P.Trim[it].Status);
@@ -653,8 +661,44 @@ void CreateTable(void){
 	AddTab(CE,TINT,MOXY,MOXY_PRES_EDGE,"PresentationRise",0,0,&P.Moxy.PresentationRise);
 	AddTab(CE,TINT,MOXY,MOXY_EXT_TRIG,"ExternalTrigger",0,0,&P.Moxy.ExternalTrigger);
 	
+	//3
+	AddTab(CE,TINT,NIRS,NIRS_FREQ,"NirsFreq",0,0,&P.Spc.Nirs[0].Freq);
+	AddTab(CE,TINT,NIRS,NIRS_TIME,"NirsTime",0,0,&P.Spc.Nirs[0].UirTime);
+	AddTab(CE,TINT,NIRS,NIRS_LAMBDA,"NirsLambda",0,0,&P.Spc.Nirs[0].Lambda);
+	
 	for(ic=0;ic<T.Num;ic++) T.Dimmed[ic]=FALSE;
 	}
+
+/* ################### NIRS BOX SECTION ################ */
+
+/* NIRS BOX PRESSED (ON or OFF) */
+int CVICALLBACK NirsBoxCbk(int panel,int control,int event,void *callbackData,int eventData1,int eventData2){
+	int start;
+	GetCtrlVal(panel,control,&start);
+	//int start = *((int *)callbackData);
+	switch (event){
+		case EVENT_COMMIT:
+			if(!NirsBox(start))
+				SetCtrlVal (panel, control, !start); // undo action on press button
+			break;
+		}
+	return 0;
+	}
+
+/* NIRS LASER PRESSED (ON or OFF) */
+int CVICALLBACK NirsLasersCbk(int panel,int control,int event,void *callbackData,int eventData1,int eventData2){
+	int start;
+	GetCtrlVal(panel,control,&start);
+	//int start = *((int *)callbackData);
+	switch (event){
+		case EVENT_COMMIT:
+			if(!NirsLasers(start))
+				SetCtrlVal (panel, control, !start); // undo action on press button
+			break;
+		}
+	return 0;
+	}
+
 
 
 /* ################### GEOMETRY SECTION ################ */ //ALE
@@ -2052,7 +2096,8 @@ void ReCreatePad (void){
 		}			
 }
 
+
+
+
 /* END GEOMETRY SECTION */
-
-
 

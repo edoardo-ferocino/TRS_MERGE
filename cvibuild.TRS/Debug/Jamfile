@@ -1,5 +1,5 @@
 CCFLAGS = -g ;
-HDRS = 	"c:\\Users\\Laboratorio\\Desktop\\TRS\\Library"
+HDRS = 	"c:\\Program Files (x86)\\TRS_MERGE\\Library"
 	"c:\\program files (x86)\\national instruments\\cvi2013\\toolslib\\activex\\word"
 	"c:\\program files (x86)\\national instruments\\cvi2013\\toolslib\\activex\\excel"
 	"c:\\program files (x86)\\national instruments\\cvi2013\\toolslib\\custctrl"
@@ -30,20 +30,20 @@ HDRS = 	"c:\\Users\\Laboratorio\\Desktop\\TRS\\Library"
 	"c:\\Program Files (x86)\\National Instruments\\Shared\\CVI\\Bin"
 	;
 include Jamfile_instr ;
-LOCATE on "Measure.c" = "c:\\Users\\Laboratorio\\Desktop\\TRS\\Sources" ;
-LOCATE on "Trs.c" = "c:\\Users\\Laboratorio\\Desktop\\TRS\\Sources" ;
-Object "c:\\Users\\Laboratorio\\Desktop\\TRS\\cvibuild.TRS\\Debug\\Measure.obj" : "c:\\Users\\Laboratorio\\Desktop\\TRS\\Sources\\Measure.c" ;
-FILENUM on "c:\\Users\\Laboratorio\\Desktop\\TRS\\cvibuild.TRS\\Debug\\Measure.obj" = 1 ;
-DEFPROTS on "c:\\Users\\Laboratorio\\Desktop\\TRS\\cvibuild.TRS\\Debug\\Measure.obj" = "c:\\Users\\Laboratorio\\Desktop\\TRS\\cvibuild.TRS\\Debug\\Measure.obj.cvidefprots" ;
-OUTFILE on "c:\\Users\\Laboratorio\\Desktop\\TRS\\cvibuild.TRS\\Debug\\Measure.obj" = "c:\\Users\\Laboratorio\\Desktop\\TRS\\cvibuild.TRS\\Debug\\Measure.obj.out" ;
-PrjObjects += "c:\\Users\\Laboratorio\\Desktop\\TRS\\cvibuild.TRS\\Debug\\Measure.obj" ;
-Object "c:\\Users\\Laboratorio\\Desktop\\TRS\\cvibuild.TRS\\Debug\\Trs.obj" : "c:\\Users\\Laboratorio\\Desktop\\TRS\\Sources\\Trs.c" ;
-FILENUM on "c:\\Users\\Laboratorio\\Desktop\\TRS\\cvibuild.TRS\\Debug\\Trs.obj" = 2 ;
-DEFPROTS on "c:\\Users\\Laboratorio\\Desktop\\TRS\\cvibuild.TRS\\Debug\\Trs.obj" = "c:\\Users\\Laboratorio\\Desktop\\TRS\\cvibuild.TRS\\Debug\\Trs.obj.cvidefprots" ;
-OUTFILE on "c:\\Users\\Laboratorio\\Desktop\\TRS\\cvibuild.TRS\\Debug\\Trs.obj" = "c:\\Users\\Laboratorio\\Desktop\\TRS\\cvibuild.TRS\\Debug\\Trs.obj.out" ;
-PrjObjects += "c:\\Users\\Laboratorio\\Desktop\\TRS\\cvibuild.TRS\\Debug\\Trs.obj" ;
-Object "c:\\Users\\Laboratorio\\Desktop\\TRS\\cvibuild.TRS\\Debug\\resources.res" : "c:\\Users\\Laboratorio\\Desktop\\TRS\\cvibuild.TRS\\Debug\\resources.in.rc" ;
-MainFromObjects "c:\\Users\\Laboratorio\\Desktop\\TRS\\cvibuild.TRS\\Debug\\TRS_dbg.exe" : $(PrjObjects) $(InstrObjects) ;
-Depends "c:\\Users\\Laboratorio\\Desktop\\TRS\\cvibuild.TRS\\Debug\\TRS_dbg.exe" : "c:\\Users\\Laboratorio\\Desktop\\TRS\\cvibuild.TRS\\Debug\\link_options.txt" ;
-Depends "c:\\Users\\Laboratorio\\Desktop\\TRS\\cvibuild.TRS\\Debug\\TRS_dbg.exe" : "c:\\Users\\Laboratorio\\Desktop\\TRS\\cvibuild.TRS\\Debug\\resources.res" ;
-Depends all : "c:\\Users\\Laboratorio\\Desktop\\TRS\\cvibuild.TRS\\Debug\\TRS_dbg.exe" ;
+LOCATE on "Measure.c" = "c:\\Program Files (x86)\\TRS_MERGE\\Sources" ;
+LOCATE on "Trs.c" = "c:\\Program Files (x86)\\TRS_MERGE\\Sources" ;
+Object "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Debug\\Measure.obj" : "c:\\Program Files (x86)\\TRS_MERGE\\Sources\\Measure.c" ;
+FILENUM on "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Debug\\Measure.obj" = 1 ;
+DEFPROTS on "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Debug\\Measure.obj" = "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Debug\\Measure.obj.cvidefprots" ;
+OUTFILE on "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Debug\\Measure.obj" = "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Debug\\Measure.obj.out" ;
+PrjObjects += "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Debug\\Measure.obj" ;
+Object "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Debug\\Trs.obj" : "c:\\Program Files (x86)\\TRS_MERGE\\Sources\\Trs.c" ;
+FILENUM on "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Debug\\Trs.obj" = 2 ;
+DEFPROTS on "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Debug\\Trs.obj" = "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Debug\\Trs.obj.cvidefprots" ;
+OUTFILE on "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Debug\\Trs.obj" = "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Debug\\Trs.obj.out" ;
+PrjObjects += "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Debug\\Trs.obj" ;
+Object "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Debug\\resources.res" : "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Debug\\resources.in.rc" ;
+MainFromObjects "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Debug\\TRS_dbg.exe" : $(PrjObjects) $(InstrObjects) ;
+Depends "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Debug\\TRS_dbg.exe" : "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Debug\\link_options.txt" ;
+Depends "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Debug\\TRS_dbg.exe" : "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Debug\\resources.res" ;
+Depends all : "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Debug\\TRS_dbg.exe" ;
