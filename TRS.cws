@@ -15,7 +15,7 @@ Project 0001 = "TRS.PRJ"
 Drag Bar Left = 191
 Window Top = 53
 Window Left = -28
-Window Bottom = 875
+Window Bottom = 555
 Window Right = 916
 Maximized = True
 Maximized Children = True
@@ -48,14 +48,12 @@ Batch Build Debug = True
 [File 0001]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/Measure.c"
 File Type = "CSource"
-Disk Date = 3610000878
+Disk Date = 3610009542
 In Projects = "1,"
 Window Top = 62
 Window Left = 26
 Window Z-Order = 1
-Source Window State = "1,642,642,642,32,50,32,0,0,140,0,0,0,0,0,30,617,0,629,37,431,1020,1,0,"
-Breakpoint 0001 = "2748,0,enabled,"
-Breakpoint 0002 = "2764,0,enabled,"
+Source Window State = "1,0,0,0,0,0,0,0,0,140,0,0,0,0,0,30,2787,0,2797,96,291,1020,1,0,"
 
 [File 0002]
 Path = "/c/Program Files (x86)/National Instruments/CVI2013/include/userint.h"
@@ -90,7 +88,7 @@ Source Window State = "1,0,0,0,0,0,0,0,0,80,0,0,0,0,0,24,0,0,0,0,511,1020,1,0,"
 [File 0005]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/Trs.c"
 File Type = "CSource"
-Disk Date = 3609994013
+Disk Date = 3610006061
 In Projects = "1,"
 Window Top = 45
 Window Left = 6
@@ -100,7 +98,7 @@ Source Window State = "1,0,2058,0,0,0,0,0,0,52,0,2103,0,2103,18,15,342,0,349,16,
 [File 0006]
 Path = "/c/Program Files (x86)/TRS_Beta/Sources/TRS.UIR"
 File Type = "User Interface Resource"
-Disk Date = 3609993113
+Disk Date = 3610007396
 In Projects = ""
 Window Top = 32
 Window Left = 10
@@ -111,27 +109,27 @@ Window Z-Order = 5
 [File 0007]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/TRS.h"
 File Type = "Include"
-Disk Date = 3610000576
+Disk Date = 3610006061
 In Projects = ""
 Window Top = 32
 Window Left = 10
-Window Z-Order = 2
+Window Z-Order = 3
 Source Window State = "1,0,1062,0,0,0,0,0,0,80,0,1062,0,1062,0,20,1033,0,1061,6,431,1020,1,0,"
 
 [File 0008]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/MEASURE.H"
 File Type = "Include"
-Disk Date = 3610000525
+Disk Date = 3610008770
 In Projects = ""
 Window Top = 32
 Window Left = 10
-Window Z-Order = 3
-Source Window State = "1,0,2431,0,0,0,0,0,0,80,0,2439,0,2439,0,20,2410,0,2439,0,431,1020,1,0,"
+Window Z-Order = 2
+Source Window State = "1,0,2439,0,0,0,0,0,0,80,0,2439,0,2439,0,20,2419,0,2439,0,431,1020,1,0,"
 
 [File 0009]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/TRS.UIR"
 File Type = "User Interface Resource"
-Disk Date = 3609993113
+Disk Date = 3610006061
 In Projects = "1,"
 Window Top = 45
 Window Left = 6
@@ -147,7 +145,7 @@ In Projects = "1,"
 [File 0011]
 Path = "/c/Program Files (x86)/TRS_MERGE/Library/NIRS_DLL_v2.lib"
 File Type = "Library"
-Disk Date = 3609131124
+Disk Date = 3610006061
 In Projects = "1,"
 
 [File 0012]

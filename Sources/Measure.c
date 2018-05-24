@@ -219,7 +219,8 @@ void KernelGen(){
 						if(P.Action.ScReInit.Measure) ReInitSC1000('M');  //EDO
 						if(P.Action.StartOma) StartOma();
 						if(P.Action.Ophir) GetOphir();
-						if(P.Action.StartMamm) {if(P.Command.Abort) break; StartMammot();}	   //patch
+						if(P.Action.ScReInit.StartMammot) ReInitSC1000('S'); //EDO
+						if(P.Action.StartMamm) StartMammot();	   //EDO
 						if(P.Action.WaitChrono) WaitChrono();
 						if(P.Action.StartAdc) {StartAdc(); P.Time.Start=clock();}		 // se è attivo ADC e power
 			    		if(P.Action.StartSync) StartSync();
@@ -2741,7 +2742,6 @@ void CompleteClosureSC1000(int Board){
 
 void ReInitSC1000(char Operation){  //EDO
 	int Board = 0; //controllare
-	if (Operation=='M'&&P.Mamm.Status) return;
 	int it,id,ret;
 	P.Spc.ScPipeClose = TRUE;
 	if (Operation=='S') P.Spc.ScDeinit = TRUE; else P.Spc.ScDeinit = FALSE;
@@ -2761,19 +2761,20 @@ void ReInitSC1000(char Operation){  //EDO
 			for(id=0;id<P.Num.Det;id++) AccTime[id] = P.Spc.TimeM;
 			break;
 		case 'S':
-			{char IniPath[260];
+			P.Spc.ScAutoTrim = FALSE;
+			char IniPath[260];
 			strcpy(IniPath,P.Spc.Settings[Board]);   // riveder
 			IniPath[strlen(IniPath)-4]='\0';
 			strcat(IniPath,"_sync.ini");
 			ret = sc_tdc_init_inifile(IniPath);
 			if (ret < 0) {ErrHandler(ERR_SC1000,ret,"Error initializing SC board"); return;}
-				else {
+				else{
 					char message[STRLEN];
 					P.Spc.ScBoard[Board]=ret; 
 					sprintf (message, "\nCommunication set\n");
 	    			SetCtrlVal (hDisplay, DISPLAY_MESSAGE, message);
 					P.Spc.ScBoardInitialized[Board] = TRUE;}
-			for(id=0;id<P.Num.Det;id++) AccTime[id] = P.Spc.TimeM;}
+			for(id=0;id<P.Num.Det;id++) AccTime[id] = P.Spc.TimeM;
 			break;
 	}
 	
@@ -2794,7 +2795,8 @@ void ReInitSC1000(char Operation){  //EDO
 		else P.Spc.Pipe[Board][id]=ret;
 		}
 		
-	if (Operation!='S') P.Spc.ScAcqTime=StartSC1000(Board,SC1000_TIME_INFINITY);
+	if (Operation!='S') {P.Spc.ScAcqTime=StartSC1000(Board,SC1000_TIME_INFINITY); P.Spc.Started;}
+		else P.Spc.Started = FALSE;
 }
 
 /* INIT SC1000 */	
@@ -2939,8 +2941,7 @@ int PipeRead(int Board,int Det,int Timeout){			 //EDO
 }
 
 /* TRANSFER DATA FROM SC1000 */	
-void GetDataSC1000(void){
-	FILE *fid=fopen("CheckMamm.txt","a+");
+void GetDataSC1000(void){						  //EDO
 	if(P.Action.StartCont[P.Mamm.Step[X]]&&P.Mamm.Status) P.Num.Acq=0;
 	int Timeout;
 	if(P.Mamm.Status) Timeout=-1;  /*check*/ //patch
@@ -5046,7 +5047,7 @@ void StartCont(char Step, char Status){
 		P.Wait.Pos=start[iloop]+(imeas*delta/num_meas);
 		}
 	
-	TrashMemory=P.Spc.Trash;
+	TrashMemory=P.Spc.Trash;				//EDO  //controllare
 	P.Step[Step].StopGoal=stopgoal; //patch
 	MoveStep(&P.Step[Step].Actual,stopgoal,Step,FALSE,Status);	
 	if(P.Spc.Type==SPC_SC1000) {
@@ -9063,10 +9064,6 @@ void AnalysisMamm_new(void){
 
 /* START MAMMOT */
 void StartMammot(void){
-	
-	P.Action.ScReInit.StartMammot = TRUE;
-	ReInitSC1000('S');
-	
 	char StepX=P.Mamm.Step[X];
 	char StepY=P.Mamm.Step[Y];
 	char LoopX=P.Mamm.Loop[X];
@@ -9105,17 +9102,9 @@ void StartMammot(void){
 	P.Frame.Actual=abs(P.Loop[LoopX].First/P.Loop[LoopX].Delta)-(is-!P.Mamm.OverTreshold);
 	if(P.Frame.Actual<0) P.Frame.Actual=0; 
 	
-	FILE *fid;
-	fid=fopen("CheckMamm.txt","w+");
-	fprintf(fid,"Rate\tPos\tX\tY\tFA\tFL\tFF\IsTop\tNumAcq\tTimeSC\n");
-	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\tStartMammot\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.ScAcqTime);
-	
-	
 	CorrShift=abs(P.Loop[LoopX].First/P.Loop[LoopX].Delta)-abs(P.Step[StepX].Actual/P.Step[StepX].Factor/P.Loop[LoopX].Delta)-P.Frame.Actual;
 	StopGoal=P.Step[StepX].Actual+SIGNUM(P.Loop[LoopX].First)*CorrShift*P.Step[StepX].Factor*abs(P.Loop[LoopX].Delta);
 	MoveStep(&P.Step[StepX].Actual,StopGoal,StepX,1,P.Action.Status);
-	
-	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\tStartMammot\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.ScAcqTime);
 	
 	if(P.Mamm.ShiftBack&&P.Loop[LoopX].First!=0){
 		StopGoal=P.Step[StepX].Actual-SIGNUM(StopGoal)*P.Mamm.ShiftBack*P.Step[StepX].Factor*abs(P.Loop[LoopX].Delta);
@@ -9131,8 +9120,6 @@ void StartMammot(void){
      P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx]=P.Frame.Actual;
 	 P.Loop[LoopX].Idx=P.Frame.Actual;			 //riposizionamento dei cicli
 	 P.Mamm.OverTreshold=0;
-	fprintf(fid,"%.0f\t%d\t%d\t%d\t%d\t%d\t%d\t%lf\n",P.Mamm.Rate.Actual[0],P.Step[StepX].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Last,P.Frame.First,P.Time.Stop);
-	fclose(fid);
 	
 	//P.Action.SpcReset=0;
 	P.Action.MoveStep[StepY]=0;
