@@ -2092,7 +2092,7 @@ void SpcRestart(void){  //TODO: check
 		case SPC130: for(ib=0;ib<P.Num.Board;ib++) SPC_restart_measurement(ib); break;
 		case HYDRA: HH_StartMeas(HYDRA_DEV0,P.Spc.TimeHydra); break;
 		case TH260: TH260_StartMeas(TH260_DEV0,P.Spc.TimeHydra); break;
-		case SPC_SC1000: for(ib=0;ib<P.Num.Board;ib++) P.Spc.ScAcqTime=StartSC1000(P.Spc.ScBoard[ib],P.Mamm.Status?(abs(P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx-1]-P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx-1])+1+20)*P.Spc.TimeM:SC1000_TIME_INFINITY); break;
+		case SPC_SC1000: RestartSc1000(ib); break;
 		case SPC_SPADLAB: for(ib=0;ib<P.Num.Board;ib++) StartSpad(ib); break;
 		case SPC_NIRS: for(ib=0;ib<P.Num.Board;ib++) StartNirs(ib); break;
 		case TEST: break;
@@ -2872,12 +2872,12 @@ void InitSC1000(int Board){			   //EDO
 	P.Spc.TimeInit=TimerN();   // era Timer() 
 	
 	// initialize memory
-	if(Board==0){ // Only 1 item is needed for all the boards
-		LinArray = doubleAlloc1D(P.Chann.Num);
-		DCR_raw_count = SC1000Alloc1D(42526);  //20700
-		DCR_raw_time = doubleAlloc1D(42526);
-		NonLinDt = doubleAlloc3D(P.Num.Board,P.Num.Det,42526);
-		}
+	if(Board==0){
+		LinArray = doubleAlloc1D(P.Chann.Num);// Only 1 item is needed for all the boards
+		NonLinDt = doubleAlloc3D(P.Num.Board,P.Num.Det,20700); //P.Spc.ScNumBins should be the max number of entries  in the file. +500 is to take into account of possible mismatch between files
+		DCR_raw_count = SC1000Alloc1D(20700);  				 //controllare
+		DCR_raw_time = doubleAlloc1D(20700);
+	}
 
 	// initialise correction coefficients
 	if(linearise) CalcNonlinSC1000(); // load BACKGROUND curve and derives coefficients for non-lin correction
@@ -5003,7 +5003,6 @@ void StartCont(char Step, char Status){
 	int iloop = P.Loop[loop].Actual;
 	long start[MAXPOS];
 	long stop[MAXPOS];
-	char TrashMemory;
 	
 	char invert=(P.Loop[loop].Invert)&&REMINDER(P.Loop[loop-1].Idx,2);
 	for(il=P.Step[Step].Loop+1;il<MAX_LOOP;il++) num_meas*=P.Loop[il].Num;
@@ -5036,16 +5035,7 @@ void StartCont(char Step, char Status){
 		P.Wait.Pos=start[iloop]+(imeas*delta/num_meas);
 		}
 	
-	TrashMemory=P.Spc.Trash;				//EDO  //controllare
-	P.Step[Step].StopGoal=stopgoal; //patch
 	MoveStep(&P.Step[Step].Actual,stopgoal,Step,FALSE,Status);	
-	if(P.Spc.Type==SPC_SC1000) {
-		P.Spc.Trash=TrashMemory;
-		if(P.Mamm.Status) P.Spc.Trash=FALSE; 
-		//Delay(1);
-	}
-	
-	
 }
 
 
