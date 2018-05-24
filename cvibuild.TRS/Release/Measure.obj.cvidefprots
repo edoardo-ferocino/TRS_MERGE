@@ -1434,6 +1434,10 @@ Prototype="void AnalysisMamm();"
 Class="Function"
 Prototype="void AnalysisMamm_new();"
 
+[InitMammot]
+Class="Function"
+Prototype="void InitMammot();"
+
 [StartMammot]
 Class="Function"
 Prototype="void StartMammot();"

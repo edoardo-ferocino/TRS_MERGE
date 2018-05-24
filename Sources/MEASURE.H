@@ -1066,6 +1066,7 @@ struct ScReinitS{  //EDO
 	int TrimmerPreBreak;
 	int TrimmerPostBreak;
 	int Oscilloscope;
+	int InitMammot;
 	int StartMammot;
 	int AnyOper;
 };
@@ -1132,7 +1133,8 @@ struct ActionS{
 	char WaitAdc;
 	char ReadUIR;
 	char SpcTime;			//EDO
-	char StartMamm;         //EDO
+	char InitMamm;         //EDO
+	char StartMamm;
 	char CheckMamm;         //EDO
 	char StopMamm;		    //EDO
 	char DoJumpMamm;		//EDO

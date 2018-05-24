@@ -220,6 +220,7 @@ void KernelGen(){
 						if(P.Action.ScReInit.Measure) ReInitSC1000('M');  //EDO
 						if(P.Action.StartOma) StartOma();
 						if(P.Action.Ophir) GetOphir();
+						if(P.Action.InitMamm) {if(P.Command.Abort) break; InitMammot();}	   //EDO
 						if(P.Action.ScReInit.StartMammot) ReInitSC1000('S'); //EDO
 						if(P.Action.StartMamm) StartMammot();	   //EDO
 						if(P.Action.WaitChrono) WaitChrono();
@@ -337,7 +338,8 @@ void SetLoopActual(void){
 	int il;
 	for(il=0;il<MAX_LOOP;il++) P.Loop[il].Actual=P.Loop[il].Idx;
 	for(il=1;il<MAX_LOOP;il++)
-		if((P.Loop[il].Invert)&&REMINDER(P.Loop[il-1].Idx,2)) P.Loop[il].Actual=P.Loop[il].Num-1-P.Loop[il].Idx;
+		if((P.Loop[il].Invert)&&REMINDER(P.Loop[il-1].Idx,2))
+			P.Loop[il].Actual=P.Loop[il].Num-1-P.Loop[il].Idx;
 	}
 
 
@@ -567,6 +569,7 @@ void DecideAction(void){
 	P.Action.ReadUIR=P.Command.ReadUIR;
 	
 	// MAMMOT
+	P.Action.ScReInit.InitMammot = FALSE;
 	P.Action.ScReInit.StartMammot = FALSE;
 	P.Mamm.IgnoreTrash = FALSE;
 	if(P.Mamm.Status){		   //EDO	 //controllare
@@ -2328,6 +2331,16 @@ void DataCopy(void){
 
 /* UPDATE ALL ACQ INDEXES */
 void NewAcq(void){
+/*	P.Acq.Actual++;
+	if(P.Acq.Actual==P.Acq.Frame){
+		P.Frame.Actual++;
+		P.Acq.Actual=0;
+		}
+	if(P.Frame.Actual==P.Frame.Num){
+		P.Ram.Actual++;
+		P.Frame.Actual=0;
+		} 
+	}*/
 P.Acq.Actual++;
 	if(P.Acq.Actual==P.Acq.Frame){
 		if(P.Mamm.Status){  //EDO
@@ -2897,8 +2910,6 @@ float RestartSc1000(int Board){
 /* CLOSE SC1000 */	
 void CloseSC1000(void){	   //EDO	
 	int ib,id,ret;
-	double now,delta;
-	int status;
 	for(ib=0;ib<P.Num.Board;ib++){
 		if(P.Mamm.OverTresholdPrevious||P.Mamm.IsTop){ //substitute with: if(P.Action.DoJumpMamm)??	   controllare
 			for(id=0;id<P.Num.Det;id++) ret=sc_pipe_close2(P.Spc.ScBoard[ib],P.Spc.Pipe[ib][id]);
@@ -2920,8 +2931,8 @@ void CloseSC1000(void){	   //EDO
 		for(it=0;it<300;it++){
 		P.Frame.Mem[0][it]=0;
         P.Frame.Mem[1][it]=0;
-		P.Spc.Started = FALSE;
 		}
+		P.Spc.Started = FALSE;
 	}
 	
 	// free memory
@@ -3012,7 +3023,6 @@ int id,ret=0;
 	}
 	}
 	else for(id=0;id<P.Num.Det;id++) while(PipeRead(Board,id,Timeout));
-	P.Spc.Started=TRUE;
 }
 
 /* CALCULATE COEFFICIENTS FOR NON-LIN COMPENSATION */
@@ -9041,7 +9051,31 @@ void AnalysisMamm_new(void){
 
 }
 
-/* START MAMMOT */
+/* INIT MAMMOT */
+void InitMammot(void){	   //EDO
+	char StepX=P.Mamm.Step[X];
+	char StepY=P.Mamm.Step[Y];
+	char LoopX=P.Mamm.Loop[X];
+	int ib=0,ifr,ip;
+	
+	if(P.Action.ScReInit.InitMammot) ReInitSC1000('S'); 
+	for(ib=0;ib<P.Num.Board;ib++) P.Spc.ScAcqTime=StartSC1000(ib,P.Loop[LoopX].Num*P.Spc.TimeM);
+	P.Spc.Started=TRUE;
+	P.Frame.Min = 0; P.Frame.Max = P.Frame.Num;
+	P.Frame.First = 0; P.Frame.Last = P.Frame.Max;
+	P.Mamm.IgnoreTrash = TRUE;
+	// Clear DATA
+	for(ifr=0; ifr<P.Frame.Num; ifr++)
+		for(ip=0; ip<P.Num.Page; ip++)
+			for(ic=0; ic<P.Chann.Num; ic++)
+				D.Data[ifr][ip][ic]=0;
+	for(ifr=0; ifr<P.Frame.Num; ifr++)
+		for(ip=0; ip<P.Num.Page; ip++)
+			CompileSub(P.Ram.Actual, ifr, ip);
+
+}
+
+/* RESUME MAMMOT PROCEDURE */
 void StartMammot(void){
 	char StepX=P.Mamm.Step[X];
 	char StepY=P.Mamm.Step[Y];
@@ -9111,59 +9145,34 @@ void StartMammot(void){
 }
 
 /* STOP STEP AND PREPARE FOR DATA SAVE */
-void StopMammot(void){
-	FILE *fid;
-	double stop;
+void StopMammot(void){	  //EDO
 	StopStep(P.Mamm.Step[X]);
-	int ib;
-	for(ib=0;ib<P.Num.Board;ib++) {
-		double start=Timer();
-		FlushSC1000(ib);
-		stop=Timer()-start;
-	}
-	fid=fopen("CheckMamm.txt","a+");
-	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\t%lf\tStop\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.ScAcqTime,stop);
-	if(P.Mamm.CorrShift) {ShiftCorrection();
-	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\tStop\tShift\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.ScAcqTime);}
-	if(P.Mamm.ShiftBack) {BackShift();
-	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\tStop\tBackShift\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.ScAcqTime);}
-	
+	int ib,ifr,ip;
+	for(ib=0;ib<P.Num.Board;ib++) FlushSC1000(ib);
+	if(P.Mamm.CorrShift) ShiftCorrection();
+	if(P.Mamm.ShiftBack) BackShift();
 	P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx]=P.Frame.Actual;
 	P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx+1]=P.Frame.Actual;
 	P.Mamm.OverTreshold=TRUE;
 	P.Mamm.IsTop=abs(P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx]-P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx])<=(P.Mamm.TopLim);
-	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\tStopFinished\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.ScAcqTime);
 	P.Num.Acq=0;    
-	fclose(fid);
+	P.Spc.Started=FALSE;
 }
 
 /* ADJUST LOOP INDEX */
-void AdjustIndex(void){
+void AdjustIndex(void){			//EDO
 P.Spc.Trash=FALSE;
 	if(REMINDER(P.Loop[P.Mamm.Loop[Y]].Idx,2)) 
 		P.Loop[P.Mamm.Loop[X]].Idx=P.Loop[P.Mamm.Loop[X]].Num-P.Frame.Actual-1;
 	else 
     	P.Loop[P.Mamm.Loop[X]].Idx=P.Frame.Actual;
-
-FILE* fid=fopen("CheckMamm.txt","a+");
-fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\t%lf\tAdjustIndex\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.ScAcqTime);
-fclose(fid);
 }
 
 /* OVERTHRESHOLDS OPERATIONS */
 void CheckMammot(void){
-
 P.Mamm.OverTreshold=0; //da eliminare  
 AnalysisMamm_new();			
-		
-if(P.Mamm.OverTreshold){
-	P.Action.DataSave=1;
-	P.Action.StopMamm=1;
-	FILE* fid;
-	fid=fopen("CheckMamm.txt","a+");
-	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\t%lf\tOverTreshold\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.ScAcqTime);
-	fclose(fid);
-	}
+if(P.Mamm.OverTreshold){P.Action.DataSave=1;P.Action.StopMamm=1;}
 }
 
 /* APPLY CORRECTION SHIFT */

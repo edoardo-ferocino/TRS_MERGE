@@ -194,10 +194,7 @@ void CVICALLBACK Print(int menuBar, int menuItem, void *callbackData,
 void CVICALLBACK Quit (int menuBar, int menuItem, void *callbackData,int panel){  
 	SaveSet(FILESET,NEG);
 	int ib;
-	for (ib=0;ib<P.Num.Board;ib++){
-		P.Spc.ScDeinit=TRUE;
-		CompleteClosureSC1000(ib);  //patch
-	}
+	for (ib=0;ib<P.Num.Board;ib++){P.Spc.ScDeinit=TRUE;CompleteClosureSC1000(ib);} //EDO
 	QuitUserInterface (0);
 	}
 
