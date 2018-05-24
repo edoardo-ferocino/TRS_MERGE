@@ -932,7 +932,7 @@ struct NumS {
 	long Fiber;
 	long Source; //ALE
 	long LoopxFrame;
-	long Acq;
+	long Acq;	 //EDO
 	};
 
 struct FiberS {
@@ -1064,7 +1064,7 @@ struct MammAttS{
 struct MammS {
 	char Mamm;
 	char AutoLabel;
-	char FindTop;
+	char FindTop;		
 	int IterBord;
 	int IdxBorderNIR;
 	double BackTopNIR;
@@ -1076,18 +1076,17 @@ struct MammS {
 	struct MammRateS Count;
 	struct MammRateS Rate;
 	struct MammAttS Att[MAMM_NUM_BOARD];
-	char OverTreshold;   //patch
-	char OverTresholdPrevious; //patch
-	unsigned int SC1000_MAXBIN;
-	char IsTop;
-	char PostProcess;
-	int PhysicalBorder;
-	int ShiftBack;
-	int MarginMM;
-	int TopLim;
-	int CorrShift;
-	char InvertSignCorr;
-	char ParityMem;
+	char OverTreshold;   //EDO
+	char OverTresholdPrevious;  //EDO
+	char IsTop;					//EDO
+	char PostProcess;			//EDO
+	int PhysicalBorder;			//EDO
+	int ShiftBack;				//EDO
+	int MarginMM;				//EDO
+	int TopLim;					//EDO
+	int CorrShift;				//EDO
+	char InvertSignCorr;		//EDO
+	char ParityMem;				//EDO
 	char Status;
 	char   IniFile[MAMM_NUM_BOARD][260];
 	};
@@ -1409,31 +1408,32 @@ struct SpcS {
 	int	   TimeTH260;
 	int	   TH260HistLen;
 	int	   TimeSC1000;
-	int    SCAutoTrim; //patch
 	long   Count;
-	long   CountRate; //patch
-	float  AcqTimeSC1000;		//patch
-	double TimeElapsed;//patch
+	long   CountRate; //EDO
 	char   TdcDcrFileRoot[260];
 	char   Scale;
 	double Calib;
 	double Factor;
 	int    RoutingBits;
-	int	 Refolding;
 	double RepRate;
 	int	   MaxPage[MAX_BOARD];
 	char   Settings[MAX_BOARD][260];
 	char   IniFile[MAX_BOARD][260];
-	int	 ScBoard[MAX_BOARD];
-	int  ScBoardInitialized[MAX_BOARD];   //patch
-	int PipeClose;			//patch
-	int SelRepNum;			//patch
-	int StartDivider;		//patch
-	int ScFirstBin;			//patch
-	int ScLastBin;			//patch
-	int ScDeinit;		   //patch
+	int	 Refolding; //EDO
+	int	 ScBoard[MAX_BOARD];	 //EDO
+	int  ScBoardInitialized[MAX_BOARD];   //EDO
+	double ScTimeElapsed;//EDO
+	float  ScAcqTime;		//EDO          
+	int    ScAutoTrim; //EDO
+	int ScPipeClose;			//EDO
+	int SelRepNum;			//EDO
+	int StartDivider;		//EDO
+	int ScFirstBin;			//EDO
+	int ScLastBin;			//EDO
+	int ScDeinit;		   //EDO
 	int	 Pipe[MAX_BOARD][MAX_DET];
-	int ScInit;			   //patch
+	int ScInit;			   //EDO
+	unsigned int ScNumBin; //EDO
 	struct SpadS Spad[MAX_BOARD];
 	struct NirsS Nirs[MAX_BOARD];
 	};
@@ -1460,10 +1460,9 @@ struct FrameS{
 	long Actual;
 	int Min;
 	int Max;
-	//patch
-	int First;
-	int Last;
-	int Mem[2][300];
+	int First;		 //EDO
+	int Last;		 //EDO
+	int Mem[2][300]; //EDO
 	};
 
 struct FilterS{

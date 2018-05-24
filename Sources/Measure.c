@@ -200,7 +200,6 @@ void KernelGen(){
 				for(P.Loop[LOOP4].Idx=0;P.Loop[LOOP4].Idx<P.Loop[LOOP4].Num;P.Loop[LOOP4].Idx++){
 					if(P.Command.Abort) break;
 					for(P.Loop[LOOP5].Idx=0;P.Loop[LOOP5].Idx<P.Loop[LOOP5].Num;P.Loop[LOOP5].Idx++){
-						
 						SetLoopActual();
 						DecideAction();
 						if(P.Action.ReadUIR) GetUserEvent (0, &panel, &control);
@@ -588,7 +587,6 @@ void DecideAction(void){
 	
 	P.Mamm.TopLim=5;
 	P.Mamm.CorrShift=3;
-	P.Mamm.PostProcess=0;
 	int BorderLength=P.Mamm.PhysicalBorder*2;
 	
 	char is_before,is_near,is_within,is_margin_neg,is_loopy_even,is_loopy_firstidx,is_loopx_firstidx;
@@ -713,13 +711,10 @@ void CloseMem(void){
 	DFree2D(D.Osc,P.Num.Board*P.Num.Det); 
 	DFree2D(D.Buffer,P.Num.Board); 
 	if(P.Spc.Subtract) DFree1D(D.Last); 
-	
 	if(P.Contest.Run!=CONTEST_MEAS) return;
-	
 	if(P.Moxy.Moxy) DFree2D(D.Bank,P.Num.Board); 
 	if(P.Info.SubHeader) SFree2D(D.Sub,P.Frame.Num);
 	DFree3D(D.Data,P.Frame.Num,P.Num.Page); 
-	if(P.Mamm.PostProcess) DFree3D_SC1000(D.BufferTDC,P.Frame.Num,P.Num.Page); //patch	
 }
 
 
@@ -943,10 +938,6 @@ void CompleteParmS(void){
 	if(P.Spc.Type==SPC_SC1000) {
 		Period = (double) (1/(P.Spc.RepRate*1e6))*1e12;		// in ps   //EDO
 		if(P.Spc.Refolding==2||P.Spc.Refolding==4) {
-			//P.Spc.Factor=Period/P.Chann.Num; //if the chann num defines the factor
-			//P.Chann.Num=Period/P.Spc.Factor; //if the factor defines the chann num
-			//P.Chann.Last=P.Chann.Num-1;
-			//P.Spc.Calib = P.Spc.Factor;
 			if(Binsize==0) P.Spc.Calib=ns2ps*(0.0823045267489712);
 				else P.Spc.Calib=ns2ps*Binsize;
 			P.Spc.Factor= P.Spc.Calib;
@@ -1827,7 +1818,7 @@ void DisplayRoi(void){
 			for(id=0;id<P.Num.Det;id++)
 				for(ic=0;ic<P.Chann.Num;ic++)
 					area+=D.Osc[id+ib*P.Num.Det][ic];
-			area/=P.Spc.TimeO;//area/=(P.Spc.Type==SPC_SC1000&&P.Contest.Run==CONTEST_MEAS)?P.Spc.TimeM:P.Spc.TimeO; //patch
+			area/=P.Spc.TimeO;
 			SetTableCellAttribute(hDisplay,DISPLAY_T_BOARD,MakePoint(1,ib+1),ATTR_CTRL_VAL,area);
 			}			
 	for(ir=0;ir<MAX_ROW_ROI;ir++)
@@ -2105,7 +2096,7 @@ void SpcRestart(void){  //TODO: check
 		case SPC130: for(ib=0;ib<P.Num.Board;ib++) SPC_restart_measurement(ib); break;
 		case HYDRA: HH_StartMeas(HYDRA_DEV0,P.Spc.TimeHydra); break;
 		case TH260: TH260_StartMeas(TH260_DEV0,P.Spc.TimeHydra); break;
-		case SPC_SC1000: for(ib=0;ib<P.Num.Board;ib++) P.Spc.AcqTimeSC1000=StartSC1000(P.Spc.ScBoard[ib],P.Mamm.Status?(abs(P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx-1]-P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx-1])+1+20)*P.Spc.TimeM:SC1000_TIME_INFINITY); break;
+		case SPC_SC1000: for(ib=0;ib<P.Num.Board;ib++) P.Spc.ScAcqTime=StartSC1000(P.Spc.ScBoard[ib],P.Mamm.Status?(abs(P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx-1]-P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx-1])+1+20)*P.Spc.TimeM:SC1000_TIME_INFINITY); break;
 		case SPC_SPADLAB: for(ib=0;ib<P.Num.Board;ib++) StartSpad(ib); break;
 		case SPC_NIRS: for(ib=0;ib<P.Num.Board;ib++) StartNirs(ib); break;
 		case TEST: break;
@@ -2116,7 +2107,7 @@ void SpcRestart(void){  //TODO: check
 
 /* OPTIMIZED DATA CLEAR & DATA IN */
 void SpcReset(char Status, char Clear, char Stop){
-	if(Clear) SpcClear();
+	if(Clear) SpcClear(); 
 	if((P.Spc.Type==SPC_NIRS)&&P.Spc.Trash) TrashNirs(); // note Trash clear for SPC_NIRS is inserted here  
 	if(P.Spc.Trash) SpcOut(FALSE);
 	if(Stop||(!P.Spc.Started)) SpcIn();
@@ -2171,7 +2162,7 @@ void SpcStop(char Status){
 		}
 	CalcTime();
 	if(Status) SetCtrlVal (hDisplay, DISPLAY_MEASURE, OFF);
-	if(P.Spc.Type!=SPC_SC1000) P.Spc.Started=FALSE;
+	if(P.Spc.Type!=SPC_SC1000) P.Spc.Started=FALSE;			//EDO
 	}
 
 
@@ -2237,8 +2228,7 @@ void SpcGet(void){
 void SpcOut(char Status){
 	if(P.Spc.Started) CalcTime();
 	SpcGet();
-	if(P.Mamm.PostProcess&&P.Contest.Function==CONTEST_MEAS) {} //patch
-		else DataCopy();
+	DataCopy();
 	if((P.Spc.Type==VARRO)||(P.Spc.Type==SILENA)) DataReverse();
 	if((P.Spc.Type==VARRO)||(P.Spc.Type==SILENA)) DataSubtract();
 	if(Status) SetCtrlVal (hDisplay, DISPLAY_MEASURE, OFF);
@@ -2710,10 +2700,6 @@ void GetDataTH260(void){
 		}
 	}
 
-void patch2(int ret){
-	//ErrHandler(ERR_SC1000,ret,"SC1000 error in getting binsize (factor)");
-	for(ret=0;ret<10000;ret++);
-}
 /* CLEAR TH260 */	
 void ClearTH260(void){
 	short ret;
@@ -2735,40 +2721,39 @@ void ClearTH260(void){
 void CompleteClosureSC1000(int Board){
 	int id,ib,ret; ib=Board;  
 	if(P.Spc.Type!=SPC_SC1000) return;
-	if(P.Spc.TimeElapsed==0) 
-		if(!P.Action.ScReInit)
-			return;
-	P.Spc.TimeElapsed=Timer()-P.Spc.TimeElapsed;
-	if(P.Spc.TimeElapsed<6) Delay(6-P.Spc.TimeElapsed);
-	if(P.Action.ScReInit) 
-		{ret=sc_tdc_interrupt2(P.Spc.ScBoard[ib]); Delay(3);};
+	if(P.Spc.ScTimeElapsed==0) if(!P.Action.ScReInit) return;
+	P.Spc.ScTimeElapsed=Timer()-P.Spc.ScTimeElapsed;
+	if(P.Spc.ScTimeElapsed<6) Delay(6-P.Spc.ScTimeElapsed);
+	if(P.Action.ScReInit) {ret=sc_tdc_interrupt2(P.Spc.ScBoard[ib]); Delay(3);};
 	char message[STRLEN];
-	if(P.Spc.PipeClose){
-	sprintf (message, "Closing Pipes SC1000\n");
-	SetCtrlVal (hDisplay, DISPLAY_MESSAGE, message);
-		for(id=0;id<P.Num.Det;id++){
-			while(sc_pipe_read2(P.Spc.ScBoard[ib],P.Spc.Pipe[ib][id],(void *)&(NonLinArray),-1));
-			ret=sc_pipe_close2(P.Spc.ScBoard[ib],P.Spc.Pipe[ib][id]);  // close pipe.
-	}
-	P.Spc.PipeClose=FALSE;
-	sprintf (message, "Pipes Closed\n");
-	SetCtrlVal (hDisplay, DISPLAY_MESSAGE, message);
+	if(P.Spc.ScPipeClose){
+		sprintf (message, "Closing Pipes SC1000\n");
+		SetCtrlVal (hDisplay, DISPLAY_MESSAGE, message);
+			for(id=0;id<P.Num.Det;id++){
+				while(sc_pipe_read2(P.Spc.ScBoard[ib],P.Spc.Pipe[ib][id],(void *)&(NonLinArray),-1));
+				ret=sc_pipe_close2(P.Spc.ScBoard[ib],P.Spc.Pipe[ib][id]);
+		}
+		P.Spc.ScPipeClose=FALSE;
+		sprintf (message, "Pipes Closed\n");
+		SetCtrlVal (hDisplay, DISPLAY_MESSAGE, message);
 	}
 	if(P.Spc.ScDeinit){
-	sprintf (message, "Deinitializing SC1000\n");
-	SetCtrlVal (hDisplay, DISPLAY_MESSAGE, message);
-		ret=sc_tdc_deinit2(P.Spc.ScBoard[ib]); // release hardware and resources.
+		sprintf (message, "Deinitializing SC1000\n");
+		SetCtrlVal (hDisplay, DISPLAY_MESSAGE, message);
+		ret=sc_tdc_deinit2(P.Spc.ScBoard[ib]); 
 		P.Spc.ScDeinit=FALSE;
 		P.Spc.ScBoardInitialized[Board]=FALSE;
-	sprintf (message, "SC1000 Deinitialized\n");
-	SetCtrlVal (hDisplay, DISPLAY_MESSAGE, message);}		
-	P.Spc.TimeElapsed=0;
+		sprintf (message, "SC1000 Deinitialized\n");
+		SetCtrlVal (hDisplay, DISPLAY_MESSAGE, message);
+	}		
+	P.Spc.ScTimeElapsed=0;
+	P.Spc.Started = FALSE;
 }
 
 void ReInitSC1000(int Board, char Operation){
 	if (Operation=='M'&&P.Mamm.Status) return;
 	int it,id,ret;
-	P.Spc.PipeClose = TRUE;
+	P.Spc.ScPipeClose = TRUE;
 	if (Operation=='S') P.Spc.ScDeinit = TRUE; else P.Spc.ScDeinit = FALSE;
 	CompleteClosureSC1000(Board);
 	double AccTime[8] = {0};
@@ -2807,7 +2792,7 @@ void ReInitSC1000(int Board, char Operation){
 		params.modulo = P.Spc.Refolding<SC1000_HARDREFOLD?-1:P.Spc.Refolding;
 		params.binning = P.Spc.Scale; // histogram binning is set to 1
 		params.offset =0; // histogram starts from the 0 time bins (see sc_tdc_get_binsize2()).
-		params.size = P.Mamm.SC1000_MAXBIN; // histogram size is P.Mamm.SC1000_MAXBIN time bins (but note binning)!
+		params.size = P.Spc.ScNumBin; // histogram size is P.Spc.ScNumBin time bins (but note binning)!
 		params.accumulation_ms = AccTime[id]*SEC_2_MILLISEC; // 0=accumulation is off
 		params.allocator_owner = NULL; // parameter for allocator cbf
 		params.allocator_cb = NULL; // internal allocator is used
@@ -2816,7 +2801,7 @@ void ReInitSC1000(int Board, char Operation){
 		else P.Spc.Pipe[Board][id]=ret;
 		}
 		
-		if (Operation!='S') P.Spc.AcqTimeSC1000=StartSC1000(Board,SC1000_TIME_INFINITY);
+		if (Operation!='S') P.Spc.ScAcqTime=StartSC1000(Board,SC1000_TIME_INFINITY);
 }
 
 /* INIT SC1000 */	
@@ -2832,12 +2817,8 @@ void InitSC1000(int Board){			   //EDO
 	
 	char IniPath[260];
 	strcpy(IniPath,P.Spc.Settings[Board]);
-	char StartMeasure=TRUE;
 	double AccTime[8] = {0};
-	if(P.Contest.Run==CONTEST_OSC&&P.Contest.Function==CONTEST_OSC) {
-		for(id=0;id<P.Num.Det;id++)
-			AccTime[id] = P.Spc.TimeO;
-	}
+	if(P.Contest.Run==CONTEST_OSC&&P.Contest.Function==CONTEST_OSC) for(id=0;id<P.Num.Det;id++) AccTime[id] = P.Spc.TimeO;
 	if(P.Contest.Run==CONTEST_MEAS&&P.Contest.Function==CONTEST_MEAS){
 		int TrimFlag=0;
 		for(it=0; it<MAX_TRIM; it++) 
@@ -2847,14 +2828,9 @@ void InitSC1000(int Board){			   //EDO
 		if(!P.Meas.SkipOscill) for(id=0;id<P.Num.Det;id++) {AccTime[id] = P.Spc.TimeO;}
 	}
 
-	P.Spc.Started=StartMeasure;
 	FILE* file=fopen(IniPath,"r");
 	char row[4*STRLEN]; 
-	for(it=0;it<81;it++)
-		fgets(row,4*STRLEN,file);//skip header
-    //fgets(row,4*STRLEN,file);//skip header	
-	fscanf(file,"%*s%*s%d",&P.Spc.StartDivider);
-	fclose(file);
+	for(it=0;it<81;it++) fgets(row,4*STRLEN,file); fscanf(file,"%*s%*s%d",&P.Spc.StartDivider); P.Spc.SelRepNum = P.Spc.StartDivider; fclose(file);
 	// read settings
 	if(!P.Spc.ScBoardInitialized[Board]) ret = sc_tdc_init_inifile(IniPath);
 		else ret=P.Spc.ScBoard[Board];
@@ -2874,17 +2850,17 @@ void InitSC1000(int Board){			   //EDO
 		}
 	if (ret < 0) {ErrHandler(ERR_SC1000,ret,"SC1000 error in getting binsize factor"); return;}
     
-    P.Mamm.SC1000_MAXBIN=Period*P.Spc.SelRepNum/(ns2ps*Binsize);
+    P.Spc.ScNumBin=floor(Period*P.Spc.SelRepNum/(ns2ps*Binsize)/P.Spc.Scale);
 	
 	// initialize pipe
 	for(id=0;id<P.Num.Det;id++){
 		struct sc_pipe_tdc_histo_params_t params;
 		params.depth = SC1000_BINDEPTH; // 32 bit per time channel (bin) in the histogram
 		params.channel = id; // pipe for channel #id is requested
-		params.modulo = P.Spc.Refolding<SC1000_HARDREFOLD?-1:P.Spc.Refolding;
+		params.modulo = P.Spc.Refolding<SC1000_HARDREFOLD?0:P.Spc.Refolding;
 		params.binning = P.Spc.Scale; // histogram binning is set to 1
 		params.offset =0; // histogram starts from the 0 time bins (see sc_tdc_get_binsize2()).
-		params.size = P.Mamm.SC1000_MAXBIN; // histogram size is P.Mamm.SC1000_MAXBIN time bins (but note binning)!
+		params.size = P.Spc.ScNumBin; // histogram size is P.Spc.ScNumBin time bins (but note binning)!
 		params.accumulation_ms = AccTime[id]*SEC_2_MILLISEC; // 0=accumulation is off
 		params.allocator_owner = NULL; // parameter for allocator cbf
 		params.allocator_cb = NULL; // internal allocator is used
@@ -2909,15 +2885,16 @@ void InitSC1000(int Board){			   //EDO
 	if(linearise) CalcNonlinSC1000(); // load BACKGROUND curve and derives coefficients for non-lin correction
 	
 	// start acquisition
-	if(StartMeasure) 
-		P.Spc.AcqTimeSC1000=StartSC1000(Board,SC1000_TIME_INFINITY);
-	if(P.Spc.AcqTimeSC1000<0) return;
+	char StartMeasure = TRUE;	   //controllare
+	P.Spc.Started=StartMeasure;
+	if(StartMeasure) P.Spc.ScAcqTime=StartSC1000(Board,SC1000_TIME_INFINITY);
+	if(P.Spc.ScAcqTime<0) return;
 	Passed();
 	
 } 
 
 /* START ACQUISITION */
-float StartSC1000(int Board,float AcqTime){   /*patch*/
+float StartSC1000(int Board,float AcqTime){   //EDO
 	int Time=AcqTime*SEC_2_MILLISEC;
 	int ret=sc_tdc_start_measure2(P.Spc.ScBoard[Board],Time);
 	if(ret<0) {ErrHandler(ERR_SC1000,ret,"StartSC1000"); Failure("Error in starting acquisition"); return -1;}
@@ -2925,25 +2902,22 @@ float StartSC1000(int Board,float AcqTime){   /*patch*/
 }
 
 /* CLOSE SC1000 */	
-void CloseSC1000(void){
+void CloseSC1000(void){	   //EDO	
 	int ib,id,ret;
 	double now,delta;
 	int status;
 	for(ib=0;ib<P.Num.Board;ib++){
-		/*patch*/
-		if(P.Mamm.OverTresholdPrevious||P.Mamm.IsTop){ //substitute with: if(P.Action.DoJumpMamm)??
-		for(id=0;id<P.Num.Det;id++) 
-			ret=sc_pipe_close2(P.Spc.ScBoard[ib],P.Spc.Pipe[ib][id]);
-		//ret=sc_tdc_deinit2(P.Spc.ScBoard[ib]);
-		P.Spc.PipeClose=FALSE;
-		P.Spc.ScDeinit=TRUE;
+		if(P.Mamm.OverTresholdPrevious||P.Mamm.IsTop){ //substitute with: if(P.Action.DoJumpMamm)??	   controllare
+			for(id=0;id<P.Num.Det;id++) ret=sc_pipe_close2(P.Spc.ScBoard[ib],P.Spc.Pipe[ib][id]);
+			P.Spc.ScPipeClose=FALSE;
+			P.Spc.ScDeinit=TRUE;
 		}
 		else{
-		ret=sc_tdc_interrupt2(P.Spc.ScBoard[ib]);
-		P.Spc.PipeClose=TRUE;
-		P.Spc.ScDeinit=FALSE;
+			ret=sc_tdc_interrupt2(P.Spc.ScBoard[ib]);
+			P.Spc.ScPipeClose=TRUE;
+			P.Spc.ScDeinit=FALSE;
 		}
-		P.Spc.TimeElapsed=Timer();
+		P.Spc.ScTimeElapsed=Timer();
 		P.Spc.ScDeinit|=P.Spc.ScInit;
 		P.Mamm.OverTresholdPrevious=0;
 		P.Mamm.IsTop=0;
@@ -2952,7 +2926,8 @@ void CloseSC1000(void){
 		int it;
 		for(it=0;it<300;it++){
 		P.Frame.Mem[0][it]=0;
-        P.Frame.Mem[1][it]=0;		
+        P.Frame.Mem[1][it]=0;
+		P.Spc.Started = FALSE;
 		}
 	}
 	
@@ -2989,13 +2964,13 @@ void GetDataSC1000(void){
 	for(ib=0;ib<P.Num.Board;ib++){
 		for(id=0;id<P.Num.Det;id++){
 			ret=PipeRead(ib,id,Timeout);  
-			if(P.Spc.SCAutoTrim&&id>=1) break;
-			//fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\t%d\tGetData\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.AcqTimeSC1000,ret);
+			if(P.Spc.ScAutoTrim&&id>=1) break;
+			//fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\t%d\tGetData\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.ScAcqTime,ret);
 			if(ret<0){ 
-				/*if(ret==-17&&P.Mamm.Status&&((P.Num.Acq+1)*P.Spc.TimeM>=P.Spc.AcqTimeSC1000)) {*/
+				/*if(ret==-17&&P.Mamm.Status&&((P.Num.Acq+1)*P.Spc.TimeM>=P.Spc.ScAcqTime)) {*/
 				if(P.Mamm.Status&&P.Contest.Function==CONTEST_MEAS){
 					FILE *fid=fopen("CheckMamm.txt","a+");
-					fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\tGetData\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.AcqTimeSC1000);
+					fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\tGetData\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.ScAcqTime);
 					fclose(fid);
 					P.Action.StopMamm=1;
 					P.Action.DataSave=1;
@@ -3004,27 +2979,22 @@ void GetDataSC1000(void){
 				else ;//ErrHandler(ERR_SC1000,ret,"PipeRead"); 
 					}
 			if(linearise){
-			 if(P.Mamm.PostProcess&&P.Contest.Function==CONTEST_MEAS){
-				for(ic=0;ic<P.Mamm.SC1000_MAXBIN;ic++) D.BufferTDC[P.Frame.Actual][id][ic]=NonLinArray[ic];
-			 }
-			  else{
 				LinRefoldSC1000(P.Spc.Refolding,ib,id,NonLinArray,LinArray,P.Chann.Num); // 3 ms;0.75 ms
 			  	for(ic=0;ic<P.Chann.Num;ic++) D.Buffer[ib][id*P.Chann.Num+ic]=(T_DATA) floor(LinArray[ic]+0.5);
-			  }
 			}
 			else{
-				for(ic=0;ic<min(P.Chann.Num,P.Mamm.SC1000_MAXBIN);ic++) D.Buffer[ib][id*P.Chann.Num+ic]=(T_DATA) floor(NonLinArray[ic]+0.5);
-				for(ic=min(P.Chann.Num,P.Mamm.SC1000_MAXBIN);ic<P.Chann.Num;ic++) D.Buffer[ib][id*P.Chann.Num+ic]=0;
+				for(ic=0;ic<min(P.Chann.Num,P.Spc.ScNumBin);ic++) D.Buffer[ib][id*P.Chann.Num+ic]=(T_DATA) floor(NonLinArray[ic]+0.5);
+				for(ic=min(P.Chann.Num,P.Spc.ScNumBin);ic<P.Chann.Num;ic++) D.Buffer[ib][id*P.Chann.Num+ic]=0;
 				}
 			if(ret<0) ErrHandler(ERR_SC1000,ret,"GetDataSC1000");
 		}
 	if(P.Mamm.Status) {
 		if(P.Contest.Function != CONTEST_OSC){
 			P.Num.Acq++;
-			if(P.Num.Acq>=P.Spc.AcqTimeSC1000/P.Spc.TimeM){
+			if(P.Num.Acq>=P.Spc.ScAcqTime/P.Spc.TimeM){
 				P.Action.StopMamm=1;
 				P.Action.DataSave=1;
-				fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\tOverMaxMeasNum\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.AcqTimeSC1000);
+				fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\tOverMaxMeasNum\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.ScAcqTime);
 				SetCtrlVal (hDisplay, DISPLAY_MESSAGE, "OverMaxMeasNum\n");
 			}
 		}
@@ -3051,7 +3021,7 @@ void ClearSC1000(void){
 			}
 	P.Spc.Started=TRUE;
 	if(!(P.Contest.Function==CONTEST_MEAS&&P.Mamm.Status)) 
-		P.Spc.AcqTimeSC1000=StartSC1000(ib,SC1000_TIME_INFINITY);
+		P.Spc.ScAcqTime=StartSC1000(ib,SC1000_TIME_INFINITY);
 	else P.Spc.Started=FALSE;
 	}
 	
@@ -3061,23 +3031,23 @@ void ClearSC1000(void){
 void FlushSC1000(int Board){
 int id,ret=0;
 	FILE *fid=fopen("CheckMamm.txt","a+");
-	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\tFlushStart\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.AcqTimeSC1000);
+	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\tFlushStart\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.ScAcqTime);
 	int Timeout=1000;	
 	//Delay(2);
 	if(P.Mamm.Status&&P.Contest.Function==CONTEST_MEAS){
 		if(P.Num.Acq!=0){
-		while(P.Num.Acq*P.Spc.TimeM<=P.Spc.AcqTimeSC1000||ret>0){
+		while(P.Num.Acq*P.Spc.TimeM<=P.Spc.ScAcqTime||ret>0){
 		P.Num.Acq++;
 			for(id=0;id<P.Num.Det;id++){
 				ret=PipeRead(Board,id,Timeout);
-				//fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\t%d\tFlushIter\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.AcqTimeSC1000,ret);
+				//fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\t%d\tFlushIter\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.ScAcqTime,ret);
 			}
 		};
 
 	}
 	}
 	else for(id=0;id<P.Num.Det;id++) while(PipeRead(Board,id,Timeout));
-	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\tFlushStop\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.AcqTimeSC1000);
+	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\tFlushStop\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.ScAcqTime);
 	fclose(fid);
 	P.Spc.Started=TRUE;
 }
@@ -3100,9 +3070,9 @@ void CalcNonlinSC1000(void){	   //EDO
 			if (!pfile) {ErrHandler(ERR_SC1000,0,"Unable to open DCR File"); return;}
 			fgets(trash, STRLEN, pfile); // discard first title line
 			icc=0;
-			while(fscanf(pfile,"%lf\t%d",&DCR_raw_time[icc],&DCR_raw_count[icc++])>0);
+			while(fscanf(pfile,"%lf\t%d",&DCR_raw_time[icc],&DCR_raw_count[icc])!=EOF) icc++;
 			fclose(pfile);
-			int LengthDCRFile = icc-350;
+			int LengthDCRFile = icc-350;  //to remove the effects of the non linear time scale at the end of the acquisition
 			meanDCR=0;
 			for(icc=0;icc<LengthDCRFile;icc++) meanDCR+=DCR_raw_count[icc]; // icc = channel (bin) on the original non-lin TDC data
 			meanDCR/=LengthDCRFile;
@@ -3125,7 +3095,7 @@ void LinRefoldSC1000(int Refold,int Board,int Det,SC1000_TYPE *NonLinArray, doub
 	int ic,itp;
 	int    	itt = P.Spc.ScFirstBin-1;	// index that scans over the original non-linear time scale
 	int    	it = 0; 					// index that scans over the new linear time-scale
-	int 		ntt = min(P.Spc.ScLastBin,P.Mamm.SC1000_MAXBIN); // last chann of the Non-Lin Array
+	int 		ntt = min(P.Spc.ScLastBin,P.Spc.ScNumBin); // last chann of the Non-Lin Array
 	int 		nt = NumChannLin; 	// length of the Lin Array
 	double 	*dtt = NonLinDt[Board][Det]; 		// array with NonLin Delta;
 	double   dt=P.Spc.Factor;				// lin delta
@@ -3144,7 +3114,6 @@ void LinRefoldSC1000(int Refold,int Board,int Det,SC1000_TYPE *NonLinArray, doub
 	//Refold 4 = OnlyRefold
 	
 	for(ic=0;ic<P.Chann.Num;ic++) LinArray[ic]=0;
-	if(P.Spc.SelRepNum>=16) P.Spc.SelRepNum=16;
 	if(Refold==2||Refold==0){
 	//int Rebin=(ns2ps*Binsize)/(Period/P.Chann.Num); //P.Chann.Num sould be 65535 to obtain max Rebin. if chann num defines the factor
 	int Rebin =(ns2ps*Binsize)/(P.Spc.Factor); 		  //if the factor defines the chann num
@@ -3203,7 +3172,7 @@ void LinRefoldSC1000(int Refold,int Board,int Det,SC1000_TYPE *NonLinArray, doub
 	}
 	else if(Refold==1){
 	//for(it=P.Spc.ScFirstBin;it<P.Spc.ScLastBin;it++) somma+=NonLinArray[it];
-	while(itt<(ntt*P.Spc.SelRepNum/P.Spc.SelRepNum)){
+	while(itt<(ntt)){
 		if(((Refold==1)||(Refold==3)) && tt>T){  // if REBIN, both t & tt have surpassed the Period, then reset
 			tt-=T;
 			rt=dt-tt;
@@ -3245,7 +3214,7 @@ void LinRefoldSC1000(int Refold,int Board,int Det,SC1000_TYPE *NonLinArray, doub
 	}
 	//for(it=(P.Spc.ScFirstBin-1)*Rebin;it<P.Spc.ScLastBin*Rebin;it++) somma1+=Buffer[it];
 	it=0;
-	for(iit=(P.Spc.ScFirstBin-1)*Rebin;iit<P.Spc.ScLastBin*Rebin*(P.Spc.SelRepNum/P.Spc.SelRepNum);iit++){
+	for(iit=(P.Spc.ScFirstBin-1)*Rebin;iit<P.Spc.ScLastBin*Rebin;iit++){
 		if(it==RoundRealToNearestInteger(Period/((ns2ps*Binsize)/Rebin))){ 
 			it=0;
 			numrep++;}
@@ -3882,7 +3851,7 @@ void InitTrim(char Trim){
 
 /* AUTO TRIMMER */
 void AutoTrim(int Trim){
-	if(P.Spc.Type==SPC_SC1000) P.Spc.SCAutoTrim=1;   //patch
+	if(P.Spc.Type==SPC_SC1000) P.Spc.ScAutoTrim=1;   //patch
 	struct TrimS *T = &P.Trim[Trim];
 	char si=T->Step;
 	char datareset,tellpos,movestep,startstep,dataclear,datain,typewait,datastop,dataout;
@@ -4041,7 +4010,7 @@ void AutoTrim(int Trim){
 	P.Spc.Trash=TRUE;
 	SpcTime(P.Spc.TimeM);
 	P.Contest.Function=CONTEST_MEAS;
-	if(P.Spc.Type==SPC_SC1000) P.Spc.SCAutoTrim=0;
+	if(P.Spc.Type==SPC_SC1000) P.Spc.ScAutoTrim=0;
 	}
 
 
@@ -8134,29 +8103,6 @@ void DataSave(void){
 		}
 	while(P.File.File == NULL);
 */	
-	if(P.Mamm.PostProcess){
-    long actual=P.Frame.Actual;
-	for(ib=0;ib<P.Num.Board;ib++){ 
-		for(ifr=0;ifr<P.Frame.Num;ifr++){
-			P.Frame.Actual=ifr;
-			for(id=0;id<P.Num.Det;id++){
-				   LinRefoldSC1000(P.Spc.Refolding,ib,id,D.BufferTDC[ifr][id],LinArray,P.Chann.Num); // 3 ms;0.75 ms
-				   for(ic=0;ic<P.Chann.Num;ic++) 
-					   D.Buffer[ib][id*P.Chann.Num+ic]=(T_DATA) floor(LinArray[ic]+0.5);
-			}
-		DataCopy();
-		}
-	}
-	
-	
-	for(ifr=0;ifr<P.Frame.Num;ifr++)
-		for(ip=0;ip<P.Num.Page;ip++)
-			for(ic=0;ic<P.Mamm.SC1000_MAXBIN;ic++)
-				D.BufferTDC[ifr][ip][ic]=0;
-	
-	P.Frame.Actual=actual;
-	}
-	
 	if(P.Mamm.Shrink[X]&&P.Mamm.Status){
 	
     int IdY=P.Loop[P.Mamm.Loop[Y]].Idx;
@@ -9121,20 +9067,11 @@ void AnalysisMamm(void){
 /* IS OVERTHRESHODLS? */
 void AnalysisMamm_new(void){
 	int ib,id,ic;
-	if(P.Mamm.PostProcess){
-		for(ib=0;ib<P.Num.Board;ib++) P.Mamm.Count.Actual[ib]=0; 
-		for(ib=0;ib<P.Num.Board;ib++)
-			for(id=0;id<P.Num.Det;id++)
-		 		for(ic=P.Spc.ScFirstBin-1;ic<P.Spc.ScLastBin;ic++)
-			  		P.Mamm.Count.Actual[ib]+=D.BufferTDC[P.Frame.Actual][id][ic];
-	}
-	else{
 	for(ib=0;ib<P.Num.Board;ib++) P.Mamm.Count.Actual[ib]=0; 
 	for(ib=0;ib<P.Num.Board;ib++)
 		for(id=0;id<P.Num.Det;id++)
 		 	for(ic=0;ic<P.Chann.Num;ic++)
 			  P.Mamm.Count.Actual[ib]+=D.Buffer[ib][ic+id*P.Chann.Num];
-	}
 	for(ib=0;ib<P.Num.Board;ib++){
 			P.Mamm.Rate.Actual[ib]=P.Mamm.Count.Actual[ib]/P.Spc.TimeM; //Antonio. P.Spc.TimeM o P.Spc.EffTime[ib]
 			P.Spc.CountRate=P.Mamm.Rate.Actual[ib];
@@ -9163,7 +9100,7 @@ void StartMammot(void){
 	
 	if(P.Loop[LoopX].First!=0)
 		for(ib=0;ib<P.Num.Board;ib++) 
-			P.Spc.AcqTimeSC1000=StartSC1000(ib,ceil(abs(P.Loop[LoopX].First/P.Loop[LoopX].Delta)-P.Mamm.CorrShift+1)*P.Spc.TimeM);
+			P.Spc.ScAcqTime=StartSC1000(ib,ceil(abs(P.Loop[LoopX].First/P.Loop[LoopX].Delta)-P.Mamm.CorrShift+1)*P.Spc.TimeM);
 	P.Spc.Started=TRUE;
 	MoveStep(&P.Step[StepX].Actual,StopGoal,StepX,FALSE,P.Action.Status);
 	
@@ -9181,13 +9118,6 @@ void StartMammot(void){
 			 for(ic=0;ic<P.Chann.Num;ic++) 
 	            D.Data[P.Frame.Actual][id][ic]=0;
 	
-	if(P.Mamm.PostProcess) {
-		for(ib=0;ib<P.Num.Board;ib++)
-			 for(id=0;id<P.Num.Det;id++)
-				 for(ic=0;ic<P.Mamm.SC1000_MAXBIN;ic++)		 
-	 				D.BufferTDC[P.Frame.Actual][id][ic]=0;
-	}
-	
 	for(ifr=0; ifr<P.Frame.Num; ifr++)
 			for(ip=0; ip<P.Num.Page; ip++)
 				CompileSub(P.Ram.Actual, ifr, ip);	 
@@ -9198,14 +9128,14 @@ void StartMammot(void){
 	FILE *fid;
 	fid=fopen("CheckMamm.txt","w+");
 	fprintf(fid,"Rate\tPos\tX\tY\tFA\tFL\tFF\IsTop\tNumAcq\tTimeSC\n");
-	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\tStartMammot\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.AcqTimeSC1000);
+	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\tStartMammot\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.ScAcqTime);
 	
 	
 	CorrShift=abs(P.Loop[LoopX].First/P.Loop[LoopX].Delta)-abs(P.Step[StepX].Actual/P.Step[StepX].Factor/P.Loop[LoopX].Delta)-P.Frame.Actual;
 	StopGoal=P.Step[StepX].Actual+SIGNUM(P.Loop[LoopX].First)*CorrShift*P.Step[StepX].Factor*abs(P.Loop[LoopX].Delta);
 	MoveStep(&P.Step[StepX].Actual,StopGoal,StepX,1,P.Action.Status);
 	
-	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\tStartMammot\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.AcqTimeSC1000);
+	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\tStartMammot\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.ScAcqTime);
 	
 	if(P.Mamm.ShiftBack&&P.Loop[LoopX].First!=0){
 		StopGoal=P.Step[StepX].Actual-SIGNUM(StopGoal)*P.Mamm.ShiftBack*P.Step[StepX].Factor*abs(P.Loop[LoopX].Delta);
@@ -9229,7 +9159,7 @@ void StartMammot(void){
 	P.Spc.Trash=FALSE;
 	for(ib=0;ib<P.Num.Board;ib++){ 
 			FlushSC1000(ib);
-			P.Spc.AcqTimeSC1000=StartSC1000(ib,(P.Loop[LoopX].Num+1)*P.Spc.TimeM);
+			P.Spc.ScAcqTime=StartSC1000(ib,(P.Loop[LoopX].Num+1)*P.Spc.TimeM);
 	}
 	
 }
@@ -9246,17 +9176,17 @@ void StopMammot(void){
 		stop=Timer()-start;
 	}
 	fid=fopen("CheckMamm.txt","a+");
-	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\t%lf\tStop\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.AcqTimeSC1000,stop);
+	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\t%lf\tStop\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.ScAcqTime,stop);
 	if(P.Mamm.CorrShift) {ShiftCorrection();
-	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\tStop\tShift\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.AcqTimeSC1000);}
+	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\tStop\tShift\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.ScAcqTime);}
 	if(P.Mamm.ShiftBack) {BackShift();
-	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\tStop\tBackShift\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.AcqTimeSC1000);}
+	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\tStop\tBackShift\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.ScAcqTime);}
 	
 	P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx]=P.Frame.Actual;
 	P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx+1]=P.Frame.Actual;
 	P.Mamm.OverTreshold=TRUE;
 	P.Mamm.IsTop=abs(P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx]-P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx])<=(P.Mamm.TopLim);
-	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\tStopFinished\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.AcqTimeSC1000);
+	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\tStopFinished\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.ScAcqTime);
 	P.Num.Acq=0;    
 	fclose(fid);
 }
@@ -9270,7 +9200,7 @@ P.Spc.Trash=FALSE;
     	P.Loop[P.Mamm.Loop[X]].Idx=P.Frame.Actual;
 
 FILE* fid=fopen("CheckMamm.txt","a+");
-fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\t%lf\tAdjustIndex\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.AcqTimeSC1000);
+fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\t%lf\tAdjustIndex\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.ScAcqTime);
 fclose(fid);
 }
 
@@ -9285,7 +9215,7 @@ if(P.Mamm.OverTreshold){
 	P.Action.StopMamm=1;
 	FILE* fid;
 	fid=fopen("CheckMamm.txt","a+");
-	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\t%lf\tOverTreshold\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.AcqTimeSC1000);
+	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\t%lf\tOverTreshold\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.ScAcqTime);
 	fclose(fid);
 	}
 }
@@ -9347,24 +9277,13 @@ void BackShift(void){
 	int ib,ic,id,iframe,delta;
 	delta=(REMINDER(P.Loop[P.Mamm.Loop[Y]].Idx,2)?1:-1);
 	ShiftBack=ShiftBack*delta;
-	if(P.Mamm.PostProcess){
 	for(ib=0;ib<P.Num.Board;ib++)
-		for(id=0;id<P.Num.Det;id++)
-			for(ic=P.Spc.ScFirstBin-1;ic<P.Spc.ScLastBin;ic++){ 
-	   			for(iframe=P.Frame.Actual;P.Frame.Actual-abs(ShiftBack)<iframe&&iframe<P.Frame.Actual+abs(ShiftBack);iframe=iframe+delta){
-					D.BufferTDC[iframe][id][ic]=0;
-					if(P.Info.SubHeader) CompileSub(P.Ram.Actual,iframe,id);}
-			}
-	}
-	else{
-		for(ib=0;ib<P.Num.Board;ib++)
 		for(id=0;id<P.Num.Det;id++)
 			for(ic=0;ic<P.Chann.Num;ic++){ 
 	   			for(iframe=P.Frame.Actual;P.Frame.Actual-abs(ShiftBack)<iframe&&iframe<P.Frame.Actual+abs(ShiftBack);iframe=iframe+delta){
 					D.Data[iframe][id][ic]=0;
 						if(P.Info.SubHeader) CompileSub(P.Ram.Actual,iframe,id);}
 			}
-	}
 	P.Frame.Actual=P.Frame.Actual+ShiftBack;
 }
 
@@ -9713,4 +9632,3 @@ void CopySaveBank(void){
 /* ######################################################################## */
 /* 								END of TRSMEAS.C							*/ 
 /* ######################################################################## */
-

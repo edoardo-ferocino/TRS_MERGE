@@ -286,10 +286,6 @@ Prototype="void CloseTH260();"
 Class="Function"
 Prototype="void GetDataTH260();"
 
-[patch2]
-Class="Function"
-Prototype="void patch2(int ret);"
-
 [ClearTH260]
 Class="Function"
 Prototype="void ClearTH260();"
