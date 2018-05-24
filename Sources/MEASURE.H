@@ -1096,6 +1096,7 @@ struct MammS {
 	int CorrShift;				//EDO
 	char InvertSignCorr;		//EDO
 	char ParityMem;				//EDO
+	char IgnoreTrash;
 	char Status;
 	char   IniFile[MAMM_NUM_BOARD][260];		//EDO
 	};
@@ -1130,6 +1131,7 @@ struct ActionS{
 	char StartAdc;
 	char WaitAdc;
 	char ReadUIR;
+	char SpcTime;			//EDO
 	char StartMamm;         //EDO
 	char CheckMamm;         //EDO
 	char StopMamm;		    //EDO
@@ -1263,7 +1265,7 @@ struct StepS {
 	char  FPath[STRLEN];
 	struct Delay_GateS Delay_Gate;
 	struct Standa2S Standa2;
-	long StopGoal; // patch
+	long StopGoal; // EDO
 	};
 
 struct SwitchS {
@@ -1999,6 +2001,7 @@ void GetDataTimeharp(void);
 /* ########################   SC1000 FUNCTIONS   ####################### */
 void InitSC1000(int Board);
 float StartSC1000(int Board,float AcqTime);
+float RestartSc1000(int Board);
 void CloseSC1000(void);
 void GetDataSC1000(void);
 void ClearSC1000(void);
@@ -2378,14 +2381,14 @@ char IsBorderNIR(char, char);
 void InitLegend(void);
 void AddLabel(int IdName);
 void AddThick(int ID);
-/*patch*/
-void StartMammot(void);
-void StopMammot(void);
-void CheckMammot(void);
-void AnalysisMamm_new(void);
-void AdjustIndex(void);
-void ShiftCorrection(void);
-void BackShift(void);
+void InitMammot(void);			//EDO
+void StartMammot(void);			//EDO
+void StopMammot(void);			//EDO
+void CheckMammot(void);			//EDO
+void AnalysisMamm_new(void);	//EDO
+void AdjustIndex(void);			//EDO
+void ShiftCorrection(void);		//EDO
+void BackShift(void);			//EDO
 
 
 /* ########################   MOXY PROCEDURES   ########################### */

@@ -48,12 +48,12 @@ Batch Build Debug = True
 [File 0001]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/Measure.c"
 File Type = "CSource"
-Disk Date = 3610009542
+Disk Date = 3610017254
 In Projects = "1,"
 Window Top = 62
 Window Left = 26
 Window Z-Order = 1
-Source Window State = "1,0,0,0,0,0,0,0,0,140,0,0,0,0,0,30,2787,0,2797,96,291,1020,1,0,"
+Source Window State = "1,0,9601,0,0,0,0,0,0,140,0,9479,0,9479,0,30,555,0,572,11,291,1020,1,0,"
 
 [File 0002]
 Path = "/c/Program Files (x86)/National Instruments/CVI2013/include/userint.h"
@@ -88,17 +88,17 @@ Source Window State = "1,0,0,0,0,0,0,0,0,80,0,0,0,0,0,24,0,0,0,0,511,1020,1,0,"
 [File 0005]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/Trs.c"
 File Type = "CSource"
-Disk Date = 3610006061
+Disk Date = 3610016590
 In Projects = "1,"
 Window Top = 45
 Window Left = 6
 Window Z-Order = 4
-Source Window State = "1,0,2058,0,0,0,0,0,0,52,0,2103,0,2103,18,15,342,0,349,16,349,676,1,17,"
+Source Window State = "1,0,2103,0,0,0,0,0,0,52,0,2098,0,2098,18,15,2055,0,2098,0,349,676,1,17,"
 
 [File 0006]
 Path = "/c/Program Files (x86)/TRS_Beta/Sources/TRS.UIR"
 File Type = "User Interface Resource"
-Disk Date = 3610007396
+Disk Date = 3610017374
 In Projects = ""
 Window Top = 32
 Window Left = 10
@@ -109,22 +109,22 @@ Window Z-Order = 5
 [File 0007]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/TRS.h"
 File Type = "Include"
-Disk Date = 3610006061
+Disk Date = 3610016609
 In Projects = ""
 Window Top = 32
 Window Left = 10
 Window Z-Order = 3
-Source Window State = "1,0,1062,0,0,0,0,0,0,80,0,1062,0,1062,0,20,1033,0,1061,6,431,1020,1,0,"
+Source Window State = "1,0,1062,0,0,0,0,0,0,80,0,1060,0,1060,0,20,1017,0,1059,6,431,1020,1,0,"
 
 [File 0008]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/MEASURE.H"
 File Type = "Include"
-Disk Date = 3610008770
+Disk Date = 3610016672
 In Projects = ""
 Window Top = 32
 Window Left = 10
 Window Z-Order = 2
-Source Window State = "1,0,2439,0,0,0,0,0,0,80,0,2439,0,2439,0,20,2419,0,2439,0,431,1020,1,0,"
+Source Window State = "1,0,2439,0,0,0,0,0,0,80,0,2439,0,2439,0,20,2396,0,2439,0,431,1020,1,0,"
 
 [File 0009]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/TRS.UIR"
@@ -218,11 +218,11 @@ In Projects = "1,"
 Tab 0001 = "/c/Program Files (x86)/National Instruments/CVI2013/include/userint.h"
 Tab 0002 = "/c/Program Files (x86)/National Instruments/CVI2013/include/utility.h"
 Tab 0003 = "/c/Program Files (x86)/National Instruments/CVI2013/include/ansi/string.h"
-Tab 0004 = "/c/Program Files (x86)/TRS_MERGE/Sources/Trs.c"
-Tab 0005 = "/c/Program Files (x86)/TRS_Beta/Sources/TRS.UIR"
-Tab 0006 = "/c/Program Files (x86)/TRS_MERGE/Sources/TRS.h"
-Tab 0007 = "/c/Program Files (x86)/TRS_MERGE/Sources/MEASURE.H"
-Tab 0008 = "/c/Program Files (x86)/TRS_MERGE/Sources/Measure.c"
+Tab 0004 = "/c/Program Files (x86)/TRS_Beta/Sources/TRS.UIR"
+Tab 0005 = "/c/Program Files (x86)/TRS_MERGE/Sources/Measure.c"
+Tab 0006 = "/c/Program Files (x86)/TRS_MERGE/Sources/Trs.c"
+Tab 0007 = "/c/Program Files (x86)/TRS_MERGE/Sources/TRS.h"
+Tab 0008 = "/c/Program Files (x86)/TRS_MERGE/Sources/MEASURE.H"
 
 [Default Build Config 0001 Debug]
 Generate Browse Info = True

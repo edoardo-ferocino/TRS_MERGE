@@ -366,7 +366,7 @@ void CreateTable(void){
 
 	T.Num=0;
 
-	// ITEMS  607 = 27+3+5+17+7+3+9+2+6+1+154+90+150+30+48+18+33+4+1
+	// ITEMS  721 = 27+3+5+17+7+3+9+2+6+1+154+90+150+30+48+18+33+4+1
 	
 	// 9*5
 	for(il=0;il<MAX_LOOP;il++){
@@ -393,7 +393,7 @@ void CreateTable(void){
 	AddTab(CE,TINT,PARM,PARM_FILE_TAG,"FileTag",0,0,&P.File.Tag); 
 	AddTab(CE,TCHAR,PARM,PARM_FILE_TYPE,"FileType",0,0,&P.File.Type); 
 
-	// 16+4
+	// 19+4
 	AddTab(CE,TCHAR,PARM,PARM_SPC_TYPE,"SpcType",0,0,&P.Spc.Type);
 	AddTab(CE,TCHAR,PARM,PARM_SPC_SCALE,"SpcScale",0,0,&P.Spc.Scale);
 	AddTab(CE,TDOUBLE,PARM,PARM_SPC_CALIB,"SpcCalib",0,0,&P.Spc.Calib);
@@ -519,7 +519,7 @@ void CreateTable(void){
 		AddTab(CE,TSTRING,TRIM,TRIM_FNAME_1+it,"TrimFName",it+1,0,P.Trim[it].FName);
 		}
 
-	// 22+8
+	// 25+7
 	AddTab(CE,TCHAR,MAMM,MAMM_AUTOLABEL,"MammAutoLabel",0,0,&P.Mamm.AutoLabel);
 	AddTab(CE,TCHAR,MAMM,MAMM_FINDTOP,"MammFindTop",0,0,&P.Mamm.FindTop);
 	AddTab(CE,TINT,MAMM,MAMM_ITERBORD,"MammIterBoard",0,0,&P.Mamm.IterBord);
