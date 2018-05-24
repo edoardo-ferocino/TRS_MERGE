@@ -286,10 +286,6 @@ Prototype="void CloseTH260();"
 Class="Function"
 Prototype="void GetDataTH260();"
 
-[patch2]
-Class="Function"
-Prototype="void patch2(int ret);"
-
 [ClearTH260]
 Class="Function"
 Prototype="void ClearTH260();"
@@ -300,7 +296,7 @@ Prototype="void CompleteClosureSC1000(int Board);"
 
 [ReInitSC1000]
 Class="Function"
-Prototype="void ReInitSC1000(int Board, char Operation);"
+Prototype="void ReInitSC1000(char Operation);"
 
 [InitSC1000]
 Class="Function"

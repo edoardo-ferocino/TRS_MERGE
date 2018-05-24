@@ -296,7 +296,7 @@ Prototype="void CompleteClosureSC1000(int Board);"
 
 [ReInitSC1000]
 Class="Function"
-Prototype="void ReInitSC1000(int Board, char Operation);"
+Prototype="void ReInitSC1000(char Operation);"
 
 [InitSC1000]
 Class="Function"

@@ -1060,7 +1060,16 @@ struct MammAttS{
 	int IdxGoal;
 	double FreqOpen;
 	};
-	
+
+struct ScReinitS{  //EDO
+	int Measure;
+	int TrimmerPreBreak;
+	int TrimmerPostBreak;
+	int Oscilloscope;
+	int StartMammot;
+	int AnyOper;
+};
+
 struct MammS {
 	char Mamm;
 	char AutoLabel;
@@ -1088,7 +1097,7 @@ struct MammS {
 	char InvertSignCorr;		//EDO
 	char ParityMem;				//EDO
 	char Status;
-	char   IniFile[MAMM_NUM_BOARD][260];
+	char   IniFile[MAMM_NUM_BOARD][260];		//EDO
 	};
 
 struct ActionS{
@@ -1121,14 +1130,13 @@ struct ActionS{
 	char StartAdc;
 	char WaitAdc;
 	char ReadUIR;
-	//patch
-	char StartMamm;
-	char CheckMamm;
-	char StopMamm;
-	char DoJumpMamm;
-	char SpcRestart;
-	char AdjustIndex;
-	char ScReInit;
+	char StartMamm;         //EDO
+	char CheckMamm;         //EDO
+	char StopMamm;		    //EDO
+	char DoJumpMamm;		//EDO
+	char SpcRestart;		//EDO
+	char AdjustIndex;		//EDO
+	struct ScReinitS ScReInit;			//EDO
 	};
 
 struct LoopS {
@@ -1995,7 +2003,7 @@ void CloseSC1000(void);
 void GetDataSC1000(void);
 void ClearSC1000(void);
 void CompleteClosureSC1000(int Board);
-void ReInitSC1000(int Board, char Operation);
+void ReInitSC1000(char Operation);
 void CalcNonlinSC1000(void);
 void LinRefoldSC1000(int Refold,int Board,int Det,SC1000_TYPE *NonLinArray, double *LinArray, int NumChannLin);
 void FlushSC1000(int Board);
