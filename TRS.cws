@@ -48,12 +48,12 @@ Batch Build Debug = True
 [File 0001]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/Measure.c"
 File Type = "CSource"
-Disk Date = 3609996902
+Disk Date = 3609997464
 In Projects = "1,"
 Window Top = 32
 Window Left = 10
 Window Z-Order = 1
-Source Window State = "1,3023,3023,3023,14,27,27,0,0,140,0,0,0,0,0,30,3008,0,3023,23,531,1020,1,0,"
+Source Window State = "1,0,0,0,0,0,0,0,0,140,0,0,0,0,0,30,0,0,0,0,531,1020,1,0,"
 
 [File 0002]
 Path = "/c/Program Files (x86)/National Instruments/CVI2013/include/userint.h"

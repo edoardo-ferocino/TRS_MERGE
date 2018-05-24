@@ -2043,12 +2043,7 @@ void SpcClear(void){
 		case HYDRA: ClearHydra(); break;
 		case TH260: ClearTH260(); break;
 		case SPC_SPADLAB: ClearSpad(); break;
-		case SPC_SC1000:	  // forse si può sostituire con if(P.Spc.Trash) FlushSC1000(0);
-			if(P.Contest.Function == CONTEST_OSC) {if(P.Spc.Trash) FlushSC1000(0);}
-			else if(P.Mamm.Status){if(P.Spc.Trash) 
-					ClearSC1000();} //forse si può eliminare ma controllare
-					else if(P.Spc.Trash) FlushSC1000(0); 
-			break; /*patch*/
+		case SPC_SC1000: ClearSC1000(); break; 
 		case TEST: break;
 		case DEMO: break;
 		default: break;
@@ -3003,9 +2998,14 @@ void GetDataSC1000(void){
 	fclose(fid);
 }
 
-/* CLEAR SC1000 */	//REDUNDANT?
+/* CLEAR SC1000 */	//EDO
 void ClearSC1000(void){
-	int ic,ib,id=0,ret;
+	int ib=0, id=0;
+	if(P.Spc.Trash)
+		for(ib=0;ib<P.Num.Board;ib++)
+			for(id=0;id<P.Num.Det;id++)
+				while(sc_pipe_read2(P.Spc.ScBoard[ib],P.Spc.Pipe[ib][id],(void *)&(NonLinArray),1000));
+	/*int ic,ib,id=0,ret;
 	int status;
 	for(ib=0;ib<P.Num.Board;ib++){
 		ret=sc_tdc_interrupt2(P.Spc.ScBoard[ib]);
@@ -3015,7 +3015,7 @@ void ClearSC1000(void){
 					P.Spc.CountRate+=D.Buffer[ib][ic+id*P.Chann.Num];
 		P.Spc.CountRate/=P.Spc.TimeM;
 		
-		Delay(P.Spc.CountRate<=9e6?3:5);/*patch. utilizzare anche un limite per le misure normali*/
+		Delay(P.Spc.CountRate<=9e6?3:5);
 		for(id=0;id<P.Num.Det;id++){
 			while(sc_pipe_read2(P.Spc.ScBoard[ib],P.Spc.Pipe[ib][id],(void *)&(NonLinArray),1000));
 			}
@@ -3023,7 +3023,7 @@ void ClearSC1000(void){
 	if(!(P.Contest.Function==CONTEST_MEAS&&P.Mamm.Status)) 
 		P.Spc.ScAcqTime=StartSC1000(ib,SC1000_TIME_INFINITY);
 	else P.Spc.Started=FALSE;
-	}
+	}						 */
 	
 }
 
