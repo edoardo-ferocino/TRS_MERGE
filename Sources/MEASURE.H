@@ -1096,6 +1096,7 @@ struct MammS {
 	int CorrShift;				//EDO
 	char InvertSignCorr;		//EDO
 	char ParityMem;				//EDO
+	char IgnoreTrash;
 	char Status;
 	char   IniFile[MAMM_NUM_BOARD][260];		//EDO
 	};
@@ -1263,7 +1264,7 @@ struct StepS {
 	char  FPath[STRLEN];
 	struct Delay_GateS Delay_Gate;
 	struct Standa2S Standa2;
-	long StopGoal; // patch
+	long StopGoal; // EDO
 	};
 
 struct SwitchS {
@@ -1999,6 +2000,7 @@ void GetDataTimeharp(void);
 /* ########################   SC1000 FUNCTIONS   ####################### */
 void InitSC1000(int Board);
 float StartSC1000(int Board,float AcqTime);
+float RestartSc1000(int Board);
 void CloseSC1000(void);
 void GetDataSC1000(void);
 void ClearSC1000(void);

@@ -212,7 +212,7 @@ void KernelGen(){
 						if(P.Action.ScReInit.TrimmerPreBreak) ReInitSC1000('T'); // EDO
 						for(it=0;it<MAX_TRIM;it++) if((P.Action.Trim[it])&&!P.Trim[it].Break) AutoTrim(it);  // Trim BEFORE Break
 						if(P.Action.DisplayStatus) DisplayStatus();
-						if (P.Action.ScReInit.Oscilloscope) ReInitSC1000('O');
+						if(P.Action.ScReInit.Oscilloscope) ReInitSC1000('O');
 						for(il=0;il<MAX_LOOP;il++) if(P.Action.Break[il]){Oscilloscope();if(P.Command.Abort) break;}
 						if(P.Action.ScReInit.TrimmerPostBreak) ReInitSC1000('T'); 
 						for(it=0;it<MAX_TRIM;it++) if((P.Action.Trim[it])&&P.Trim[it].Break) AutoTrim(it); // Trim AFTER Break
@@ -564,6 +564,7 @@ void DecideAction(void){
 	
 	// MAMMOT
 	P.Action.ScReInit.StartMammot = FALSE;
+	P.Mamm.IgnoreTrash = FALSE;
 	if(P.Mamm.Status){		   //EDO	 //controllare
 	P.Mamm.TopLim=5;
 	P.Mamm.CorrShift=3;
@@ -608,9 +609,6 @@ void DecideAction(void){
 			
 	if(P.Mamm.OverTresholdPrevious){
 		P.Mamm.OverTresholdPrevious=FALSE;
-		//P.Action.SpcRestart=new[P.Mamm.Loop[Y]]&&!first[P.Mamm.Loop[Y]];
-		//P.Action.AdjustIndex=new[P.Mamm.Loop[Y]]&&!first[P.Mamm.Loop[Y]];
-		//P.Action.SpcReset=(new[P.Mamm.Loop[Y]]&&!first[P.Mamm.Loop[Y]])?FALSE:P.SpcReset;
 		P.Action.SpcRestart=TRUE;
 		P.Action.AdjustIndex=TRUE;
 		P.Action.SpcReset=FALSE;}
@@ -2069,7 +2067,7 @@ void SpcIn(){
 		case DEMO: break;
 		}
 	P.Spc.Zero=TimerN();
-	if(P.Spc.Type!=SPC_SC1000) P.Spc.Started=TRUE;
+	if(P.Spc.Type!=SPC_SC1000) P.Spc.Started=TRUE;  //EDO
 	}
 
 
@@ -2086,7 +2084,7 @@ void SpcRestart(void){  //TODO: check
 		case SPC130: for(ib=0;ib<P.Num.Board;ib++) SPC_restart_measurement(ib); break;
 		case HYDRA: HH_StartMeas(HYDRA_DEV0,P.Spc.TimeHydra); break;
 		case TH260: TH260_StartMeas(TH260_DEV0,P.Spc.TimeHydra); break;
-		case SPC_SC1000: for(ib=0;ib<P.Num.Board;ib++) P.Spc.ScAcqTime=StartSC1000(P.Spc.ScBoard[ib],P.Mamm.Status?(abs(P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx-1]-P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx-1])+1+20)*P.Spc.TimeM:SC1000_TIME_INFINITY); break;
+		case SPC_SC1000: RestartSc1000(ib); break;
 		case SPC_SPADLAB: for(ib=0;ib<P.Num.Board;ib++) StartSpad(ib); break;
 		case SPC_NIRS: for(ib=0;ib<P.Num.Board;ib++) StartNirs(ib); break;
 		case TEST: break;
@@ -2327,7 +2325,7 @@ void DataCopy(void){
 void NewAcq(void){
 	P.Acq.Actual++;
 	if(P.Acq.Actual==P.Acq.Frame){
-		if(P.Mamm.Status){  //patch
+		if(P.Mamm.Status){  //EDO
 		char loopx=P.Mamm.Loop[X];
 		char loopy=P.Mamm.Loop[Y];
 		if(P.Mamm.OverTreshold||P.Loop[loopx].Idx==P.Loop[loopx].Num-P.Mamm.CorrShift-1){ }
@@ -2795,7 +2793,7 @@ void ReInitSC1000(char Operation){  //EDO
 		else P.Spc.Pipe[Board][id]=ret;
 		}
 		
-	if (Operation!='S') {P.Spc.ScAcqTime=StartSC1000(Board,SC1000_TIME_INFINITY); P.Spc.Started;}
+	if (Operation!='S') {P.Spc.ScAcqTime=StartSC1000(Board,SC1000_TIME_INFINITY); P.Spc.Started = TRUE;}
 		else P.Spc.Started = FALSE;
 }
 
@@ -2814,14 +2812,6 @@ void InitSC1000(int Board){			   //EDO
 	strcpy(IniPath,P.Spc.Settings[Board]);
 	double AccTime[8] = {0};
 	for(id=0;id<P.Num.Det;id++) AccTime[id] = P.Spc.TimeO;
-	/*if(P.Contest.Run==CONTEST_OSC&&P.Contest.Function==CONTEST_OSC) for(id=0;id<P.Num.Det;id++) AccTime[id] = P.Spc.TimeO;
-	if(P.Contest.Run==CONTEST_MEAS&&P.Contest.Function==CONTEST_MEAS){
-		int TrimFlag=0;
-		for(it=0; it<MAX_TRIM; it++) 			 //one time for all the trimmer procedures
-			if(P.Trim[it].Trim)
-				for(id=0;id<P.Num.Det;id++){AccTime[id] = P.Trim[it].Time; TrimFlag=1;}
-		if(TrimFlag==0) for(id=0;id<P.Num.Det;id++) AccTime[id] = P.Spc.TimeM; 
-		if(!P.Meas.SkipOscill) for(id=0;id<P.Num.Det;id++) AccTime[id] = P.Spc.TimeO;}*/
 	FILE* file=fopen(IniPath,"r");
 	char row[4*STRLEN]; 
 	for(it=0;it<81;it++) fgets(row,4*STRLEN,file); fscanf(file,"%*s%*s%d",&P.Spc.StartDivider); P.Spc.SelRepNum = P.Spc.StartDivider; fclose(file);
@@ -2890,6 +2880,14 @@ float StartSC1000(int Board,float AcqTime){   //EDO
 	int Time=AcqTime*SEC_2_MILLISEC;
 	int ret=sc_tdc_start_measure2(P.Spc.ScBoard[Board],Time);
 	if(ret<0) {ErrHandler(ERR_SC1000,ret,"StartSC1000"); Failure("Error in starting acquisition"); return -1;}
+	return AcqTime;
+}
+/* RESTART ACQUITISITON */
+float RestartSc1000(int Board){
+	int ib;
+	float AcqTime = P.Mamm.Status?(abs(P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx-1]-P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx-1])+1+20)*P.Spc.TimeM:SC1000_TIME_INFINITY;
+	for(ib=0;ib<P.Num.Board;ib++)
+		P.Spc.ScAcqTime=StartSC1000(P.Spc.ScBoard[ib],AcqTime);
 	return AcqTime;
 }
 
@@ -2987,53 +2985,27 @@ void GetDataSC1000(void){						  //EDO
 void ClearSC1000(void){
 	int ib=0, id=0;
 	if(P.Spc.Trash)
-		for(ib=0;ib<P.Num.Board;ib++)
-			for(id=0;id<P.Num.Det;id++)
-				while(sc_pipe_read2(P.Spc.ScBoard[ib],P.Spc.Pipe[ib][id],(void *)&(NonLinArray),1000));
-	/*int ic,ib,id=0,ret;
-	int status;
-	for(ib=0;ib<P.Num.Board;ib++){
-		ret=sc_tdc_interrupt2(P.Spc.ScBoard[ib]);
-		P.Spc.CountRate=0;
-		 	for(id=0;id<P.Num.Det;id++)
-		        for(ic=0;ic<P.Chann.Num;ic++)
-					P.Spc.CountRate+=D.Buffer[ib][ic+id*P.Chann.Num];
-		P.Spc.CountRate/=P.Spc.TimeM;
-		
-		Delay(P.Spc.CountRate<=9e6?3:5);
-		for(id=0;id<P.Num.Det;id++){
-			while(sc_pipe_read2(P.Spc.ScBoard[ib],P.Spc.Pipe[ib][id],(void *)&(NonLinArray),1000));
-			}
-	P.Spc.Started=TRUE;
-	if(!(P.Contest.Function==CONTEST_MEAS&&P.Mamm.Status)) 
-		P.Spc.ScAcqTime=StartSC1000(ib,SC1000_TIME_INFINITY);
-	else P.Spc.Started=FALSE;
-	}						 */
-	
+		if (!P.Mamm.IgnoreTrash)
+			for(ib=0;ib<P.Num.Board;ib++)
+				for(id=0;id<P.Num.Det;id++)
+					while(sc_pipe_read2(P.Spc.ScBoard[ib],P.Spc.Pipe[ib][id],(void *)&(NonLinArray),1000));
 }
 
 /* FLUSH SC1000 BUFFER */
 void FlushSC1000(int Board){
 int id,ret=0;
-	FILE *fid=fopen("CheckMamm.txt","a+");
-	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\tFlushStart\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.ScAcqTime);
 	int Timeout=1000;	
-	//Delay(2);
 	if(P.Mamm.Status&&P.Contest.Function==CONTEST_MEAS){
 		if(P.Num.Acq!=0){
 		while(P.Num.Acq*P.Spc.TimeM<=P.Spc.ScAcqTime||ret>0){
 		P.Num.Acq++;
 			for(id=0;id<P.Num.Det;id++){
 				ret=PipeRead(Board,id,Timeout);
-				//fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\t%d\tFlushIter\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.ScAcqTime,ret);
 			}
 		};
-
 	}
 	}
 	else for(id=0;id<P.Num.Det;id++) while(PipeRead(Board,id,Timeout));
-	fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\tFlushStop\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.ScAcqTime);
-	fclose(fid);
 	P.Spc.Started=TRUE;
 }
 
@@ -3061,10 +3033,11 @@ void CalcNonlinSC1000(void){	   //EDO
 			for(icc=0;icc<LengthDCRFile;icc++) meanDCR+=DCR_raw_count[icc]; // icc = channel (bin) on the original non-lin TDC data
 			meanDCR/=LengthDCRFile;
 			// calc non-lin coefficients
-			meanDCR=0;
-			for(icc=P.Spc.ScFirstBin-1;icc<P.Spc.ScLastBin;icc++) meanDCR+=DCR_raw_count[icc]; // icc = channel (bin) on the original non-lin TDC data
-			meanDCR/=(P.Spc.ScLastBin-P.Spc.ScFirstBin+1);
-			for(icc=P.Spc.ScFirstBin-1;icc<P.Spc.ScLastBin;icc++){ 
+			//meanDCR=0;
+			//for(icc=P.Spc.ScFirstBin-1;icc<P.Spc.ScLastBin;icc++) meanDCR+=DCR_raw_count[icc]; // icc = channel (bin) on the original non-lin TDC data
+			//meanDCR/=(P.Spc.ScLastBin-P.Spc.ScFirstBin+1);
+			//for(icc=P.Spc.ScFirstBin-1;icc<P.Spc.ScLastBin;icc++){
+			for(icc=0;icc<LengthDCRFile;icc++){ 
 				if(P.Spc.Refolding!=2&&P.Spc.Refolding!=0)
 					NonLinDt[ib][id][icc]=ns2ps*Binsize*DCR_raw_count[icc]/meanDCR; // dtt stores the time-width of a bin
 			    else 
@@ -5014,7 +4987,6 @@ void StartCont(char Step, char Status){
 	int iloop = P.Loop[loop].Actual;
 	long start[MAXPOS];
 	long stop[MAXPOS];
-	char TrashMemory;
 	
 	char invert=(P.Loop[loop].Invert)&&REMINDER(P.Loop[loop-1].Idx,2);
 	for(il=P.Step[Step].Loop+1;il<MAX_LOOP;il++) num_meas*=P.Loop[il].Num;
@@ -5047,16 +5019,7 @@ void StartCont(char Step, char Status){
 		P.Wait.Pos=start[iloop]+(imeas*delta/num_meas);
 		}
 	
-	TrashMemory=P.Spc.Trash;				//EDO  //controllare
-	P.Step[Step].StopGoal=stopgoal; //patch
 	MoveStep(&P.Step[Step].Actual,stopgoal,Step,FALSE,Status);	
-	if(P.Spc.Type==SPC_SC1000) {
-		P.Spc.Trash=TrashMemory;
-		if(P.Mamm.Status) P.Spc.Trash=FALSE; 
-		//Delay(1);
-	}
-	
-	
 }
 
 
@@ -9123,7 +9086,7 @@ void StartMammot(void){
 	
 	//P.Action.SpcReset=0;
 	P.Action.MoveStep[StepY]=0;
-	P.Spc.Trash=FALSE;
+	P.Mamm.IgnoreTrash = TRUE;
 	for(ib=0;ib<P.Num.Board;ib++){ 
 			FlushSC1000(ib);
 			P.Spc.ScAcqTime=StartSC1000(ib,(P.Loop[LoopX].Num+1)*P.Spc.TimeM);

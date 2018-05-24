@@ -306,6 +306,10 @@ Prototype="void InitSC1000(int Board);"
 Class="Function"
 Prototype="float StartSC1000(int Board, float AcqTime);"
 
+[RestartSc1000]
+Class="Function"
+Prototype="float RestartSc1000(int Board);"
+
 [CloseSC1000]
 Class="Function"
 Prototype="void CloseSC1000();"
