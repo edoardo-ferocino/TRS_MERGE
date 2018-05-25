@@ -575,7 +575,7 @@ void DecideAction(void){
 	if(P.Mamm.Status){		   //EDO	 //controllare
 	P.Mamm.IgnoreTrash = TRUE;
 	P.Mamm.TopLim=5;
-	P.Mamm.CorrShift=3;
+	P.Mamm.CorrShift=0;
 	int BorderLength=P.Mamm.PhysicalBorder*2;
 	
 	char is_before,is_near,is_within,is_margin_neg,is_loopy_even,is_loopy_firstidx,is_loopx_firstidx;
@@ -9161,7 +9161,8 @@ void StopMammot(void){	  //EDO
 	StopStep(P.Mamm.Step[X]);
 	int ib,ifr,ip;
 	for(ib=0;ib<P.Num.Board;ib++) FlushSC1000(ib);
-	if(P.Mamm.CorrShift) ShiftCorrection();
+	//if(P.Mamm.CorrShift) ShiftCorrection();
+	ShiftCorrection();
 	if(P.Mamm.ShiftBack) BackShift();
 	P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx]=P.Frame.Actual;
 	P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx+1]=P.Frame.Actual;
@@ -9195,9 +9196,9 @@ void ShiftCorrection(void){
 	char LoopX=P.Mamm.Loop[X];
 	char LoopY=P.Mamm.Loop[Y];
 	char TrashMem,Sign,is_loopy_odd;
-	long PosX,StopGoal,StartPoint;
+	long PosX,StopGoal=0,StopGoal2,StartPoint;
 	
-	TellPos(StepX,&PosX);
+	/*TellPos(StepX,&PosX);
 	is_loopy_odd=REMINDER(P.Loop[LoopY].Idx,2)==0;
 	if(P.Loop[LoopX].First!=0){
 	Sign = is_loopy_odd?1:-1;
@@ -9227,8 +9228,24 @@ void ShiftCorrection(void){
 	}
 	}
 	TrashMem=P.Spc.Trash;
-	MoveStep(&PosX,StopGoal,StepX,TRUE,P.Action.Status);
-	P.Spc.Trash=TrashMem;
+	//MoveStep(&PosX,StopGoal,StepX,TRUE,P.Action.Status);
+	P.Spc.Trash=TrashMem;*/
+	FILE *fid;
+	if(P.Loop[P.Mamm.Loop[Y]].Idx==0)
+		fid = fopen("CheckMammot.txt","w+");
+	else
+		fid = fopen("CheckMammot.txt","a+");		
+	TellPos(StepX,&PosX);
+	if (REMINDER(P.Loop[P.Mamm.Loop[Y]].Idx,2)==0)
+		StopGoal2 = P.Step[StepX].Stop[P.Frame.Actual-1]; // controllare il +1
+	else
+		StopGoal2 = P.Step[StepX].Start[P.Frame.Actual]; // controllare il +1
+	TrashMem=P.Spc.Trash;
+	MoveStep(&PosX,StopGoal2,StepX,TRUE,P.Action.Status);
+	P.Spc.Trash=TrashMem;								
+	fprintf(fid,"%d\t%d\t%d\n",P.Frame.Actual,StopGoal,StopGoal2);
+	fclose(fid);
+	
 }
 
 /* BACK SHIFT */

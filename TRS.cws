@@ -48,12 +48,12 @@ Batch Build Debug = True
 [File 0001]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/Measure.c"
 File Type = "CSource"
-Disk Date = 3610078593
+Disk Date = 3610115640
 In Projects = "1,"
 Window Top = 62
 Window Left = 26
 Window Z-Order = 1
-Source Window State = "1,2904,2904,2904,24,29,29,0,0,140,0,9502,0,9502,0,30,2889,0,2904,4,291,1020,1,0,"
+Source Window State = "1,9251,9279,9279,0,1,1,0,0,140,0,9526,0,9526,0,30,9250,0,9261,6,291,1020,1,0,"
 Breakpoint 0001 = "2767,0,enabled,"
 Breakpoint 0002 = "2894,0,enabled,"
 Breakpoint 0003 = "2905,0,enabled,"
@@ -94,7 +94,7 @@ Source Window State = "1,0,0,0,0,0,0,0,0,80,0,0,0,0,0,24,0,0,0,0,511,1020,1,0,"
 [File 0005]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/Trs.c"
 File Type = "CSource"
-Disk Date = 3610017921
+Disk Date = 3610103522
 In Projects = "1,"
 Window Top = 45
 Window Left = 6
@@ -104,7 +104,7 @@ Source Window State = "1,0,2103,0,0,0,0,0,0,52,0,2098,0,2098,18,15,50,0,57,4,349
 [File 0006]
 Path = "/c/Program Files (x86)/TRS_Beta/Sources/TRS.UIR"
 File Type = "User Interface Resource"
-Disk Date = 3610028185
+Disk Date = 3610099457
 In Projects = ""
 Window Top = 32
 Window Left = 10
@@ -115,7 +115,7 @@ Window Z-Order = 5
 [File 0007]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/TRS.h"
 File Type = "Include"
-Disk Date = 3610017896
+Disk Date = 3610101081
 In Projects = ""
 Window Top = 32
 Window Left = 10
@@ -125,12 +125,12 @@ Source Window State = "1,0,1062,0,0,0,0,0,0,80,0,1060,0,1060,0,20,1017,0,1059,6,
 [File 0008]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/MEASURE.H"
 File Type = "Include"
-Disk Date = 3610077817
+Disk Date = 3610103522
 In Projects = ""
 Window Top = 32
 Window Left = 10
 Window Z-Order = 2
-Source Window State = "1,1074,1074,1074,4,7,7,0,0,80,0,2444,0,2444,0,20,1064,0,1074,9,431,1020,1,0,"
+Source Window State = "1,1476,1476,1476,9,15,15,0,3,80,0,2444,0,2444,0,20,1466,0,1476,9,431,1020,1,0,"
 
 [File 0009]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/TRS.UIR"
