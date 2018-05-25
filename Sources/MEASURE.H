@@ -686,6 +686,7 @@
 #define TH260_LENCODE			4 //  Note: HistLen=1024*(2^TH260_LENCODE)
 #define TH260_DEV0		0 // Use just 1 Device, the software can control more than 1 device (i.e. many HydraHarp) (Board = Channel, not Device)
 #define SEC_2_MILLISEC	1000 // conversion factor for second to millisecond
+#define MILLISEC_2_SEC	1/1000 // conversion factor for millisecond to second
 
 /* SC1000 CONSTANTS */
 #define SC1000_TYPE unsigned long			// data type of hystogram SC1000 data (non-lin)
@@ -761,7 +762,7 @@
 #define	MAMM_NIR_IDX_MAX_BORDER	360	
 #define MAMM_NIR_STEP_MAX   400
 #define	MAMM_NUM_BOARD		2
-#define MAMM_NUM_DET		8 //patch
+#define MAMM_NUM_DET		8 //EDO
 #define	MAMM_NUM_ROW		240
 #define D2				(char) 2
 #define X				(char) 0
@@ -1061,6 +1062,16 @@ struct MammAttS{
 	double FreqOpen;
 	};
 
+struct MammRefMeaS{	   //EDO
+	double Width;
+	double BaricentrePos;
+	long MaxPos;
+	long MaxVal;
+	long Area;
+	long First;
+	long Last;
+	double Treshold;
+};
 struct ScReinitS{  //EDO
 	int Measure;
 	int TrimmerPreBreak;
@@ -1101,9 +1112,12 @@ struct MammS {
 	int CorrShift;				//EDO
 	char InvertSignCorr;		//EDO
 	char ParityMem;				//EDO
-	char IgnoreTrash;
+	char Roi;					//EDO
+	double Fract;				//EDO
+	char IgnoreTrash;			//EDO
 	char Status;
 	char   IniFile[MAMM_NUM_BOARD][260];		//EDO
+	struct MammRefMeaS RefMeas;				    //EDO
 	struct NumAcqS NumAcq;
 	};
 
@@ -1405,7 +1419,39 @@ struct NirsS{
 	uint32_t *Hist;
 	uint32_t RegOut[NIRS_REGLEN];
 	};
-
+struct SurfaceConceptS{
+	int	 Refolding; //EDO
+	int	 ScBoard[MAX_BOARD];	 //EDO
+	int  ScBoardInitialized[MAX_BOARD];   //EDO
+	int  ScInitializedForMammot[MAX_BOARD];   //EDO
+	double ScTimeElapsed;//EDO
+	float  ScAcqTime;		//EDO          
+	int    ScAutoTrim; //EDO
+	int ScPipeClose;			//EDO
+	int SelRepNum;			//EDO
+	int StartDivider;		//EDO
+	int ScFirstBin;			//EDO
+	int ScLastBin;			//EDO
+	int ScDeinit;		   //EDO
+	char ScWait;
+	int	 Pipe[MAX_BOARD][MAX_DET];
+	unsigned int ScNumBin; //EDO
+	char DCR_files[MAX_BOARD][MAX_DET][STRLEN];
+	double *LinArray;
+	FILE *FID;
+	SC1000_TYPE *NonLinArray;
+	SC1000_TYPE *DCR_raw_count;
+	double *DCR_raw_time;
+	double *Buffer;
+	double *Buffer2;
+	SC1000_TYPE *IRF_raw_count;
+	double *IRF_raw_time;
+	int Modulo; // perform Refolding operation via SC hardware. It corresponds to the Modulo length, i.e. Period=Number of Bins to refold (NOT SURE, VERIFY)
+	double ***NonLinDt;     // corrections coefficients
+	double Binsize;								// temporal width of the mean bin
+	double Period;									// period between two IRF peaks (used in rebinning)
+	double Rebin;
+};
 struct SpcS {
 	char   Type;
 	char   Control;
@@ -1439,6 +1485,7 @@ struct SpcS {
 	int	 Refolding; //EDO
 	int	 ScBoard[MAX_BOARD];	 //EDO
 	int  ScBoardInitialized[MAX_BOARD];   //EDO
+	int  ScInitializedForMammot[MAX_BOARD];   //EDO
 	double ScTimeElapsed;//EDO
 	float  ScAcqTime;		//EDO          
 	int    ScAutoTrim; //EDO
@@ -1448,9 +1495,11 @@ struct SpcS {
 	int ScFirstBin;			//EDO
 	int ScLastBin;			//EDO
 	int ScDeinit;		   //EDO
+	char ScWait;
 	int	 Pipe[MAX_BOARD][MAX_DET];
 	int ScInit;			   //EDO
 	unsigned int ScNumBin; //EDO
+	struct SurfaceConceptS SC;
 	struct SpadS Spad[MAX_BOARD];
 	struct NirsS Nirs[MAX_BOARD];
 	};
@@ -1478,6 +1527,8 @@ struct FrameS{
 	int Min;
 	int Max;
 	int First;		 //EDO
+	int Half;		 //EDO
+	int Dir;		 //EDO
 	int Last;		 //EDO
 	int Mem[2][300]; //EDO
 	};
@@ -1898,6 +1949,7 @@ char tempString[PROF_MAX_ID];
 // move to std code when finished debugging
 char DCR_files[MAX_BOARD][MAX_DET][STRLEN];
 double *LinArray;
+FILE *FID;
 SC1000_TYPE *NonLinArray;
 SC1000_TYPE *DCR_raw_count;
 double *DCR_raw_time;
@@ -1907,6 +1959,9 @@ int Modulo; // perform Refolding operation via SC hardware. It corresponds to th
 double ***NonLinDt;     // corrections coefficients
 double Binsize;								// temporal width of the mean bin
 double Period;									// period between two IRF peaks (used in rebinning)
+double *BufferTDC;
+double *BufferTDC2;
+
 
 /* #####################    MEASUREMENT FUNCTIONS   ########################### */
 void CVICALLBACK Measure(int menuBar,int menuItem,void *callbackData,int panel);
@@ -1946,6 +2001,7 @@ void GraphRoi(void);
 void GraphPlot(void);
 void DisplayRoi(void);
 long CalcArea(long First, long Last);
+double CalcBaricentre(long First, long Last);
 double CalcWidth(long First,long Last,double Treshold);
 void GetRange(long RoiFirst,long RoiLast,double Fract,long *Max, long *Peak, long *pRangeFirst, long *pRangeLast,double *Treshold);
 int CVICALLBACK GetMarker(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);

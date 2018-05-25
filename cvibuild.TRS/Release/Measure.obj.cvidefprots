@@ -138,6 +138,10 @@ Prototype="void DisplayRoi();"
 Class="Function"
 Prototype="long CalcArea(long First, long Last);"
 
+[CalcBaricentre]
+Class="Function"
+Prototype="double CalcBaricentre(long First, long Last);"
+
 [CalcWidth]
 Class="Function"
 Prototype="double CalcWidth(long First, long Last, double Treshold);"
@@ -1445,10 +1449,6 @@ Prototype="void StartMammot();"
 [StopMammot]
 Class="Function"
 Prototype="void StopMammot();"
-
-[AdjustIndex]
-Class="Function"
-Prototype="void AdjustIndex();"
 
 [CheckMammot]
 Class="Function"
