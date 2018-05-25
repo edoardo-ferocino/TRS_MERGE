@@ -1070,7 +1070,11 @@ struct ScReinitS{  //EDO
 	int StartMammot;
 	int AnyOper;
 };
-
+struct NumAcqS{
+	int Actual;
+	float Tot;
+	char Active;
+};
 struct MammS {
 	char Mamm;
 	char AutoLabel;
@@ -1100,6 +1104,7 @@ struct MammS {
 	char IgnoreTrash;
 	char Status;
 	char   IniFile[MAMM_NUM_BOARD][260];		//EDO
+	struct NumAcqS NumAcq;
 	};
 
 struct ActionS{

@@ -40,7 +40,7 @@ FileSizeColumnWidth = 70
 Version = 1302
 Don't Update DistKit = True
 Platform Code = 4
-Build Configuration = "Debug"
+Build Configuration = "Release"
 Warn User If Debugging Release = 1
 Batch Build Release = True
 Batch Build Debug = True
@@ -48,13 +48,18 @@ Batch Build Debug = True
 [File 0001]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/Measure.c"
 File Type = "CSource"
-Disk Date = 3610029288
+Disk Date = 3610078593
 In Projects = "1,"
 Window Top = 62
 Window Left = 26
 Window Z-Order = 1
-Source Window State = "1,5037,5038,5037,4,4,4,0,0,140,0,9478,0,9478,0,30,5022,0,5037,4,291,1020,1,0,"
-Breakpoint 0001 = "3002,0,enabled,"
+Source Window State = "1,2904,2904,2904,24,29,29,0,0,140,0,9502,0,9502,0,30,2889,0,2904,4,291,1020,1,0,"
+Breakpoint 0001 = "2767,0,enabled,"
+Breakpoint 0002 = "2894,0,enabled,"
+Breakpoint 0003 = "2905,0,enabled,"
+Breakpoint 0004 = "3027,0,enabled,"
+Breakpoint 0005 = "3035,0,enabled,"
+Breakpoint 0006 = "9161,0,enabled,"
 
 [File 0002]
 Path = "/c/Program Files (x86)/National Instruments/CVI2013/include/userint.h"
@@ -93,13 +98,13 @@ Disk Date = 3610017921
 In Projects = "1,"
 Window Top = 45
 Window Left = 6
-Window Z-Order = 4
-Source Window State = "1,0,2103,0,0,0,0,0,0,52,0,2098,0,2098,18,15,2055,0,2098,0,349,676,1,17,"
+Window Z-Order = 3
+Source Window State = "1,0,2103,0,0,0,0,0,0,52,0,2098,0,2098,18,15,50,0,57,4,349,676,1,17,"
 
 [File 0006]
 Path = "/c/Program Files (x86)/TRS_Beta/Sources/TRS.UIR"
 File Type = "User Interface Resource"
-Disk Date = 3610026478
+Disk Date = 3610028185
 In Projects = ""
 Window Top = 32
 Window Left = 10
@@ -114,18 +119,18 @@ Disk Date = 3610017896
 In Projects = ""
 Window Top = 32
 Window Left = 10
-Window Z-Order = 3
+Window Z-Order = 4
 Source Window State = "1,0,1062,0,0,0,0,0,0,80,0,1060,0,1060,0,20,1017,0,1059,6,431,1020,1,0,"
 
 [File 0008]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/MEASURE.H"
 File Type = "Include"
-Disk Date = 3610020631
+Disk Date = 3610077817
 In Projects = ""
 Window Top = 32
 Window Left = 10
 Window Z-Order = 2
-Source Window State = "1,0,2439,0,0,0,0,0,0,80,0,2439,0,2439,0,20,2396,0,2439,0,431,1020,1,0,"
+Source Window State = "1,1074,1074,1074,4,7,7,0,0,80,0,2444,0,2444,0,20,1064,0,1074,9,431,1020,1,0,"
 
 [File 0009]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/TRS.UIR"
@@ -390,6 +395,711 @@ Watch Expression = "P.Spc.ReInit"
 
 [Watch 26]
 Watch Expression = "NonLinArray"
+
+[Watch 27]
+Watch Expression = "LinArray"
+
+[Watch 28]
+Watch Expression = "DataSave"
+
+[Watch 29]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 30]
+Watch Expression = "P.Spc.PipeClose"
+
+[Watch 31]
+Watch Expression = "P.Chann.Num"
+
+[Watch 32]
+Watch Expression = "LinArray"
+
+[Watch 33]
+Watch Expression = "DataSave"
+
+[Watch 34]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 35]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 36]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 37]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 38]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 39]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 40]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 41]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 42]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 43]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 44]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 45]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 46]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 47]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 48]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 49]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 50]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 51]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 52]
+Watch Expression = "NonLinArray"
+
+[Watch 53]
+Watch Expression = "LinArray"
+
+[Watch 54]
+Watch Expression = "DataSave"
+
+[Watch 55]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 56]
+Watch Expression = "P.Spc.PipeClose"
+
+[Watch 57]
+Watch Expression = "P.Chann.Num"
+
+[Watch 58]
+Watch Expression = "LinArray"
+
+[Watch 59]
+Watch Expression = "DataSave"
+
+[Watch 60]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 61]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 62]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 63]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 64]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 65]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 66]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 67]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 68]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 69]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 70]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 71]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 72]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 73]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 74]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 75]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 76]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 77]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 78]
+Watch Expression = "NonLinArray"
+
+[Watch 79]
+Watch Expression = "LinArray"
+
+[Watch 80]
+Watch Expression = "DataSave"
+
+[Watch 81]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 82]
+Watch Expression = "P.Spc.PipeClose"
+
+[Watch 83]
+Watch Expression = "P.Chann.Num"
+
+[Watch 84]
+Watch Expression = "LinArray"
+
+[Watch 85]
+Watch Expression = "DataSave"
+
+[Watch 86]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 87]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 88]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 89]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 90]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 91]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 92]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 93]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 94]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 95]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 96]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 97]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 98]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 99]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 100]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 101]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 102]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 103]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 104]
+Watch Expression = "NonLinArray"
+
+[Watch 105]
+Watch Expression = "LinArray"
+
+[Watch 106]
+Watch Expression = "DataSave"
+
+[Watch 107]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 108]
+Watch Expression = "P.Spc.PipeClose"
+
+[Watch 109]
+Watch Expression = "P.Chann.Num"
+
+[Watch 110]
+Watch Expression = "LinArray"
+
+[Watch 111]
+Watch Expression = "DataSave"
+
+[Watch 112]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 113]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 114]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 115]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 116]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 117]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 118]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 119]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 120]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 121]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 122]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 123]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 124]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 125]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 126]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 127]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 128]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 129]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 130]
+Watch Expression = "NonLinArray"
+
+[Watch 131]
+Watch Expression = "LinArray"
+
+[Watch 132]
+Watch Expression = "DataSave"
+
+[Watch 133]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 134]
+Watch Expression = "P.Spc.PipeClose"
+
+[Watch 135]
+Watch Expression = "P.Chann.Num"
+
+[Watch 136]
+Watch Expression = "LinArray"
+
+[Watch 137]
+Watch Expression = "DataSave"
+
+[Watch 138]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 139]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 140]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 141]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 142]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 143]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 144]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 145]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 146]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 147]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 148]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 149]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 150]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 151]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 152]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 153]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 154]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 155]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 156]
+Watch Expression = "NonLinArray"
+
+[Watch 157]
+Watch Expression = "LinArray"
+
+[Watch 158]
+Watch Expression = "DataSave"
+
+[Watch 159]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 160]
+Watch Expression = "P.Spc.PipeClose"
+
+[Watch 161]
+Watch Expression = "P.Chann.Num"
+
+[Watch 162]
+Watch Expression = "LinArray"
+
+[Watch 163]
+Watch Expression = "DataSave"
+
+[Watch 164]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 165]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 166]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 167]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 168]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 169]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 170]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 171]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 172]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 173]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 174]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 175]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 176]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 177]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 178]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 179]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 180]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 181]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 182]
+Watch Expression = "NonLinArray"
+
+[Watch 183]
+Watch Expression = "LinArray"
+
+[Watch 184]
+Watch Expression = "DataSave"
+
+[Watch 185]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 186]
+Watch Expression = "P.Spc.PipeClose"
+
+[Watch 187]
+Watch Expression = "P.Chann.Num"
+
+[Watch 188]
+Watch Expression = "LinArray"
+
+[Watch 189]
+Watch Expression = "DataSave"
+
+[Watch 190]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 191]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 192]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 193]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 194]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 195]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 196]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 197]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 198]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 199]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 200]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 201]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 202]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 203]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 204]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 205]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 206]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 207]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 208]
+Watch Expression = "NonLinArray"
+
+[Watch 209]
+Watch Expression = "LinArray"
+
+[Watch 210]
+Watch Expression = "DataSave"
+
+[Watch 211]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 212]
+Watch Expression = "P.Spc.PipeClose"
+
+[Watch 213]
+Watch Expression = "P.Chann.Num"
+
+[Watch 214]
+Watch Expression = "LinArray"
+
+[Watch 215]
+Watch Expression = "DataSave"
+
+[Watch 216]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 217]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 218]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 219]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 220]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 221]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 222]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 223]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 224]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 225]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 226]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 227]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 228]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 229]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 230]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 231]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 232]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 233]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 234]
+Watch Expression = "NonLinArray"
+
+[Watch 235]
+Watch Expression = "LinArray"
+
+[Watch 236]
+Watch Expression = "DataSave"
+
+[Watch 237]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 238]
+Watch Expression = "P.Spc.PipeClose"
+
+[Watch 239]
+Watch Expression = "P.Chann.Num"
+
+[Watch 240]
+Watch Expression = "LinArray"
+
+[Watch 241]
+Watch Expression = "DataSave"
+
+[Watch 242]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 243]
+Watch Expression = "P.Action.DataSave"
+
+[Watch 244]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 245]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 246]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 247]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 248]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 249]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 250]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 251]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 252]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 253]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 254]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 255]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 256]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 257]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 258]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 259]
+Watch Expression = "P.Spc.ReInit"
+
+[Watch 260]
+Watch Expression = "NonLinArray"
+
+[Watch 261]
+Watch Expression = "P.Mamm.NumAcq.Tot"
 
 [Distributions]
 Active Index = 1
