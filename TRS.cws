@@ -14,9 +14,9 @@ Active Project = 1
 Project 0001 = "TRS.PRJ"
 Drag Bar Left = 191
 Window Top = 53
-Window Left = -28
-Window Bottom = 555
-Window Right = 916
+Window Left = 968
+Window Bottom = 1055
+Window Right = 1912
 Maximized = True
 Maximized Children = True
 Max32 Number Of Errors = 20
@@ -48,12 +48,13 @@ Batch Build Debug = True
 [File 0001]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/Measure.c"
 File Type = "CSource"
-Disk Date = 3610191493
+Disk Date = 3610203089
 In Projects = "1,"
 Window Top = 32
 Window Left = 10
-Window Z-Order = 2
-Source Window State = "1,9125,9125,9125,5,20,20,0,0,80,0,0,0,0,0,25,9110,0,9131,52,531,1020,1,0,"
+Window Z-Order = 1
+Source Window State Line0001 = "1,3153,3153,3153,18,36,18,0,0,140,0,9601,0,9601,0,30,3170,0,3274,29,531,1020,1,0"
+Source Window State Line0002 = ","
 
 [File 0002]
 Path = "/c/Program Files (x86)/National Instruments/CVI2013/include/userint.h"
@@ -88,127 +89,117 @@ Source Window State = "1,0,0,0,0,0,0,0,0,80,0,0,0,0,0,24,0,0,0,0,511,1020,1,0,"
 [File 0005]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/Trs.c"
 File Type = "CSource"
-Disk Date = 3610191411
+Disk Date = 3610202182
 In Projects = "1,"
 Window Top = 45
 Window Left = 6
 Window Z-Order = 3
-Source Window State = "1,0,2100,0,0,0,0,0,0,52,0,2098,0,2098,18,15,2069,0,2098,0,349,676,1,17,"
+Source Window State = "1,542,543,542,4,4,4,0,0,52,0,2096,0,2096,18,15,531,0,542,4,349,676,1,17,"
 
 [File 0006]
-Path = "/c/Program Files (x86)/TRS_Beta/Sources/TRS.UIR"
-File Type = "User Interface Resource"
-Disk Date = 3610186120
-In Projects = ""
-Window Top = 32
-Window Left = 10
-Window Height = 531
-Window Width = 1020
-Window Z-Order = 5
-
-[File 0007]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/TRS.h"
 File Type = "Include"
-Disk Date = 3610191439
+Disk Date = 3610202139
 In Projects = ""
 Window Top = 32
 Window Left = 10
-Window Z-Order = 1
-Source Window State = "1,0,1062,0,0,0,0,0,0,140,0,1060,0,1060,0,30,1031,0,1059,6,431,1020,1,0,"
+Window Z-Order = 5
+Source Window State = "1,0,1062,0,0,0,0,0,0,80,0,1060,0,1060,0,20,263,0,1059,6,431,1020,1,0,"
 
-[File 0008]
+[File 0007]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/MEASURE.H"
 File Type = "Include"
-Disk Date = 3610187234
+Disk Date = 3610202517
 In Projects = ""
-Window Top = 32
-Window Left = 10
+Window Top = 212
+Window Left = 106
 Window Z-Order = 4
-Source Window State = "1,0,2462,0,0,0,0,0,0,80,0,2482,0,2482,0,20,2439,0,2482,0,431,1020,1,0,"
+Source Window State = "1,1144,1145,1144,4,4,4,0,0,80,0,1122,0,0,0,20,2455,0,1512,36,431,1020,1,16,"
 
-[File 0009]
+[File 0008]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/TRS.UIR"
 File Type = "User Interface Resource"
-Disk Date = 3610006061
+Disk Date = 3610202139
 In Projects = "1,"
 Window Top = 45
 Window Left = 6
 Window Height = 284
 Window Width = 687
+Window Z-Order = 2
 
-[File 0010]
+[File 0009]
 Path = "/c/Program Files (x86)/TRS_MERGE/Library/libximc.lib"
 File Type = "Library"
 Disk Date = 3609131124
 In Projects = "1,"
 
-[File 0011]
+[File 0010]
 Path = "/c/Program Files (x86)/TRS_MERGE/Library/NIRS_DLL_v2.lib"
 File Type = "Library"
 Disk Date = 3610006061
 In Projects = "1,"
 
-[File 0012]
+[File 0011]
 Path = "/c/Program Files (x86)/TRS_MERGE/Library/scTDCmod.lib"
 File Type = "Library"
 Disk Date = 3609131124
 In Projects = "1,"
 
-[File 0013]
+[File 0012]
 Path = "/c/Program Files (x86)/TRS_MERGE/Library/spcm32x64.lib"
 File Type = "Library"
 Disk Date = 3609131124
 In Projects = "1,"
 
-[File 0014]
+[File 0013]
 Path = "/c/Program Files (x86)/TRS_MERGE/Library/th260lib.lib"
 File Type = "Library"
 Disk Date = 3609131124
 In Projects = "1,"
 
-[File 0015]
+[File 0014]
 Path = "/c/Program Files (x86)/TRS_MERGE/Library/easyio.lib"
 File Type = "Library"
 Disk Date = 3609131124
 In Projects = "1,"
 
-[File 0016]
+[File 0015]
 Path = "/c/Program Files (x86)/TRS_MERGE/Library/hhlib.lib"
 File Type = "Library"
 Disk Date = 3609131124
 In Projects = "1,"
 
-[File 0017]
+[File 0016]
 Path = "/c/Program Files (x86)/TRS_MERGE/Library/MBC32.LIB"
 File Type = "Library"
 Disk Date = 3609131124
 In Projects = "1,"
 
-[File 0018]
+[File 0017]
 Path = "/c/Program Files (x86)/TRS_MERGE/Library/MercLib210_CVI.lib"
 File Type = "Library"
 Disk Date = 3609131124
 In Projects = "1,"
 
-[File 0019]
+[File 0018]
 Path = "/c/Program Files (x86)/TRS_MERGE/Library/SPC_ISA.LIB"
 File Type = "Library"
 Disk Date = 3609131124
 In Projects = "1,"
 
-[File 0020]
+[File 0019]
 Path = "/c/Program Files (x86)/TRS_MERGE/Library/THLIB.LIB"
 File Type = "Library"
 Disk Date = 3609131124
 In Projects = "1,"
 
-[File 0021]
+[File 0020]
 Path = "/c/Program Files (x86)/TRS_MERGE/Library/USMCDLL.lib"
 File Type = "Library"
 Disk Date = 3609131124
 In Projects = "1,"
 
-[File 0022]
+[File 0021]
 Path = "/c/Program Files (x86)/TRS_MERGE/Library/w32nii3e.lib"
 File Type = "Library"
 Disk Date = 3609131124
@@ -218,11 +209,11 @@ In Projects = "1,"
 Tab 0001 = "/c/Program Files (x86)/National Instruments/CVI2013/include/userint.h"
 Tab 0002 = "/c/Program Files (x86)/National Instruments/CVI2013/include/utility.h"
 Tab 0003 = "/c/Program Files (x86)/National Instruments/CVI2013/include/ansi/string.h"
-Tab 0004 = "/c/Program Files (x86)/TRS_Beta/Sources/TRS.UIR"
-Tab 0005 = "/c/Program Files (x86)/TRS_MERGE/Sources/MEASURE.H"
-Tab 0006 = "/c/Program Files (x86)/TRS_MERGE/Sources/Trs.c"
-Tab 0007 = "/c/Program Files (x86)/TRS_MERGE/Sources/Measure.c"
-Tab 0008 = "/c/Program Files (x86)/TRS_MERGE/Sources/TRS.h"
+Tab 0004 = "/c/Program Files (x86)/TRS_MERGE/Sources/Trs.c"
+Tab 0005 = "/c/Program Files (x86)/TRS_MERGE/Sources/TRS.UIR"
+Tab 0006 = "/c/Program Files (x86)/TRS_MERGE/Sources/TRS.h"
+Tab 0007 = "/c/Program Files (x86)/TRS_MERGE/Sources/MEASURE.H"
+Tab 0008 = "/c/Program Files (x86)/TRS_MERGE/Sources/Measure.c"
 
 [Default Build Config 0001 Debug]
 Generate Browse Info = True

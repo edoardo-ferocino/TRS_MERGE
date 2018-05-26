@@ -1072,7 +1072,7 @@ struct ScReinitS{  //EDO
 	int InitMammot;
 	int AnyOper;
 };
-struct NumAcqS{
+struct NumAcqS{		  //EDO
 	int Actual;
 	float Tot;
 	char Active;
@@ -1093,23 +1093,17 @@ struct MammS {
 	struct MammRateS Rate;
 	struct MammAttS Att[MAMM_NUM_BOARD];
 	char OverTreshold;   //EDO
-	char OverTresholdPrevious;  //EDO
 	char IsTop;					//EDO
-	char PostProcess;			//EDO
-	int PhysicalBorder;			//EDO
 	int ShiftBack;				//EDO
-	int MarginMM;				//EDO
 	int TopLim;					//EDO
 	int CorrShift;				//EDO
-	char InvertSignCorr;		//EDO
-	char ParityMem;				//EDO
 	char Roi;					//EDO
 	double Fract;				//EDO
 	char IgnoreTrash;			//EDO
 	char Status;
 	char   IniFile[MAMM_NUM_BOARD][260];		//EDO
 	struct MammRefMeaS RefMeas;				    //EDO
-	struct NumAcqS NumAcq;
+	struct NumAcqS NumAcq;		  //EDO
 	};
 
 struct ActionS{
@@ -1144,11 +1138,10 @@ struct ActionS{
 	char ReadUIR;
 	char SpcTime;			//EDO
 	char InitMamm;         //EDO
-	char StartMamm;
+	char StartMamm;			 //EDO
 	char CheckMamm;         //EDO
 	char StopMamm;		    //EDO
 	char DoJumpMamm;		//EDO
-	char SpcRestart;		//EDO
 	struct ScReinitS ScReInit;			//EDO
 	};
 
@@ -1484,10 +1477,10 @@ struct SpcS {
 	int ScFirstBin;			//EDO
 	int ScLastBin;			//EDO
 	int ScDeinit;		   //EDO
-	char ScWait;
-	int	 Pipe[MAX_BOARD][MAX_DET];
+	char ScWait;			//EDO
+	int	 Pipe[MAX_BOARD][MAX_DET];//EDO
 	unsigned int ScNumBin; //EDO
-	struct SurfaceConceptS SC;
+	struct SurfaceConceptS SC;   //EDO
 	struct SpadS Spad[MAX_BOARD];
 	struct NirsS Nirs[MAX_BOARD];
 	};

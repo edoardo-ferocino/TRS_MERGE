@@ -540,8 +540,6 @@ void CreateTable(void){
 	AddTab(CE,TDOUBLE,MAMM,MAMM_RATE_HIGH_NIR,"MammRateHighNIR",0,0,&P.Mamm.Rate.High[MAMM_NIR]);
 	AddTab(CE,TDOUBLE,MAMM,MAMM_RATE_MID_NIR,"MammRateMidNIR",0,0,&P.Mamm.Rate.Mid[MAMM_NIR]);
 	AddTab(CE,TDOUBLE,MAMM,MAMM_RATE_LOW_NIR,"MammRateLowNIR",0,0,&P.Mamm.Rate.Low[MAMM_NIR]);
-	AddTab(CE,TINT,MAMM,MAMM_PHYSICAL_BORDER,"PhysicalBorder",0,0,&P.Mamm.PhysicalBorder);
-	AddTab(CE,TINT,MAMM,MAMM_MARGIN,"Margin",0,0,&P.Mamm.MarginMM);
 	AddTab(CE,TCHAR,MAMM,MAMM_STATUS,"Status",0,0,&P.Mamm.Status);
 	AddTab(CE,TINT,MAMM,MAMM_SHIFT_BACK,"ShiftBack",0,0,&P.Mamm.ShiftBack);
 	for(il=0;il<MAMM_NUM_LAMBDA;il++)
