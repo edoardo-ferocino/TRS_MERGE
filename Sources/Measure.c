@@ -2772,7 +2772,7 @@ void ReInitSC1000(char Operation){  //EDO
 		struct sc_pipe_tdc_histo_params_t params;
 		params.depth = SC1000_BINDEPTH; // 32 bit per time channel (bin) in the histogram
 		params.channel = id; // pipe for channel #id is requested
-		params.modulo = P.Spc.Refolding<SC1000_HARDREFOLD?0:P.Spc.Refolding;
+		params.modulo = P.Spc.Refolding<SC1000_HARDREFOLD?0:P.Spc.Refolding;  // modulo = Period/Binsize*32 (es. for T=25 ns, modulo=9720)
 		params.binning = P.Spc.Scale; // histogram binning is set to 1
 		params.offset =0; // histogram starts from the 0 time bins (see sc_tdc_get_binsize2()).
 		params.size = P.Spc.ScNumBin; // histogram size is P.Spc.ScNumBin time bins (but note binning)!
@@ -2832,7 +2832,7 @@ void InitSC1000(int Board){			   //EDO
 		struct sc_pipe_tdc_histo_params_t params;
 		params.depth = SC1000_BINDEPTH; // 32 bit per time channel (bin) in the histogram
 		params.channel = id; // pipe for channel #id is requested
-		params.modulo = P.Spc.Refolding<SC1000_HARDREFOLD?0:P.Spc.Refolding;
+		params.modulo = P.Spc.Refolding<SC1000_HARDREFOLD?0:P.Spc.Refolding;// modulo = Period/Binsize*32 (es. for T=25 ns, modulo=9720)
 		params.binning = P.Spc.Scale; // histogram binning is set to 1
 		params.offset =0; // histogram starts from the 0 time bins (see sc_tdc_get_binsize2()).
 		params.size = P.Spc.ScNumBin; // histogram size is P.Spc.ScNumBin time bins (but note binning)!
@@ -2848,10 +2848,27 @@ void InitSC1000(int Board){			   //EDO
 	
 	// initialize memory
 	if(Board==0){
+		char root_DCR_name[STRLEN];char trash_file[STRLEN];
+		strcpy(root_DCR_name,"TDC\\"); strcat(root_DCR_name,P.Spc.TdcDcrFileRoot);
+		SC1000_TYPE *trash_counts; double *trash_time; int file_lenght[P.Num.Det]; int max_file_lenght = 0;
+		for(int ib=0;ib<P.Num.Board;ib++){
+			for(id=0;id<P.Num.Det;id++){
+				sprintf(DCR_files[ib][id],"%s_ch%d.txt",root_DCR_name,id);
+				FILE *pfile=fopen(DCR_files[ib][id], "r");
+				if (!pfile) {ErrHandler(ERR_SC1000,0,"Unable to open DCR File"); return;}
+				fgets(trash_file, STRLEN, pfile); // discard first title line
+				int icc=0;
+				while(fscanf(pfile,"%lf\t%d",&trash_time,&trash_counts)!=EOF) icc++;
+				fclose(pfile);
+				file_lenght[id] = icc; if(icc>=max_file_lenght) max_file_lenght = icc;
+			}
+		}
 		LinArray = doubleAlloc1D(P.Chann.Num);// Only 1 item is needed for all the boards
-		NonLinDt = doubleAlloc3D(P.Num.Board,P.Num.Det,20700); //P.Spc.ScNumBins should be the max number of entries  in the file. +500 is to take into account of possible mismatch between files
-		DCR_raw_count = SC1000Alloc1D(20700);  				 //controllare
-		DCR_raw_time = doubleAlloc1D(20700);
+		NonLinDt = doubleAlloc3D(P.Num.Board,P.Num.Det,max_file_lenght); //P.Spc.ScNumBins should be the max number of entries  in the file. +500 is to take into account of possible mismatch between files
+		DCR_raw_count = SC1000Alloc1D(max_file_lenght);  				 //controllare
+		DCR_raw_time = doubleAlloc1D(max_file_lenght);
+		BufferTDC = doubleAlloc1D(32*P.Spc.ScNumBin);
+		BufferTDC2 = doubleAlloc1D(32*P.Spc.ScNumBin);
 	}
 
 	// initialise correction coefficients
@@ -2903,6 +2920,8 @@ void CloseSC1000(void){	   //EDO
 	
 	// free memory
 	doubleFree1D(LinArray);
+	doubleFree1D(BufferTDC);
+	doubleFree1D(BufferTDC2);
 	doubleFree3D(NonLinDt,P.Num.Board,P.Num.Det);
 	SC1000Free1D(DCR_raw_count);
 	doubleFree1D(DCR_raw_time);
@@ -2921,11 +2940,21 @@ int PipeRead(int Board,int Det,int Timeout){			 //EDO
 /* TRANSFER DATA FROM SC1000 */	
 void GetDataSC1000(void){						  //EDO
 	//if(P.Action.StartCont[P.Mamm.Step[X]]&&P.Mamm.Status) P.Num.Acq=0;
-	int Timeout;
-	if(P.Mamm.Status) Timeout=-1;  /*check*/ //patch
-	else Timeout=-1; //da sistemare 
+	int Timeout = -1;
 	int ib,id,ic,ret,icc,status;
 	int linearise=(SC1000_LINEARISE&&(P.Spc.Refolding<SC1000_HARDREFOLD)&&(P.Spc.Refolding!=SC1000_NODATAOPERATION));
+	/*if(P.Spc.ScWait){
+		int icount=0; char Cond = FALSE;
+		//do{
+		//	Cond = TRUE;
+			for(id=0;id<P.Num.Det;id++)
+				do{ret = PipeRead(ib,id,-1);}while(ret<0);
+			//{ret=PipeRead(ib,id,1000); Cond = Cond && ret>=0?1:0;};
+			//Delay(MILLISEC_2_SEC*10*P.Spc.TimeSC1000);
+		//	icount++;
+		//}while(Cond==FALSE||icount<4);
+	fprintf(FID,"RetNeg\t%d\t%d\t%d\t%d\t%d\t%d\n",P.Frame.Actual,P.Frame.First,P.Frame.Last,ret,id,icount);
+	}*/
 	for(ib=0;ib<P.Num.Board;ib++){
 		for(id=0;id<P.Num.Det;id++){
 			ret=PipeRead(ib,id,Timeout);  
@@ -2965,7 +2994,7 @@ void ClearSC1000(void){
 		if (!P.Mamm.IgnoreTrash)
 			for(ib=0;ib<P.Num.Board;ib++)
 				for(id=0;id<P.Num.Det;id++)
-					while(sc_pipe_read2(P.Spc.ScBoard[ib],P.Spc.Pipe[ib][id],(void *)&(NonLinArray),1000));
+					while(sc_pipe_read2(P.Spc.ScBoard[ib],P.Spc.Pipe[ib][id],(void *)&(NonLinArray),-1));
 }
 
 /* FLUSH SC1000 BUFFER */
@@ -2981,17 +3010,6 @@ int id,ret=0;
 		}
 		P.Mamm.NumAcq.Actual = 0;
 		}
-	/*if(P.Mamm.Status&&P.Contest.Function==CONTEST_MEAS){
-		if(P.Num.Acq!=0){
-		while(P.Num.Acq*P.Spc.TimeM<=P.Spc.ScAcqTime||ret>0){
-		P.Num.Acq++;
-			for(id=0;id<P.Num.Det;id++){
-				ret=PipeRead(Board,id,Timeout);
-				//fprintf(fid,"%f\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%f\t%d\tFlushIter\n",P.Mamm.Rate.Actual[0],P.Step[P.Mamm.Step[X]].Actual,P.Loop[P.Mamm.Loop[X]].Idx,P.Loop[P.Mamm.Loop[Y]].Idx,P.Frame.Actual,P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx],P.Mamm.IsTop,P.Num.Acq,P.Spc.ScAcqTime,ret);
-			}
-		};
-
-	}*/
 	}
 	else for(id=0;id<P.Num.Det;id++) while(PipeRead(Board,id,Timeout));
 }
@@ -3021,9 +3039,9 @@ void CalcNonlinSC1000(void){	   //EDO
 			meanDCR/=LengthDCRFile;
 			// calc non-lin coefficients
 			//meanDCR=0;
-			//for(icc=P.Spc.ScFirstBin-1;icc<P.Spc.ScLastBin;icc++) meanDCR+=DCR_raw_count[icc]; // icc = channel (bin) on the original non-lin TDC data
+			//for(icc=P.Spc.ScFirstBin;icc<P.Spc.ScLastBin;icc++) meanDCR+=DCR_raw_count[icc]; // icc = channel (bin) on the original non-lin TDC data
 			//meanDCR/=(P.Spc.ScLastBin-P.Spc.ScFirstBin+1);
-			//for(icc=P.Spc.ScFirstBin-1;icc<P.Spc.ScLastBin;icc++){
+			//for(icc=P.Spc.ScFirstBin;icc<P.Spc.ScLastBin;icc++){
 			for(icc=0;icc<LengthDCRFile;icc++){ 
 				if(P.Spc.Refolding!=2&&P.Spc.Refolding!=0)
 					NonLinDt[ib][id][icc]=ns2ps*Binsize*DCR_raw_count[icc]/meanDCR; // dtt stores the time-width of a bin
@@ -8997,7 +9015,27 @@ void AnalysisMamm(void){
 
 /* IS OVERTHRESHODLS? */
 void AnalysisMamm_new(void){
-	int ib,id,ic;
+	
+	int ib,id=0,ic;
+	long Area, MaxVal, MaxPos, First, Last;
+	double Treshold, BaricentrePos, Width, Target1, Target2, Target3;
+	char Cond1, Cond2, Cond3;
+	/*id = P.Step[P.Mamm.Step[X]].Dir==1?1:5;
+	D.Curve = D.Data[P.Frame.Actual][id];
+	Area = CalcArea(P.Roi.First[P.Mamm.Roi],P.Roi.Last[P.Mamm.Roi])-CalcArea(P.Roi.First[P.Mamm.Roi]-10,P.Roi.First[P.Mamm.Roi]);
+	GetRange(P.Roi.First[P.Mamm.Roi],P.Roi.Last[P.Mamm.Roi],P.Mamm.Fract,&MaxVal,&MaxPos,&First,&Last,&Treshold);
+	//BaricentrePos = CalcBaricentre(First,Last);
+	Width = CalcWidth(First,Last,Treshold);
+	Target1 = (MaxPos-P.Mamm.RefMeas.MaxPos)/((double) P.Mamm.RefMeas.MaxPos);
+	Cond1 = Target1 < -0.04;
+	Target2 =  (Width-P.Mamm.RefMeas.Width)/P.Mamm.RefMeas.Width;
+	Cond2 = Target2 <= -0.3;
+	Target3 =  (Area-P.Mamm.RefMeas.Area)/((double) P.Mamm.RefMeas.Area);
+	Cond3 = Target3 <= -0.5;
+	P.Mamm.OverTreshold = FALSE;
+	if (Cond3) P.Mamm.OverTreshold = TRUE;
+	else if (Cond2) if (Cond1) P.Mamm.OverTreshold = TRUE;*/
+	
 	for(ib=0;ib<P.Num.Board;ib++) P.Mamm.Count.Actual[ib]=0; 
 	for(ib=0;ib<P.Num.Board;ib++)
 		for(id=0;id<P.Num.Det;id++)
@@ -9005,11 +9043,8 @@ void AnalysisMamm_new(void){
 			  P.Mamm.Count.Actual[ib]+=D.Buffer[ib][ic+id*P.Chann.Num];
 	for(ib=0;ib<P.Num.Board;ib++){
 			P.Mamm.Rate.Actual[ib]=P.Mamm.Count.Actual[ib]/P.Spc.TimeM; //Antonio. P.Spc.TimeM o P.Spc.EffTime[ib]
-			P.Spc.CountRate=P.Mamm.Rate.Actual[ib];
-	        P.Mamm.OverTreshold=P.Mamm.Rate.Actual[ib]>P.Mamm.Rate.High[ib]||P.Mamm.Rate.Actual[ib]<P.Mamm.Rate.Low[ib];
+			P.Mamm.OverTreshold=P.Mamm.Rate.Actual[ib]>P.Mamm.Rate.High[ib]||P.Mamm.Rate.Actual[ib]<P.Mamm.Rate.Low[ib];
 	}
-
-
 }
 
 /* INIT MAMMOT */

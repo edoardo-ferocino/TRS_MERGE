@@ -692,16 +692,10 @@
 #define SC1000_TYPE unsigned long			// data type of hystogram SC1000 data (non-lin)
 #define SC1000_TIME_INFINITY 1000000       // sec
 #define SC1000_BINDEPTH BS32					// max size of the bin (BS32=unsigned int)
-#define SC1000_NOREFOLD  0					// no refolding
 #define SC1000_LINEARISE  1					// 1 = use background file to linearise time scale, 0 = do not linearise
-#define SC1000_SOFTREFOLD  1					// software refolding using fixed Period and fraction of channels
 #define SC1000_HARDREFOLD  5					// hardware refolding using SC and Modulo
 #define SC1000_NODATAOPERATION -1
-#define SC1000_LAST			19000		// last good channel in the DCR  // 10MHZ
-#define SC1000_FIRST		300		// first good channel in the DCR 	  // 40 mhz
-//#define SC1000_MAXBIN		20700		// max number of channels (bin) in SC1000 // 10 mhz
-#define SC1000_REFOLDTYPE  1					// software rebinning put in GUI
-#define SC1000_MODULO  38882					// modulo = Period/Binsize*32 (es. for T=25 ns, modulo=9720)
+#define SC1000_MAXBIN		20700		// max number of channels (bin) in SC1000 // 10 mhz
 
 /* SPADLAB CONSTANTS */
 #define SPADLAB_TDC_WRITE  "\\\\localhost\\MyProcess\\tdc-write"
@@ -1415,7 +1409,39 @@ struct NirsS{
 	uint32_t *Hist;
 	uint32_t RegOut[NIRS_REGLEN];
 	};
-
+struct SurfaceConceptS{
+	int	 Refolding; //EDO
+	int	 ScBoard[MAX_BOARD];	 //EDO
+	int  ScBoardInitialized[MAX_BOARD];   //EDO
+	int  ScInitializedForMammot[MAX_BOARD];   //EDO
+	double ScTimeElapsed;//EDO
+	float  ScAcqTime;		//EDO          
+	int    ScAutoTrim; //EDO
+	int ScPipeClose;			//EDO
+	int SelRepNum;			//EDO
+	int StartDivider;		//EDO
+	int ScFirstBin;			//EDO
+	int ScLastBin;			//EDO
+	int ScDeinit;		   //EDO
+	char ScWait;
+	int	 Pipe[MAX_BOARD][MAX_DET];
+	unsigned int ScNumBin; //EDO
+	char DCR_files[MAX_BOARD][MAX_DET][STRLEN];
+	double *LinArray;
+	FILE *FID;
+	SC1000_TYPE *NonLinArray;
+	SC1000_TYPE *DCR_raw_count;
+	double *DCR_raw_time;
+	double *Buffer;
+	double *Buffer2;
+	SC1000_TYPE *IRF_raw_count;
+	double *IRF_raw_time;
+	int Modulo; // perform Refolding operation via SC hardware. It corresponds to the Modulo length, i.e. Period=Number of Bins to refold (NOT SURE, VERIFY)
+	double ***NonLinDt;     // corrections coefficients
+	double Binsize;								// temporal width of the mean bin
+	double Period;									// period between two IRF peaks (used in rebinning)
+	double Rebin;
+};
 struct SpcS {
 	char   Type;
 	char   Control;
@@ -1436,7 +1462,6 @@ struct SpcS {
 	int	   TH260HistLen;
 	int	   TimeSC1000;
 	long   Count;
-	long   CountRate; //EDO
 	char   TdcDcrFileRoot[260];
 	char   Scale;
 	double Calib;
@@ -1462,6 +1487,7 @@ struct SpcS {
 	char ScWait;
 	int	 Pipe[MAX_BOARD][MAX_DET];
 	unsigned int ScNumBin; //EDO
+	struct SurfaceConceptS SC;
 	struct SpadS Spad[MAX_BOARD];
 	struct NirsS Nirs[MAX_BOARD];
 	};
@@ -1921,6 +1947,9 @@ int Modulo; // perform Refolding operation via SC hardware. It corresponds to th
 double ***NonLinDt;     // corrections coefficients
 double Binsize;								// temporal width of the mean bin
 double Period;									// period between two IRF peaks (used in rebinning)
+double *BufferTDC;
+double *BufferTDC2;
+
 
 /* #####################    MEASUREMENT FUNCTIONS   ########################### */
 void CVICALLBACK Measure(int menuBar,int menuItem,void *callbackData,int panel);
