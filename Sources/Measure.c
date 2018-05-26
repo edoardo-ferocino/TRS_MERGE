@@ -579,31 +579,36 @@ void DecideAction(void){
 			if(first[P.Mamm.Loop[Y]]) {
 				P.Mamm.TopLim=5;
 				P.Frame.Min = 0; P.Frame.Max = P.Frame.Num;
-				P.Frame.First = 0; P.Frame.Last = P.Frame.Max;
+				P.Frame.First = 0; P.Frame.Last = P.Frame.Max-1;
 				P.Mamm.OverTreshold = FALSE; P.Mamm.IsTop = FALSE;
 				P.Action.StopMamm = FALSE;
 			}
 			P.Frame.Half = (P.Frame.Last-P.Frame.First)/2+P.Frame.First;
-			if (REMINDER(P.Loop[P.Mamm.Loop[Y]].Idx,2)==0)
+		/*	if (REMINDER(P.Loop[P.Mamm.Loop[Y]].Idx,2)==0)
 				is_checkmamm = P.Frame.Actual>=P.Frame.Half;
 			else
-				is_checkmamm = P.Frame.Actual<=P.Frame.Half;
-		is_checkmamm = is_checkmamm||((P.Frame.Last-P.Frame.First) <= P.Mamm.TopLim*5); //controllare continous check if Frames are really close
-		if((P.Frame.Last-P.Frame.First)<=P.Mamm.TopLim) P.Mamm.IsTop = TRUE;
+				is_checkmamm = P.Frame.Actual<=P.Frame.Half;*/
+			is_checkmamm = P.Frame.Actual>=P.Frame.Half;
+		//is_checkmamm = is_checkmamm||((P.Frame.Last-P.Frame.First) <= P.Mamm.TopLim*5); //controllare continous check if Frames are really close
+		if((P.Frame.Last-P.Frame.First+1)<=P.Mamm.TopLim) P.Mamm.IsTop = TRUE;
 			else P.Mamm.IsTop = FALSE;
 		}
 		else is_checkmamm=0;
 	
 		P.Action.DoJumpMamm=(P.Mamm.OverTreshold||P.Mamm.IsTop||P.Action.StopMamm);
 		P.Action.ScReInit.InitMammot = first[P.Mamm.Loop[Y]];
-		if(new[P.Mamm.Loop[Y]]) {P.Mamm.OverTreshold = FALSE; P.Action.DoJumpMamm = P.Mamm.IsTop;}
+		if(new[P.Mamm.Loop[Y]]) {
+			P.Mamm.OverTreshold = FALSE; P.Action.DoJumpMamm = P.Mamm.IsTop;
+			P.Frame.Actual = P.Frame.Max - P.Frame.Last -1;}
 		P.Action.InitMamm=first[P.Mamm.Loop[Y]];
 		P.Action.StartMamm=new[P.Mamm.Loop[Y]];
 		P.Action.CheckMamm=is_checkmamm;
 		P.Action.StopMamm=last[P.Mamm.Loop[X]];
-		P.Action.StopMamm=P.Action.StopMamm||(new[P.Mamm.Loop[Y]]?0:(P.Frame.Actual==P.Frame.Min||P.Frame.Actual==P.Frame.Max));//controllare
+		//P.Action.StopMamm=P.Action.StopMamm||(new[P.Mamm.Loop[Y]]?0:(P.Frame.Actual==P.Frame.Min||P.Frame.Actual==P.Frame.Max));//controllare
+		P.Action.StopMamm=P.Action.StopMamm||(new[P.Mamm.Loop[Y]]?0:P.Frame.Actual==P.Frame.Max-1);//controllare
 		P.Action.DataSave=P.Action.StopMamm;
-		P.Frame.Dir = REMINDER(P.Loop[P.Mamm.Loop[Y]].Idx,2)==0?+1:-1;
+		//P.Frame.Dir = REMINDER(P.Loop[P.Mamm.Loop[Y]].Idx,2)==0?+1:-1;
+		P.Frame.Dir = +1;
 		P.Action.ReadUIR=P.Command.ReadUIR&&new[P.Mamm.Loop[Y]];
 	}
 	
@@ -2313,7 +2318,8 @@ void DataCopy(void){
 void NewAcq(void){
 P.Acq.Actual++;
 	if(P.Acq.Actual==P.Acq.Frame){
-		P.Frame.Actual=P.Frame.Actual+P.Frame.Dir;
+		//P.Frame.Actual=P.Frame.Actual+P.Frame.Dir;
+		P.Frame.Actual++;
 		P.Acq.Actual=0;
 	}
 	if(P.Frame.Actual==P.Frame.Num){
@@ -2907,12 +2913,6 @@ void CloseSC1000(void){	   //EDO
 			P.Spc.ScDeinit=FALSE;
 		}
 		P.Spc.ScTimeElapsed=Timer();
-		/*P.Mamm.InvertSignCorr=0;
-		int it;
-		for(it=0;it<300;it++){
-		P.Frame.Mem[0][it]=0;
-        P.Frame.Mem[1][it]=0;
-		}*/
 		P.Spc.Started = FALSE;
 		if(P.Mamm.Status) P.Mamm.IgnoreTrash = FALSE;
 		P.Mamm.NumAcq.Active = FALSE;
@@ -9068,7 +9068,7 @@ void InitMammot(void){	   //EDO
 			
 	if(P.Action.ScReInit.InitMammot) ReInitSC1000('S'); 
 	P.Frame.Min = 0; P.Frame.Max = P.Frame.Num;
-	P.Frame.First = 0; P.Frame.Last = P.Frame.Max;
+	P.Frame.First = 0; P.Frame.Last = P.Frame.Max -1;
 	P.Mamm.IgnoreTrash = TRUE; P.Spc.ScWait = TRUE;
 }
 
@@ -9084,14 +9084,14 @@ void StartMammot(void){
 		for(ip=0; ip<P.Num.Page;ip++)
 			CompileSub(P.Ram.Actual, ifr, ip);
 	
-	float AcqTime = min((P.Frame.Last-P.Frame.First)+20/abs(P.Loop[P.Mamm.Loop[X]].Delta),P.Frame.Num)*P.Spc.TimeM; //controllare  //20 è in mm
+	float AcqTime = min((P.Frame.Last-P.Frame.First+1)+20/abs(P.Loop[P.Mamm.Loop[X]].Delta),P.Frame.Num)*P.Spc.TimeM; //controllare  //20 è in mm
+	P.Frame.First = P.Frame.Max - P.Frame.Last -1;
 	if(!P.Spc.Started)
 		for(ib=0;ib<P.Num.Board;ib++)
 			P.Spc.ScAcqTime=StartSC1000(ib,AcqTime);
 	P.Spc.Started = TRUE;
 	P.Mamm.IgnoreTrash = TRUE;
 	P.Spc.ScWait = TRUE;
-	int Min = min((P.Frame.Last-P.Frame.First)+20/abs(P.Loop[P.Mamm.Loop[X]].Delta),P.Frame.Num);
 	P.Mamm.NumAcq.Active = TRUE;
 }
 /* STOP STEP AND PREPARE FOR DATA SAVE */
@@ -9101,15 +9101,14 @@ void StopMammot(void){	  //EDO
 	int ib,ifr,ip;
 	for(ib=0;ib<P.Num.Board;ib++) FlushSC1000(ib);
 	
-	if(P.Mamm.CorrShift) ShiftCorrection();
-	//if(P.Mamm.ShiftBack) BackShift();
-	if (REMINDER(P.Loop[P.Mamm.Loop[Y]].Idx,2)==0)
+	/*if (REMINDER(P.Loop[P.Mamm.Loop[Y]].Idx,2)==0)
 		P.Frame.Last = P.Frame.Actual;
 	else
-		P.Frame.First = P.Frame.Actual;
-	P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx]=P.Frame.Actual;
-	P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx+1]=P.Frame.Actual;
-	//P.Mamm.IsTop=abs(P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx]-P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx])<=(P.Mamm.TopLim);
+		P.Frame.First = P.Frame.Actual;*/
+	P.Frame.Last = P.Frame.Actual;
+	//P.Frame.First = P.Frame.Max - P.Frame.Last;
+	if(P.Mamm.CorrShift) ShiftCorrection();
+	//if(P.Mamm.ShiftBack) BackShift();
 	P.Spc.Started=FALSE;
 	P.Frame.Dir = 0;
 	P.Mamm.NumAcq.Active = FALSE;
@@ -9128,10 +9127,14 @@ void ShiftCorrection(void){
 	char LoopX=P.Mamm.Loop[X];
 	long PosX, StopGoal; float Shift;
 	TellPos(StepX,&PosX);
+	/*if (REMINDER(P.Loop[P.Mamm.Loop[Y]].Idx,2)==0)
+		StopGoal = P.Step[StepX].Stop[P.Frame.Actual]; // controllare il +1
+	else
+		StopGoal = P.Step[StepX].Start[P.Frame.Actual]; // controllare il +1*/
 	if (REMINDER(P.Loop[P.Mamm.Loop[Y]].Idx,2)==0)
 		StopGoal = P.Step[StepX].Stop[P.Frame.Actual]; // controllare il +1
 	else
-		StopGoal = P.Step[StepX].Start[P.Frame.Actual]; // controllare il +1
+		StopGoal = P.Step[StepX].Start[P.Frame.Max-P.Frame.Actual-1]; // controllare il +1
 	MoveStep(&PosX,StopGoal,StepX,TRUE,P.Action.Status);
 
 }
