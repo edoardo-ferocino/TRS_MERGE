@@ -212,20 +212,20 @@ void KernelGen(){
 						if(P.Action.ScReInit.TrimmerPreBreak) ReInitSC1000('T'); // EDO
 						for(it=0;it<MAX_TRIM;it++) if((P.Action.Trim[it])&&!P.Trim[it].Break) AutoTrim(it);  // Trim BEFORE Break
 						if(P.Action.DisplayStatus) DisplayStatus();
-						if(P.Action.ScReInit.Oscilloscope) ReInitSC1000('O');
+						if(P.Action.ScReInit.Oscilloscope) ReInitSC1000('O');								  //EDO
 						for(il=0;il<MAX_LOOP;il++) if(P.Action.Break[il]){Oscilloscope();if(P.Command.Abort) break;}
-						if(P.Action.ScReInit.TrimmerPostBreak) ReInitSC1000('T'); 
+						if(P.Action.ScReInit.TrimmerPostBreak) ReInitSC1000('T'); 							  //EDO
 						for(it=0;it<MAX_TRIM;it++) if((P.Action.Trim[it])&&P.Trim[it].Break) AutoTrim(it); // Trim AFTER Break
-						if(P.Action.SpcTime) SpcTime(P.Spc.TimeM); //
+						if(P.Action.SpcTime) SpcTime(P.Spc.TimeM);
 						if(P.Action.ScReInit.Measure) ReInitSC1000('M');  //EDO
 						if(P.Action.StartOma) StartOma();
 						if(P.Action.Ophir) GetOphir();
 						if(P.Action.InitMamm) {if(P.Command.Abort) break; InitMammot();}	   //EDO
-						if(P.Action.StartMamm) StartMammot();	   //EDO
+						if(P.Action.StartMamm) StartMammot();
 						if(P.Action.WaitChrono) WaitChrono();
 						if(P.Action.StartAdc) {StartAdc(); P.Time.Start=clock();}		 // se è attivo ADC e power
 			    		if(P.Action.StartSync) StartSync();
-	                    if(P.Action.SpcReset) SpcReset(P.Action.Status,P.Meas.Clear,P.Meas.Stop);
+						if(P.Action.SpcReset) SpcReset(P.Action.Status,P.Meas.Clear,P.Meas.Stop);
 						for(is=0;is<MAX_STEP;is++) if(P.Action.StartCont[is]) StartCont(is,P.Action.Status);		 //EDO
 						if(P.Action.WaitEnd) WaitEnd(P.Spc.TimeM,P.Wait.Pos,P.Wait.Type,P.Wait.Step);
 						if(P.Action.StopSync) StopSync();
@@ -234,7 +234,7 @@ void KernelGen(){
 		    		    //if(P.Action.StopAdc) StopAdc();		 // mi da errore...Andrea F
 						if(P.Action.StopOma) StopOma();
 						if(P.Action.SpcOut) SpcOut(P.Action.Status);
-                        if(P.Action.CheckMamm) CheckMammot(); //EDO						
+						if(P.Action.CheckMamm) CheckMammot(); //EDO						
 						if(P.Action.DisplayPlot) DisplayPlot();
 						if(P.Action.DisplayRoi) DisplayRoi();
 						if(P.Action.StopMamm) StopMammot();  //EDO
@@ -242,7 +242,7 @@ void KernelGen(){
 						for(is=0;is<MAX_STEP;is++) if(P.Action.WaitCont[is]) WaitCont(is,P.Action.Status);
 						if(P.Action.CheckJump) CheckJump();
 						NewAcq();		 //EDO
-	 					}
+						}
 	 	    		}
 	    		}
 			}
@@ -528,7 +528,7 @@ void DecideAction(void){
 	
 	// Spc Out
 	P.Action.SpcOut=TRUE;
-
+	
 	// Spc Time
 	P.Action.SpcTime=TRUE;  //EDO
 	
@@ -599,11 +599,11 @@ void DecideAction(void){
 		if(new[P.Mamm.Loop[Y]]) {P.Mamm.OverTreshold = FALSE; P.Action.DoJumpMamm = P.Mamm.IsTop;}
 		P.Action.InitMamm=first[P.Mamm.Loop[Y]];
 		P.Action.StartMamm=new[P.Mamm.Loop[Y]];
+		P.Action.CheckMamm=is_checkmamm;
 		P.Action.StopMamm=last[P.Mamm.Loop[X]];
 		P.Action.StopMamm=P.Action.StopMamm||(new[P.Mamm.Loop[Y]]?0:(P.Frame.Actual==P.Frame.Min||P.Frame.Actual==P.Frame.Max));//controllare
 		P.Action.DataSave=P.Action.StopMamm;
 		P.Frame.Dir = REMINDER(P.Loop[P.Mamm.Loop[Y]].Idx,2)==0?+1:-1;
-		P.Action.CheckMamm=is_checkmamm;
 		P.Action.ReadUIR=P.Command.ReadUIR&&new[P.Mamm.Loop[Y]];
 	}
 	
@@ -2036,7 +2036,7 @@ void SpcClear(void){
 /* DATA IN */
 void SpcIn(){
 	int ib;
-	int ret;
+	
 	switch(P.Spc.Type){
 		case NONE:  break;  
 		case VARRO: CharCommVarro('a'); break;
@@ -2047,14 +2047,14 @@ void SpcIn(){
 		case SPC130: for(ib=0;ib<P.Num.Board;ib++) SPC_start_measurement(ib); break;
 		case HYDRA: HH_StartMeas(HYDRA_DEV0,P.Spc.TimeHydra); break;
 		case TH260: TH260_StartMeas(TH260_DEV0,P.Spc.TimeTH260); break;
-		case SPC_SC1000: for(ib=0;ib<P.Num.Board;ib++){} break;
+		case SPC_SC1000: break;  //EDO
 		case SPC_SPADLAB: for(ib=0;ib<P.Num.Board;ib++) StartSpad(ib); break;
 		case SPC_NIRS: for(ib=0;ib<P.Num.Board;ib++) StartNirs(ib); break;
 		case TEST: break;
 		case DEMO: break;
 		}
 	P.Spc.Zero=TimerN();
-	if(P.Spc.Type!=SPC_SC1000) P.Spc.Started=TRUE;  //EDO
+	if(P.Spc.Type!=SPC_SC1000) P.Spc.Started=TRUE;			//EDO   
 	}
 
 
@@ -2071,7 +2071,7 @@ void SpcRestart(void){  //TODO: check
 		case SPC130: for(ib=0;ib<P.Num.Board;ib++) SPC_restart_measurement(ib); break;
 		case HYDRA: HH_StartMeas(HYDRA_DEV0,P.Spc.TimeHydra); break;
 		case TH260: TH260_StartMeas(TH260_DEV0,P.Spc.TimeHydra); break;
-		case SPC_SC1000: RestartSc1000(ib); break;
+		case SPC_SC1000: break;
 		case SPC_SPADLAB: for(ib=0;ib<P.Num.Board;ib++) StartSpad(ib); break;
 		case SPC_NIRS: for(ib=0;ib<P.Num.Board;ib++) StartNirs(ib); break;
 		case TEST: break;
@@ -2118,6 +2118,7 @@ void SpcTime(float Time){
 void SpcStop(char Status){
 	short ib;
 	//**	CalcTime();
+	
 	switch(P.Spc.Type){
 		case NONE:  break;  
 		case VARRO: CharCommVarro('d'); break;
@@ -2128,7 +2129,7 @@ void SpcStop(char Status){
 		case SPC130: for(ib=0;ib<P.Num.Board;ib++) SPC_stop_measurement(ib);break;
 		case HYDRA: HH_StopMeas(HYDRA_DEV0); break;
 		case TH260: TH260_StopMeas(TH260_DEV0); break;
-		case SPC_SC1000: break;//if(P.Contest.Function = CONTEST_MEAS); for(ib=0;ib<P.Num.Board;ib++) StopSC1000(ib); break;	 /*patch*/
+		case SPC_SC1000: break; //EDO
 		case SPC_SPADLAB: for(ib=0;ib<P.Num.Board;ib++) StopSpad(ib);break;
 		case SPC_NIRS: for(ib=0;ib<P.Num.Board;ib++) StopNirs(ib);break;
 		case TEST: break;
@@ -2166,10 +2167,10 @@ void SpcWait(void){
 		case TH260: for(ib=0;ib<P.Num.Board;ib++)
     					do TH260_CTCStatus(TH260_DEV0,&mod_state2);
 						while(mod_state2==0);break;
-		case SPC_SC1000: break;
-/*		case SPC_SC1000: for(ib=0;ib<P.Num.Board;ib++)
+		case SPC_SC1000: //if(P.Spc.ScWait) Delay(MILLISEC_2_SEC*(P.Spc.TimeSC1000*10));
+						/*for(ib=0;ib<P.Num.Board;ib++)
     					do  sc_tdc_get_status2(P.Spc.ScBoard[ib],&mod_state2);
-						while(mod_state2==0);break; */
+						while(mod_state2==0);*/ break;
  		case SPC_SPADLAB: for(ib=0;ib<P.Num.Board;ib++) WaitSpad(ib); break;
 		case SPC_NIRS: for(ib=0;ib<P.Num.Board;ib++) WaitNirs(ib); break;
 		case DEMO:
@@ -2310,16 +2311,6 @@ void DataCopy(void){
 
 /* UPDATE ALL ACQ INDEXES */
 void NewAcq(void){
-/*	P.Acq.Actual++;
-	if(P.Acq.Actual==P.Acq.Frame){
-		P.Frame.Actual++;
-		P.Acq.Actual=0;
-		}
-	if(P.Frame.Actual==P.Frame.Num){
-		P.Ram.Actual++;
-		P.Frame.Actual=0;
-		} 
-	}*/
 P.Acq.Actual++;
 	if(P.Acq.Actual==P.Acq.Frame){
 		P.Frame.Actual=P.Frame.Actual+P.Frame.Dir;
@@ -2731,6 +2722,9 @@ void ReInitSC1000(char Operation){  //EDO
 	int it,id,ret;
 	P.Spc.ScPipeClose = TRUE;
 	if (Operation=='S') P.Spc.ScDeinit = TRUE; else P.Spc.ScDeinit = FALSE;
+	//if(P.Mamm.Status)			  //controllare
+	//	if(P.Spc.ScInitializedForMammot[Board])
+	//		P.Spc.ScDeinit = TRUE;
 	CompleteClosureSC1000(Board);
 	P.Mamm.NumAcq.Active = FALSE;
 	P.Spc.ScAutoTrim = FALSE;
@@ -2739,7 +2733,7 @@ void ReInitSC1000(char Operation){  //EDO
 	switch (Operation){
 		case 'T':
 			P.Spc.ScAutoTrim = TRUE;
-			for(it=0; it<MAX_TRIM; it++) if(P.Trim[it].Trim) for(id=0;id<P.Num.Det;id++) AccTime[id] = P.Trim[it].Time;
+			for(it=0;it<MAX_TRIM;it++) if(P.Trim[it].Trim) for(id=0;id<P.Num.Det;id++) AccTime[id] = P.Trim[it].Time;
 			SpcTime(P.Trim[it].Time);
 			P.Spc.ScInitializedForMammot[Board] = FALSE;
 			break;
@@ -2764,7 +2758,9 @@ void ReInitSC1000(char Operation){  //EDO
 					P.Spc.ScBoard[Board]=ret; 
 					sprintf (message, "\nCommunication set\n");
 	    			SetCtrlVal (hDisplay, DISPLAY_MESSAGE, message);
-					P.Spc.ScBoardInitialized[Board] = TRUE; P.Spc.ScInitializedForMammot[Board] = TRUE;}
+					P.Spc.ScBoardInitialized[Board] = TRUE;
+					P.Spc.ScInitializedForMammot[Board] = TRUE;
+				}
 			for(id=0;id<P.Num.Det;id++) AccTime[id] = P.Spc.TimeM;
 			SpcTime(P.Spc.TimeM);
 			P.Mamm.NumAcq.Active = TRUE;
@@ -2878,14 +2874,6 @@ float StartSC1000(int Board,float AcqTime){   //EDO
 	P.Mamm.NumAcq.Tot = ceil(Time/P.Spc.TimeSC1000);
 	return AcqTime;
 }
-/* RESTART ACQUITISITON */
-float RestartSc1000(int Board){
-	int ib;
-	float AcqTime = P.Mamm.Status?(abs(P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx-1]-P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx-1])+1+20)*P.Spc.TimeM:SC1000_TIME_INFINITY;
-	for(ib=0;ib<P.Num.Board;ib++)
-		P.Spc.ScAcqTime=StartSC1000(P.Spc.ScBoard[ib],AcqTime);
-	return AcqTime;
-}
 
 /* CLOSE SC1000 */	
 void CloseSC1000(void){	   //EDO	
@@ -2915,9 +2903,9 @@ void CloseSC1000(void){	   //EDO
 	
 	// free memory
 	doubleFree1D(LinArray);
+	doubleFree3D(NonLinDt,P.Num.Board,P.Num.Det);
 	SC1000Free1D(DCR_raw_count);
 	doubleFree1D(DCR_raw_time);
-	doubleFree3D(NonLinDt,P.Num.Board,P.Num.Det);
 } 
 
 /* PIPE READING */
@@ -2972,7 +2960,7 @@ void GetDataSC1000(void){						  //EDO
 
 /* CLEAR SC1000 */	//EDO
 void ClearSC1000(void){
-	int ib=0, id=0;
+	int ib=0, id=0; //Timeout = -1;//P.Spc.TimeSC1000*2;		//controllare
 	if(P.Spc.Trash)
 		if (!P.Mamm.IgnoreTrash)
 			for(ib=0;ib<P.Num.Board;ib++)
@@ -3818,7 +3806,7 @@ void AutoTrim(int Trim){
 	char isfirst,islast;
 	long loop_index;
 	char loop=P.Step[si].Loop;
-	char is_any_SPC = ((P.Spc.Type==SPC300)||(P.Spc.Type==SPC630)||(P.Spc.Type==SPC130)||(P.Spc.Type==HYDRA)||(P.Spc.Type==TH260)||(P.Spc.Type==SPC_SC1000));
+	char is_any_SPC = ((P.Spc.Type==SPC300)||(P.Spc.Type==SPC630)||(P.Spc.Type==SPC130)||(P.Spc.Type==HYDRA)||(P.Spc.Type==TH260)||(P.Spc.Type==SPC_SC1000));//EDO
 	short page;
 	
 	// Actions for FileTrimmer
@@ -3847,7 +3835,7 @@ void AutoTrim(int Trim){
 	T->PosBest = P.Step[si].Actual;
 	
 	// If already Success or Maximum Boundary for Step then smart exit
-	SpcReset(FALSE,is_any_SPC,is_any_SPC); //patch SpcReset(FALSE,is_any_SPC||P.Spc.Type==SPC_SC1000,is_any_SPC); //patch
+	SpcReset(FALSE,is_any_SPC,is_any_SPC);
 	WaitEnd(T->Time,0,(T->Wait==TRIM_WAIT_SPC?WAIT_SPC:WAIT_TIME),si);
 	SpcStop(FALSE);
 	SpcOut(FALSE);
@@ -9047,7 +9035,6 @@ void InitMammot(void){	   //EDO
 	P.Frame.Min = 0; P.Frame.Max = P.Frame.Num;
 	P.Frame.First = 0; P.Frame.Last = P.Frame.Max;
 	P.Mamm.IgnoreTrash = TRUE; P.Spc.ScWait = TRUE;
-	//fprintf(FID,"InitMammot\t%d\t%d\t%d\n",P.Frame.Actual,P.Frame.First,P.Frame.Last);
 }
 
 /* RESUME MAMMOT PROCEDURE */
@@ -9071,7 +9058,6 @@ void StartMammot(void){
 	P.Spc.ScWait = TRUE;
 	int Min = min((P.Frame.Last-P.Frame.First)+20/abs(P.Loop[P.Mamm.Loop[X]].Delta),P.Frame.Num);
 	P.Mamm.NumAcq.Active = TRUE;
-	//fprintf(FID,"StartMammot\t%d\t%d\t%d\t%d\n",P.Frame.Actual,P.Frame.First,P.Frame.Last,Min);
 }
 /* STOP STEP AND PREPARE FOR DATA SAVE */
 void StopMammot(void){	  //EDO
@@ -9086,7 +9072,6 @@ void StopMammot(void){	  //EDO
 		P.Frame.Last = P.Frame.Actual;
 	else
 		P.Frame.First = P.Frame.Actual;
-	//fprintf(FID,"StopMammot\t%d\t%d\t%d\n",P.Frame.Actual,P.Frame.First,P.Frame.Last);
 	P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx]=P.Frame.Actual;
 	P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx+1]=P.Frame.Actual;
 	//P.Mamm.IsTop=abs(P.Frame.Mem[FFIRST][P.Loop[P.Mamm.Loop[Y]].Idx]-P.Frame.Mem[FLAST][P.Loop[P.Mamm.Loop[Y]].Idx])<=(P.Mamm.TopLim);
@@ -9094,15 +9079,6 @@ void StopMammot(void){	  //EDO
 	P.Frame.Dir = 0;
 	P.Mamm.NumAcq.Active = FALSE;
 	P.Mamm.IgnoreTrash=FALSE;
-}
-
-/* ADJUST LOOP INDEX */
-void AdjustIndex(void){			//EDO
-P.Spc.Trash=FALSE;
-	if(REMINDER(P.Loop[P.Mamm.Loop[Y]].Idx,2)) 
-		P.Loop[P.Mamm.Loop[X]].Idx=P.Loop[P.Mamm.Loop[X]].Num-P.Frame.Actual-1;
-	else 
-    	P.Loop[P.Mamm.Loop[X]].Idx=P.Frame.Actual;
 }
 
 /* OVERTHRESHOLDS OPERATIONS */
@@ -9118,10 +9094,9 @@ void ShiftCorrection(void){
 	long PosX, StopGoal; float Shift;
 	TellPos(StepX,&PosX);
 	if (REMINDER(P.Loop[P.Mamm.Loop[Y]].Idx,2)==0)
-		StopGoal = P.Step[StepX].Stop[P.Frame.Actual-1]; // controllare il +1
+		StopGoal = P.Step[StepX].Stop[P.Frame.Actual]; // controllare il +1
 	else
 		StopGoal = P.Step[StepX].Start[P.Frame.Actual]; // controllare il +1
-	//fprintf(FID,"ShiftCorrection\t%d\t%d\t%d\t%ld\t%ld\n",P.Frame.Actual,P.Frame.First,P.Frame.Last,PosX,StopGoal);
 	MoveStep(&PosX,StopGoal,StepX,TRUE,P.Action.Status);
 
 }

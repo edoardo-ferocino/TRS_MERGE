@@ -1076,7 +1076,6 @@ struct ScReinitS{  //EDO
 	int TrimmerPostBreak;
 	int Oscilloscope;
 	int InitMammot;
-	int StartMammot;
 	int AnyOper;
 };
 struct NumAcqS{
@@ -1156,7 +1155,6 @@ struct ActionS{
 	char StopMamm;		    //EDO
 	char DoJumpMamm;		//EDO
 	char SpcRestart;		//EDO
-	char AdjustIndex;		//EDO
 	struct ScReinitS ScReInit;			//EDO
 	};
 
@@ -1463,7 +1461,6 @@ struct SpcS {
 	int ScDeinit;		   //EDO
 	char ScWait;
 	int	 Pipe[MAX_BOARD][MAX_DET];
-	int ScInit;			   //EDO
 	unsigned int ScNumBin; //EDO
 	struct SpadS Spad[MAX_BOARD];
 	struct NirsS Nirs[MAX_BOARD];
@@ -2026,7 +2023,6 @@ void GetDataTimeharp(void);
 /* ########################   SC1000 FUNCTIONS   ####################### */
 void InitSC1000(int Board);
 float StartSC1000(int Board,float AcqTime);
-float RestartSc1000(int Board);
 void CloseSC1000(void);
 void GetDataSC1000(void);
 void ClearSC1000(void);
@@ -2411,7 +2407,6 @@ void StartMammot(void);			//EDO
 void StopMammot(void);			//EDO
 void CheckMammot(void);			//EDO
 void AnalysisMamm_new(void);	//EDO
-void AdjustIndex(void);			//EDO
 void ShiftCorrection(void);		//EDO
 void BackShift(void);			//EDO
 
