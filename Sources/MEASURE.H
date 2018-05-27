@@ -2048,13 +2048,11 @@ void InitSC1000(int Board);
 float StartSC1000(int Board,float AcqTime);
 void CloseSC1000(void);
 void GetDataSC1000(void);
-void GetDataSC10002(void);
 void ClearSC1000(void);
 void CompleteClosureSC1000(int Board);
 void ReInitSC1000(char Operation);
 void CalcNonlinSC1000(void);
 void LinRefoldSC1000(int Refold,int Board,int Det,SC1000_TYPE *NonLinArray, double *LinArray, int NumChannLin);
-void LinRefoldSC10002(int Refold,int Board,int Det,SC1000_TYPE *NonLinArray, double *LinArray, int NumChannLin);
 void FlushSC1000(int Board);
 int PipeRead(int Board,int Det,int Timeout);
 
