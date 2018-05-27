@@ -9198,7 +9198,7 @@ void StopMammot(void){	  //EDO
 	for(ib=0;ib<P.Num.Board;ib++) FlushSC1000(ib);
 	
 	if(P.Mamm.CorrShift) ShiftCorrection();
-	//if(P.Mamm.ShiftBack) BackShift();
+	if(P.Mamm.ShiftBack) BackShift();
 	if (REMINDER(P.Loop[P.Mamm.Loop[Y]].Idx,2)==0)
 		P.Frame.Last = P.Frame.Actual;
 	else
@@ -9234,24 +9234,41 @@ void ShiftCorrection(void){
 
 /* BACK SHIFT */
 void BackShift(void){
-	int ShiftBack=P.Mamm.ShiftBack;
-	long pos,stopgoal;
-	TellPos(P.Mamm.Step[X],&pos);
-	stopgoal=pos+P.Step[P.Mamm.Step[X]].Dir*P.Mamm.ShiftBack*P.Step[P.Mamm.Step[X]].Factor*abs(P.Loop[P.Mamm.Loop[X]].Delta);
-	char trashmem=P.Spc.Trash;
-	MoveStep(&pos,stopgoal,P.Mamm.Step[X],TRUE,P.Action.Status);
-	P.Spc.Trash=trashmem;
-	int ib,ic,id,iframe,delta;
-	delta=(REMINDER(P.Loop[P.Mamm.Loop[Y]].Idx,2)?1:-1);
-	ShiftBack=ShiftBack*delta;
-	for(ib=0;ib<P.Num.Board;ib++)
-		for(id=0;id<P.Num.Det;id++)
-			for(ic=0;ic<P.Chann.Num;ic++){ 
-	   			for(iframe=P.Frame.Actual;P.Frame.Actual-abs(ShiftBack)<iframe&&iframe<P.Frame.Actual+abs(ShiftBack);iframe=iframe+delta){
-					D.Data[iframe][id][ic]=0;
-						if(P.Info.SubHeader) CompileSub(P.Ram.Actual,iframe,id);}
-			}
-	P.Frame.Actual=P.Frame.Actual+ShiftBack;
+	char StepX=P.Mamm.Step[X];
+	char LoopX=P.Mamm.Loop[X];
+	long PosX, StopGoal; float Shift;
+	int ShiftBack=P.Mamm.ShiftBack,id,ib,ic,iframe;
+	
+	TellPos(P.Mamm.Step[X],&PosX);
+	long Frame = P.Frame.Actual-P.Frame.Dir*(P.Mamm.ShiftBack-1);
+	if (REMINDER(P.Loop[P.Mamm.Loop[Y]].Idx,2)==0)
+		StopGoal = P.Step[StepX].Stop[Frame]; // controllare il +1
+	else
+		StopGoal = P.Step[StepX].Start[Frame]; // controllare il +1
+	MoveStep(&PosX,StopGoal,StepX,TRUE,P.Action.Status);
+	
+	if(P.Frame.Dir==1){
+		for(ib=0;ib<P.Num.Board;ib++)
+			for(id=0;id<P.Num.Det;id++)
+				for(iframe=P.Frame.Actual;iframe>Frame;iframe--){
+					for(ic=0;ic<P.Chann.Num;ic++){ 
+	   					D.Data[iframe][id][ic]=0;
+							if(P.Info.SubHeader) CompileSub(P.Ram.Actual,iframe,id);
+					}
+				}
+	}
+	else{
+		for(ib=0;ib<P.Num.Board;ib++)
+			for(id=0;id<P.Num.Det;id++)
+				for(iframe=P.Frame.Actual;iframe<Frame;iframe++){
+					for(ic=0;ic<P.Chann.Num;ic++){ 
+	   					D.Data[iframe][id][ic]=0;
+							if(P.Info.SubHeader) CompileSub(P.Ram.Actual,iframe,id);
+					}
+				}
+		
+	}
+	P.Frame.Actual=Frame;
 }
 
 /* MOVE ATTENUATOR ON PMTs */
