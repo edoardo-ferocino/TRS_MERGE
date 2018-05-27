@@ -695,7 +695,8 @@
 #define SC1000_LINEARISE  1					// 1 = use background file to linearise time scale, 0 = do not linearise
 #define SC1000_HARDREFOLD  5					// hardware refolding using SC and Modulo
 #define SC1000_NODATAOPERATION -1
-#define SC1000_MAXBIN		20700		// max number of channels (bin) in SC1000 // 10 mhz
+#define SC1000_MAXBIN	40800		// max number of channels (bin) in SC1000 // 10 mhz
+#define SC1000_REBIN 32
 
 /* SPADLAB CONSTANTS */
 #define SPADLAB_TDC_WRITE  "\\\\localhost\\MyProcess\\tdc-write"
@@ -2047,11 +2048,13 @@ void InitSC1000(int Board);
 float StartSC1000(int Board,float AcqTime);
 void CloseSC1000(void);
 void GetDataSC1000(void);
+void GetDataSC10002(void);
 void ClearSC1000(void);
 void CompleteClosureSC1000(int Board);
 void ReInitSC1000(char Operation);
 void CalcNonlinSC1000(void);
 void LinRefoldSC1000(int Refold,int Board,int Det,SC1000_TYPE *NonLinArray, double *LinArray, int NumChannLin);
+void LinRefoldSC10002(int Refold,int Board,int Det,SC1000_TYPE *NonLinArray, double *LinArray, int NumChannLin);
 void FlushSC1000(int Board);
 int PipeRead(int Board,int Det,int Timeout);
 
