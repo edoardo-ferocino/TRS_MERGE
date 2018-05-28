@@ -2867,8 +2867,8 @@ void InitSC1000(int Board){			   //EDO
 		NonLinDt = doubleAlloc3D(P.Num.Board,P.Num.Det,max_file_lenght); //P.Spc.ScNumBins should be the max number of entries  in the file. +500 is to take into account of possible mismatch between files
 		DCR_raw_count = SC1000Alloc1D(max_file_lenght);  				 //controllare
 		DCR_raw_time = doubleAlloc1D(max_file_lenght);
-		BufferTDC = doubleAlloc1D(SC1000_REBIN*P.Spc.ScNumBin);
-		BufferTDC2 = doubleAlloc1D(SC1000_REBIN*P.Spc.ScNumBin);
+		//BufferTDC = doubleAlloc1D(SC1000_REBIN*P.Spc.ScNumBin);
+		//BufferTDC2 = doubleAlloc1D(SC1000_REBIN*P.Spc.ScNumBin);
 	}
 	
 	// initialise correction coefficients
@@ -2920,8 +2920,8 @@ void CloseSC1000(void){	   //EDO
 	
 	// free memory
 	doubleFree1D(LinArray);
-	doubleFree1D(BufferTDC);
-	doubleFree1D(BufferTDC2);
+	//doubleFree1D(BufferTDC);
+	//doubleFree1D(BufferTDC2);
 	doubleFree3D(NonLinDt,P.Num.Board,P.Num.Det);
 	SC1000Free1D(DCR_raw_count);
 	doubleFree1D(DCR_raw_time);
@@ -9025,10 +9025,11 @@ void AnalysisMamm_new(void){
 	if(!P.Mamm.OverTreshold){
 		D.Curve = D.Data[P.Frame.Actual][id];
 		Area = CalcArea(P.Chann.First,P.Chann.Last)*P.Num.Det;
-		if(Area/P.Spc.TimeSC1000>=SC1000_MAX_COUNT_RATE) P.Mamm.OverTreshold = TRUE; 
+		if(Area/((double) MILLISEC_2_SEC*P.Spc.TimeSC1000)>=SC1000_MAX_COUNT_RATE) P.Mamm.OverTreshold = TRUE; 
 	}
-	if(Area/P.Spc.TimeSC1000<=SC1000_MIN_COUNT_RATE) P.Mamm.ExtraFrame = P.Frame.Num;  //to prevent frame loss in the next row
-	
+	if(Area/((double) MILLISEC_2_SEC*P.Spc.TimeSC1000)<=SC1000_MIN_COUNT_RATE)
+		P.Mamm.ExtraFrame = P.Frame.Num;  //to prevent frame loss in the next row
+	else P.Mamm.ExtraFrame = 20;
 	/*for(ib=0;ib<P.Num.Board;ib++) P.Mamm.Count.Actual[ib]=0; 
 	for(ib=0;ib<P.Num.Board;ib++)
 		for(id=0;id<P.Num.Det;id++)
