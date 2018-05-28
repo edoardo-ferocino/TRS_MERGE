@@ -28,6 +28,7 @@ HDRS = 	"c:\\Program Files (x86)\\TRS_MERGE\\Library"
 	"c:\\ProgramData\\National Instruments\\CVI2013\\bin"
 	"c:\\Program Files (x86)\\National Instruments\\Shared\\CVI\\Bin"
 	;
+include Jamfile_instr ;
 LOCATE on "Measure.c" = "c:\\Program Files (x86)\\TRS_MERGE\\Sources" ;
 LOCATE on "Trs.c" = "c:\\Program Files (x86)\\TRS_MERGE\\Sources" ;
 Object "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Release\\Measure.obj" : "c:\\Program Files (x86)\\TRS_MERGE\\Sources\\Measure.c" ;
@@ -35,5 +36,13 @@ FILENUM on "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Release\\Measure.o
 DEFPROTS on "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Release\\Measure.obj" = "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Release\\Measure.obj.cvidefprots" ;
 OUTFILE on "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Release\\Measure.obj" = "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Release\\Measure.obj.out" ;
 PrjObjects += "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Release\\Measure.obj" ;
-Always $(PrjObjects) ;
-Depends all : $(PrjObjects) ;
+Object "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Release\\Trs.obj" : "c:\\Program Files (x86)\\TRS_MERGE\\Sources\\Trs.c" ;
+FILENUM on "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Release\\Trs.obj" = 2 ;
+DEFPROTS on "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Release\\Trs.obj" = "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Release\\Trs.obj.cvidefprots" ;
+OUTFILE on "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Release\\Trs.obj" = "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Release\\Trs.obj.out" ;
+PrjObjects += "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Release\\Trs.obj" ;
+Object "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Release\\resources.res" : "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Release\\resources.in.rc" ;
+MainFromObjects "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Release\\Trs.exe" : $(PrjObjects) $(InstrObjects) ;
+Depends "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Release\\Trs.exe" : "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Release\\link_options.txt" ;
+Depends "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Release\\Trs.exe" : "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Release\\resources.res" ;
+Depends all : "c:\\Program Files (x86)\\TRS_MERGE\\cvibuild.TRS\\Release\\Trs.exe" ;

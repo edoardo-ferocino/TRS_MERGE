@@ -579,7 +579,7 @@ void DecideAction(void){
 			if(first[P.Mamm.Loop[Y]]) {
 				P.Mamm.TopLim=5;
 				P.Frame.Min = 0; P.Frame.Max = P.Frame.Num;
-				P.Frame.First = 0; P.Frame.Last = P.Frame.Max;
+				P.Frame.First = 0; P.Frame.Last = P.Frame.Max -1;
 				P.Mamm.OverTreshold = FALSE; P.Mamm.IsTop = FALSE;
 				P.Action.StopMamm = FALSE;
 			}
@@ -588,7 +588,7 @@ void DecideAction(void){
 				is_checkmamm = P.Frame.Actual>=P.Frame.Half;
 			else
 				is_checkmamm = P.Frame.Actual<=P.Frame.Half;
-		is_checkmamm = is_checkmamm||((P.Frame.Last-P.Frame.First) <= P.Mamm.TopLim*5); //controllare continous check if Frames are really close
+		//is_checkmamm = is_checkmamm||((P.Frame.Last-P.Frame.First) <= P.Mamm.TopLim*5); //controllare continous check if Frames are really close
 		if((P.Frame.Last-P.Frame.First)<=P.Mamm.TopLim) P.Mamm.IsTop = TRUE;
 			else P.Mamm.IsTop = FALSE;
 		}
@@ -8990,9 +8990,9 @@ void AnalysisMamm_new(void){
 	long Area, MaxVal, MaxPos, First, Last;
 	double Treshold, BaricentrePos, Width, Target1, Target2, Target3;
 	char Cond1, Cond2, Cond3;
-	/*
+	
 	P.Mamm.OverTreshold = FALSE; 
-	id = (P.Step[P.Mamm.Step[X]].Dir==1)?1:5;
+	id = (P.Step[P.Mamm.Step[X]].Dir==1)?1:5;  //most right or most left detector according to step movement
 	int FirstNeighb = 1; int iframe;
 	long Frames[FirstNeighb+1]; long Areas[FirstNeighb+1]; double Derivatives[FirstNeighb];
 	for(iframe=0;iframe<(FirstNeighb+1);iframe++){
@@ -9006,7 +9006,7 @@ void AnalysisMamm_new(void){
 	
 	D.Curve = D.Data[P.Frame.Actual][id];
 	Area = CalcArea(P.Roi.First[P.Mamm.Roi],P.Roi.Last[P.Mamm.Roi])-CalcArea(P.Roi.First[P.Mamm.Roi]-10,P.Roi.First[P.Mamm.Roi]);
-	GetRange(P.Roi.First[P.Mamm.Roi],P.Roi.Last[P.Mamm.Roi],P.Mamm.Fract,&MaxVal,&MaxPos,&First,&Last,&Treshold);
+	//GetRange(P.Roi.First[P.Mamm.Roi],P.Roi.Last[P.Mamm.Roi],P.Mamm.Fract,&MaxVal,&MaxPos,&First,&Last,&Treshold);
 	
 	Target1 =  (Area-P.Mamm.RefMeas.Area)/((double) P.Mamm.RefMeas.Area);
 	Cond1 = Target1 <= -0.5;
@@ -9027,9 +9027,9 @@ void AnalysisMamm_new(void){
 		Area = CalcArea(P.Chann.First,P.Chann.Last)*P.Num.Det;
 		if(Area/P.Spc.TimeSC1000>=SC1000_MAX_COUNT_RATE) P.Mamm.OverTreshold = TRUE; 
 	}
-	 */
+	if(Area/P.Spc.TimeSC1000<=SC1000_MIN_COUNT_RATE) P.Mamm.ExtraFrame = P.Frame.Num;  //to prevent frame loss in the next row
 	
-	for(ib=0;ib<P.Num.Board;ib++) P.Mamm.Count.Actual[ib]=0; 
+	/*for(ib=0;ib<P.Num.Board;ib++) P.Mamm.Count.Actual[ib]=0; 
 	for(ib=0;ib<P.Num.Board;ib++)
 		for(id=0;id<P.Num.Det;id++)
 		 	for(ic=0;ic<P.Chann.Num;ic++)
@@ -9037,7 +9037,7 @@ void AnalysisMamm_new(void){
 	for(ib=0;ib<P.Num.Board;ib++){
 			P.Mamm.Rate.Actual[ib]=P.Mamm.Count.Actual[ib]/P.Spc.TimeM; //Antonio. P.Spc.TimeM o P.Spc.EffTime[ib]
 			P.Mamm.OverTreshold=P.Mamm.Rate.Actual[ib]>P.Mamm.Rate.High[ib]||P.Mamm.Rate.Actual[ib]<P.Mamm.Rate.Low[ib];
-	}
+	}*/
 }
 
 /* INIT MAMMOT */
@@ -9061,8 +9061,9 @@ void InitMammot(void){	   //EDO
 			
 	if(P.Action.ScReInit.InitMammot) ReInitSC1000('S'); 
 	P.Frame.Min = 0; P.Frame.Max = P.Frame.Num;
-	P.Frame.First = 0; P.Frame.Last = P.Frame.Max;
+	P.Frame.First = 0; P.Frame.Last = P.Frame.Max-1;
 	P.Mamm.IgnoreTrash = TRUE; P.Spc.ScWait = TRUE;
+	P.Mamm.ExtraFrame = 20;
 }
 
 /* RESUME MAMMOT PROCEDURE */
@@ -9077,16 +9078,16 @@ void StartMammot(void){
 		for(ip=0; ip<P.Num.Page;ip++)
 			CompileSub(P.Ram.Actual, ifr, ip);
 	
-	float AcqTime = min((P.Frame.Last-P.Frame.First)+20/abs(P.Loop[P.Mamm.Loop[X]].Delta),P.Frame.Num)*P.Spc.TimeM; //controllare  //20 è in mm
+	float AcqTime = min((P.Frame.Last-P.Frame.First)+P.Mamm.ExtraFrame/abs(P.Loop[P.Mamm.Loop[X]].Delta),P.Frame.Num)*P.Spc.TimeM; //controllare  //20 è in mm
 	if(!P.Spc.Started)
 		for(ib=0;ib<P.Num.Board;ib++)
 			P.Spc.ScAcqTime=StartSC1000(ib,AcqTime);
 	P.Spc.Started = TRUE;
 	P.Mamm.IgnoreTrash = TRUE;
 	P.Spc.ScWait = TRUE;
-	int Min = min((P.Frame.Last-P.Frame.First)+20/abs(P.Loop[P.Mamm.Loop[X]].Delta),P.Frame.Num);
 	P.Mamm.NumAcq.Active = TRUE;
 }
+
 /* STOP STEP AND PREPARE FOR DATA SAVE */
 void StopMammot(void){	  //EDO
 	StopStep(P.Mamm.Step[X]);
