@@ -2867,8 +2867,8 @@ void InitSC1000(int Board){			   //EDO
 		NonLinDt = doubleAlloc3D(P.Num.Board,P.Num.Det,max_file_lenght); //P.Spc.ScNumBins should be the max number of entries  in the file. +500 is to take into account of possible mismatch between files
 		DCR_raw_count = SC1000Alloc1D(max_file_lenght);  				 //controllare
 		DCR_raw_time = doubleAlloc1D(max_file_lenght);
-		BufferTDC = doubleAlloc1D(32*P.Spc.ScNumBin);
-		BufferTDC2 = doubleAlloc1D(32*P.Spc.ScNumBin);
+		BufferTDC = doubleAlloc1D(SC1000_REBIN*P.Spc.ScNumBin);
+		BufferTDC2 = doubleAlloc1D(SC1000_REBIN*P.Spc.ScNumBin);
 	}
 	
 	// initialise correction coefficients
@@ -3000,13 +3000,14 @@ void ClearSC1000(void){
 /* FLUSH SC1000 BUFFER */
 void FlushSC1000(int Board){
 int id,ret=0;
-	int Timeout=1000;	
+	int Timeout=1000;//controllare. sarebbe meglio mettere un controllo sul fatto che il numero di curve lette sia esattamente quello	
 	//Delay(2);
 	if(P.Mamm.NumAcq.Active){
 		if(P.Mamm.NumAcq.Actual!=0){
 		while(P.Mamm.NumAcq.Actual<=P.Mamm.NumAcq.Tot||ret>0){
 			for(id=0;id<P.Num.Det;id++) ret=PipeRead(Board,id,Timeout);
-			P.Mamm.NumAcq.Actual++;
+			/*if(ret<0&&(P.Mamm.NumAcq.Actual<P.Mamm.NumAcq.Tot)) P.Mamm.NumAcq.Actual = P.Mamm.NumAcq.Actual;
+				else */P.Mamm.NumAcq.Actual++;
 		}
 		P.Mamm.NumAcq.Actual = 0;
 		}
@@ -9226,21 +9227,44 @@ void AnalysisMamm_new(void){
 	long Area, MaxVal, MaxPos, First, Last;
 	double Treshold, BaricentrePos, Width, Target1, Target2, Target3;
 	char Cond1, Cond2, Cond3;
-	/*id = P.Step[P.Mamm.Step[X]].Dir==1?1:5;
+	/*
+	P.Mamm.OverTreshold = FALSE; 
+	id = (P.Step[P.Mamm.Step[X]].Dir==1)?1:5;
+	int FirstNeighb = 1; int iframe;
+	long Frames[FirstNeighb+1]; long Areas[FirstNeighb+1]; double Derivatives[FirstNeighb];
+	for(iframe=0;iframe<(FirstNeighb+1);iframe++){
+		Frames[iframe]=P.Frame.Actual-P.Frame.Dir*iframe;
+		D.Curve = D.Data[Frames[iframe]][id];
+		Areas[iframe]=CalcArea(P.Roi.First[P.Mamm.Roi],P.Roi.Last[P.Mamm.Roi])-CalcArea(P.Roi.First[P.Mamm.Roi]-10,P.Roi.First[P.Mamm.Roi]);		
+	}
+	for(iframe=1;iframe<(FirstNeighb+1);iframe++){
+		Derivatives[iframe-1]=(Areas[iframe-1]-Areas[iframe])/((double) P.Mamm.RefMeas.Area);
+	}
+	
 	D.Curve = D.Data[P.Frame.Actual][id];
 	Area = CalcArea(P.Roi.First[P.Mamm.Roi],P.Roi.Last[P.Mamm.Roi])-CalcArea(P.Roi.First[P.Mamm.Roi]-10,P.Roi.First[P.Mamm.Roi]);
 	GetRange(P.Roi.First[P.Mamm.Roi],P.Roi.Last[P.Mamm.Roi],P.Mamm.Fract,&MaxVal,&MaxPos,&First,&Last,&Treshold);
-	//BaricentrePos = CalcBaricentre(First,Last);
-	Width = CalcWidth(First,Last,Treshold);
-	Target1 = (MaxPos-P.Mamm.RefMeas.MaxPos)/((double) P.Mamm.RefMeas.MaxPos);
-	Cond1 = Target1 < -0.04;
-	Target2 =  (Width-P.Mamm.RefMeas.Width)/P.Mamm.RefMeas.Width;
-	Cond2 = Target2 <= -0.3;
-	Target3 =  (Area-P.Mamm.RefMeas.Area)/((double) P.Mamm.RefMeas.Area);
-	Cond3 = Target3 <= -0.5;
-	P.Mamm.OverTreshold = FALSE;
-	if (Cond3) P.Mamm.OverTreshold = TRUE;
-	else if (Cond2) if (Cond1) P.Mamm.OverTreshold = TRUE;*/
+	
+	Target1 =  (Area-P.Mamm.RefMeas.Area)/((double) P.Mamm.RefMeas.Area);
+	Cond1 = Target1 <= -0.5;
+	Target2 = (double) Derivatives[0];
+	Cond2 = Target2 <=-0.3;
+	
+	if(Cond1&&Cond2) P.Mamm.OverTreshold = TRUE;
+	else{
+		Cond1 = Target1 <= -0.7;
+		Cond2 = TRUE;
+		for(iframe=0;iframe<FirstNeighb;iframe++)
+			Cond2=Cond2&&(Derivatives[iframe]<=-0.3?1:0);
+		if(Cond1||Cond2) P.Mamm.OverTreshold = TRUE;
+			else P.Mamm.OverTreshold = FALSE; 
+	}
+	if(!P.Mamm.OverTreshold){
+		D.Curve = D.Data[P.Frame.Actual][id];
+		Area = CalcArea(P.Chann.First,P.Chann.Last)*P.Num.Det;
+		if(Area/P.Spc.TimeSC1000>=SC1000_MAX_COUNT_RATE) P.Mamm.OverTreshold = TRUE; 
+	}
+	 */
 	
 	for(ib=0;ib<P.Num.Board;ib++) P.Mamm.Count.Actual[ib]=0; 
 	for(ib=0;ib<P.Num.Board;ib++)

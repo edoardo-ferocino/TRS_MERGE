@@ -48,15 +48,12 @@ Batch Build Debug = True
 [File 0001]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/Measure.c"
 File Type = "CSource"
-Disk Date = 3610260660
+Disk Date = 3610339216
 In Projects = "1,"
 Window Top = 32
 Window Left = 10
 Window Z-Order = 1
-Source Window State = "1,0,0,0,0,0,0,0,0,140,0,0,0,0,0,30,0,0,0,0,531,1020,1,0,"
-Breakpoint 0001 = "2882,0,enabled,"
-Breakpoint 0002 = "2894,0,enabled,"
-Breakpoint 0003 = "2894,0,enabled,"
+Source Window State = "1,9267,9267,9267,4,13,13,0,0,140,0,0,0,0,0,44,9219,0,9255,69,531,1020,1,0,"
 
 [File 0002]
 Path = "/c/Program Files (x86)/National Instruments/CVI2013/include/userint.h"
@@ -111,12 +108,12 @@ Source Window State = "1,0,1062,0,0,0,0,0,0,80,0,1060,0,1060,0,20,263,0,1059,6,4
 [File 0007]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/MEASURE.H"
 File Type = "Include"
-Disk Date = 3610259863
+Disk Date = 3610261009
 In Projects = ""
 Window Top = 212
 Window Left = 106
 Window Z-Order = 2
-Source Window State = "1,2051,2052,2051,0,0,0,0,0,80,0,1122,0,0,0,20,2039,0,2050,8,431,1020,1,16,"
+Source Window State = "1,698,698,698,8,20,20,0,3,80,0,1122,0,0,0,20,676,0,698,8,431,1020,1,16,"
 
 [File 0008]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/TRS.UIR"
@@ -225,8 +222,8 @@ Tab 0004 = "/c/Program Files (x86)/TRS_MERGE/Sources/Trs.c"
 Tab 0005 = "/c/Program Files (x86)/TRS_MERGE/Sources/TRS.UIR"
 Tab 0006 = "/c/Program Files (x86)/TRS_MERGE/Sources/TRS.h"
 Tab 0007 = "/c/Program Files (x86)/TRS_MERGE/Sources/MEASURE.H"
-Tab 0008 = "/c/Program Files (x86)/TRS_MERGE/Sources/Measure.c"
-Tab 0009 = "/c/Program Files (x86)/National Instruments/CVI2013/sdk/include/WinDef.h"
+Tab 0008 = "/c/Program Files (x86)/National Instruments/CVI2013/sdk/include/WinDef.h"
+Tab 0009 = "/c/Program Files (x86)/TRS_MERGE/Sources/Measure.c"
 
 [Default Build Config 0001 Debug]
 Generate Browse Info = True
