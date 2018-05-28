@@ -48,12 +48,12 @@ Batch Build Debug = True
 [File 0001]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/Measure.c"
 File Type = "CSource"
-Disk Date = 3610373509
+Disk Date = 3610374452
 In Projects = "1,"
 Window Top = 32
 Window Left = 10
 Window Z-Order = 1
-Source Window State = "1,9029,9029,9029,104,105,104,0,0,140,0,0,0,0,0,30,9004,0,9029,28,531,1020,1,0,"
+Source Window State = "1,9065,9066,9065,7,4,7,0,0,140,0,0,0,0,0,30,9049,0,9055,4,531,1020,1,0,"
 Breakpoint 0001 = "3152,0,enabled,"
 
 [File 0002]
@@ -63,8 +63,8 @@ Disk Date = 3610373205
 In Projects = ""
 Window Top = 32
 Window Left = 10
-Window Z-Order = 5
-Source Window State = "1,1827,1827,1827,17,21,21,0,0,80,0,0,0,0,0,20,1086,0,1109,37,431,1020,1,0,"
+Window Z-Order = 2
+Source Window State = "1,1475,1475,1475,11,20,20,0,3,80,0,0,0,0,0,20,1465,0,1475,11,431,1020,1,0,"
 
 [File 0003]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/Trs.c"
@@ -73,7 +73,7 @@ Disk Date = 3610373210
 In Projects = "1,"
 Window Top = 45
 Window Left = 6
-Window Z-Order = 4
+Window Z-Order = 5
 Source Window State = "1,542,543,542,4,4,4,0,0,52,0,2096,0,2096,18,15,531,0,542,4,349,676,1,17,"
 
 [File 0004]
@@ -85,7 +85,7 @@ Window Top = 45
 Window Left = 6
 Window Height = 284
 Window Width = 687
-Window Z-Order = 2
+Window Z-Order = 3
 
 [File 0005]
 Path = "/c/Program Files (x86)/TRS_MERGE/Sources/TRS.h"
@@ -94,7 +94,7 @@ Disk Date = 3610373214
 In Projects = ""
 Window Top = 122
 Window Left = 58
-Window Z-Order = 3
+Window Z-Order = 4
 Source Window State = "1,287,287,287,9,27,27,0,0,80,0,0,0,0,0,20,263,0,286,26,431,1020,1,0,"
 
 [File 0006]
