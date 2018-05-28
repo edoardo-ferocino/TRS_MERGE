@@ -3055,103 +3055,7 @@ void CalcNonlinSC1000(void){	   //EDO
 
 /* APPLY LINEARIZATION & REBINNING */
 void LinRefoldSC1000(int Refold,int Board,int Det,SC1000_TYPE *NonLinArray, double *LinArray, int NumChannLin){
-	/*int 	ic = 0,itp = 0, ir = 0, icb = 0, Rebin = 32;
-	int    	itt = P.Spc.ScFirstBin;	// index that scans over the original non-linear time scale
-	int    	it = 0; 					// index that scans over the new linear time-scale
-	int 	ntt = min(P.Spc.ScLastBin,P.Spc.ScNumBin); // last chann of the Non-Lin Array
-	int 	nt = NumChannLin; 	// length of the Lin Array
-	double 	*dtt = NonLinDt[Board][Det]; 		// array with NonLin Delta;
-	double  dt=P.Spc.Factor;				// lin delta
-	double  rtt = NonLinDt[Board][Det][P.Spc.ScFirstBin];   //	remainder of the non-lin channel
-	double  rt = dt;  			// remainder of the new linerized time-interval that need to be filled with photons
-	double 	T=Period; 				// full Period (ps) of the signal (take it exact for rebinning)
-	double 	tt=0;						// absolute time of the actual non-lin channel (ps)
-	int		numrep=0;				// number of replica so far, to be incremented every time you surpass T
-	//double *Buffer = doubleAlloc1D(Rebin*P.Spc.ScLastBin);// Only 1 item is needed for all the boards
-	//double *Buffer2 = doubleAlloc1D(Rebin*P.Spc.ScLastBin);// Only 1 item is needed for all the boards
-	//Refold -1 = NoDataOperation
-	//Refold 0 = OnlyLinearization
-	//Refold 1 = "Antonio"
-	//Refold 2 = "Alberto"
-	//Refold 3 = "Lorenzo"   //to check
-	//Refold 4 = OnlyRefold
-	
-	for(ic=0;ic<P.Chann.Num;ic++) LinArray[ic]=0;
-	switch (Refold) {
-		case 0:
-			for(icb=0;icb<min(P.Spc.ScLastBin,P.Spc.ScNumBin);icb++) BufferTDC[icb]=0;
-			for(ic=P.Spc.ScFirstBin;ic<min(P.Spc.ScLastBin,P.Spc.ScNumBin);ic++){
-				 BufferTDC[ic]=(NonLinArray[ic]/dtt[ic]);
-			 		 if(IsNotANumber(BufferTDC[ic])||IsInfinity(BufferTDC[ic]))
-						 BufferTDC[ic]=0;}
-			for(it=0;it<min(P.Chann.Num,min(P.Spc.ScLastBin,P.Spc.ScNumBin)-P.Spc.ScFirstBin);it++)
-				LinArray[it]=BufferTDC[it+P.Spc.ScFirstBin];
-			break;
-		case 1: 
-				while(itt<ntt){
-					if(tt>=T){  // if REBIN, both t & tt have surpassed the Period, then reset
-						tt-=T;
-						rt=dt-tt;
-						it=0;
-						numrep++;
-					}
-					if(rt >= rtt){ // the receiving linear channel is large enough to accomodate the remaining of the original non-linear channel
-						if(it<nt) LinArray[it] += (double)((NonLinArray[itt]/(dtt[itt])))*(rtt);
-					    tt+=rtt;
-						itt++;	  
-						rt -= rtt;
-						rtt = dtt[itt];
-					}
-					else{		      // the receiving linear channel is smaller than the remaining of the original non-linear channel
-						if(it<nt) LinArray[it] += (double)((NonLinArray[itt]/(dtt[itt])))*(rt);
-						tt+=rt;
-						it++;
-						rtt -= rt;
-						rt = dt;
-					}
-				}
-				for (itp=it+1;itp<nt;itp++) LinArray[itp]*=((numrep+1)/max(numrep,1));  // complete filling the LinArray and normalize for lower number of replica in the last part
-			break;
-		case 2:
-			for(icb=0;icb<(Rebin*P.Spc.ScLastBin);icb++) {BufferTDC[icb]=0; BufferTDC2[icb]=0;}
-			for(ic=P.Spc.ScFirstBin;ic<P.Spc.ScLastBin;ic++)
-				for (ir=0;ir<Rebin;ir++){
-					BufferTDC[ir+ic*Rebin]=(NonLinArray[ic]/dtt[ic])/((float) Rebin);
-			 		if(IsNotANumber(BufferTDC[ir+ic*Rebin])||IsInfinity(BufferTDC[ir+ic*Rebin]))
-						BufferTDC[ir+ic*Rebin]=0;
-					if(ic!=P.Spc.ScFirstBin&&REMINDER(ir+ic*Rebin,RoundRealToNearestInteger(Period/((ns2ps*Binsize/Rebin))))==0)
-						{it=0;numrep++;}
-					else it++;
-					BufferTDC2[it]+=BufferTDC[ir+ic*Rebin];
-				}
-			for (itp=it+1;itp<RoundRealToNearestInteger(Period/((ns2ps*Binsize)/Rebin));itp++) BufferTDC2[itp]*=((float) (numrep+1) /max(numrep,1));  // complete filling the LinArray and normalize for lower number of replica in the last part
-			for(it=0;it<min(P.Chann.Num,P.Spc.ScLastBin-P.Spc.ScFirstBin);it++)
-				for (ir=0;ir<Rebin;ir++)
-					LinArray[it]+=BufferTDC2[it*Rebin+ir];
-			break;
-		case 3: break;
-		case 4:
-			for(icb=0;icb<(Rebin*P.Spc.ScLastBin);icb++) {BufferTDC[icb]=0; BufferTDC2[icb]=0;}
-			for(ic=P.Spc.ScFirstBin;ic<P.Spc.ScLastBin;ic++)
-				for (ir=0;ir<Rebin;ir++){
-					BufferTDC[ir+ic*Rebin]=(NonLinArray[ic])/((float) Rebin);
-			 		if(IsNotANumber(BufferTDC[ir+ic*Rebin])||IsInfinity(BufferTDC[ir+ic*Rebin]))
-						BufferTDC[ir+ic*Rebin]=0;
-					if((ir+ic*Rebin)==RoundRealToNearestInteger(Period/((ns2ps*Binsize/Rebin)))) 
-						{it=0;numrep++;}
-					else it++;
-					BufferTDC2[it]+=BufferTDC[ir+ic*Rebin];
-				}
-			for (itp=it+1;itp<RoundRealToNearestInteger(Period/((ns2ps*Binsize)/Rebin));itp++) BufferTDC2[itp]*=((float) (numrep+1) /max(numrep,1));  // complete filling the LinArray and normalize for lower number of replica in the last part
-			for(it=0;it<min(P.Chann.Num,P.Spc.ScLastBin-P.Spc.ScFirstBin);it++)
-				for (ir=0;ir<Rebin;ir++)
-					LinArray[it]+=BufferTDC2[it*Rebin+ir];
-			break;
-	}*/
-
-	//doubleFree1D(Buffer);doubleFree1D(Buffer2); */
-
-	int ic,itp;
+	int ic,itp,is,iit;
 	int    	itt = P.Spc.ScFirstBin;	// index that scans over the original non-linear time scale
 	int    	it = 0; 					// index that scans over the new linear time-scale
 	int 		ntt = min(P.Spc.ScLastBin,P.Spc.ScNumBin); // last chann of the Non-Lin Array
@@ -3163,7 +3067,7 @@ void LinRefoldSC1000(int Refold,int Board,int Det,SC1000_TYPE *NonLinArray, doub
 	double 	T=Period; 				// full Period (ps) of the signal (take it exact for rebinning)
 	double 	tt=0;						// absolute time of the actual non-lin channel (ps)
 	int		numrep=0;				// number of replica so far, to be incremented every time you surpass T
-	double somma1=0,somma=0,somma2=0, somma3=0;
+	int Rebin = SC1000_REBIN;
 	
 	//Refold -1 = NoDataOperation
 	//Refold 0 = OnlyLinearization
@@ -3172,155 +3076,14 @@ void LinRefoldSC1000(int Refold,int Board,int Det,SC1000_TYPE *NonLinArray, doub
 	//Refold 3 = "Lorenzo"   //to check
 	//Refold 4 = OnlyRefold
 	
-	for(ic=0;ic<P.Chann.Num;ic++) LinArray[ic]=0;
-	if(Refold==2||Refold==0){
-	//int Rebin=(ns2ps*Binsize)/(Period/P.Chann.Num); //P.Chann.Num sould be 65535 to obtain max Rebin. if chann num defines the factor
-	int Rebin =(ns2ps*Binsize)/(P.Spc.Factor); 		  //if the factor defines the chann num
-	Rebin=32;
-	if(Refold==0) Rebin=1;
-	int iit;
-	int MaxRebinValue = (ns2ps*Binsize); 
-	static double Buffer[42526*32]; //P.Spc.ScLastBin*Rebin
-	static double Buffer2[42526*32]; //P.Spc.ScLastBin*Rebin
-	for(it=0;it<P.Spc.ScLastBin*Rebin;it++) {Buffer[it]=0; Buffer2[it]=0;}
-	int itt=0;
-	for(it=P.Spc.ScFirstBin;it<P.Spc.ScLastBin;it++){ 
-		for (iit=0;iit<Rebin;iit++){
-			Buffer[iit+it*Rebin]=(NonLinArray[it]/dtt[it])/((float) Rebin);
-			if(IsNotANumber(Buffer[iit+it*Rebin])||IsInfinity(Buffer[iit+it*Rebin])) 
-				Buffer[iit+it*Rebin]=0;
-			//if(Refold==2){
-			//	if(itt>=(Period/((ns2ps*Binsize)/Rebin))){ 
-			//itt=0;
-			//numrep++;}
-			//Buffer2[itt]+=Buffer[iit+it*Rebin];
-			//itt++;
-			//}
-			
-		}
-	
-	}
-	//for(it=P.Spc.ScFirstBin;it<P.Spc.ScLastBin;it++) somma+=(NonLinArray[it]);
-	//for(it=(P.Spc.ScFirstBin)*Rebin;it<P.Spc.ScLastBin*Rebin;it++) somma1+=Buffer[it];
-	
-	if(Refold==2){
-	//for (itp=itt+1;itp<(Period/((ns2ps*Binsize)/Rebin));itp++) Buffer2[itp]*=((float) (numrep) /max(numrep-1,1));  // complete filling the LinArray and normalize for lower number of replica in the last part
-	it=0;
-	for(iit=(P.Spc.ScFirstBin)*Rebin;iit<P.Spc.ScLastBin*Rebin;iit++){
-		if(it==RoundRealToNearestInteger(Period/((ns2ps*Binsize)/Rebin))){ 
-			it=0;
-			numrep++;}
-		//if(it<P.Chann.Num) LinArray[it]+=Buffer[iit]; 
-		Buffer2[it]+=Buffer[iit];
-		it++;					   
-	}  
-	for (itp=it;itp<(Period/((ns2ps*Binsize)/Rebin));itp++) Buffer2[itp]*=((float) (numrep+1) /max(numrep,1));  // complete filling the LinArray and normalize for lower number of replica in the last part
-	//for(it=(P.Spc.ScFirstBin)*Rebin;it<P.Spc.ScLastBin*Rebin;it++) somma2+=Buffer2[it];
-	for(it=0;it<P.Chann.Num;it++)
-    		for (iit=0;iit<Rebin;iit++) 
-				LinArray[it]+=Buffer2[it*Rebin+iit];
-    
-	}
-	else for(it=0;it<min(P.Chann.Num,P.Spc.ScLastBin-P.Spc.ScFirstBin+1);it++) LinArray[it]+=Buffer[it+P.Spc.ScFirstBin];
-	//for(it=0;it<P.Chann.Num;it++) somma3+=LinArray[it];
-	//int trash;
-	
-	
-	
-	
-	}
-	else if(Refold==1){
-	//for(it=P.Spc.ScFirstBin;it<P.Spc.ScLastBin;it++) somma+=NonLinArray[it];
-	while(itt<(ntt)){
-		if(((Refold==1)||(Refold==3)) && tt>T){  // if REBIN, both t & tt have surpassed the Period, then reset
-			tt-=T;
-			rt=dt-tt;
-			it=0;
-			numrep++;
-			}
-		if(rt >= rtt)  { // the receiving linear channel is large enough to accomodate the remaining of the original non-linear channel
-			if(it<nt) LinArray[it] += (double)((NonLinArray[itt]/(dtt[itt])))*(rtt);
-			if(Refold==1) tt+=rtt;
-			if(Refold==3) tt+=ns2ps*Binsize;
-			itt++;	  
-			rt -= rtt;
-			rtt = dtt[itt];
-			}
-		else{		      // the receiving linear channel is smaller than the remaining of the original non-linear channel
-			if(it<nt) LinArray[it] += (double)((NonLinArray[itt]/(dtt[itt])))*(rt);
-			if(Refold==1) tt+=rt;
-			it++;
-			rtt -= rt;
-			rt = dt;
-			}
-   	}
-	}
-	//for(it=0;it<P.Chann.Num;it++) somma1+=LinArray[it];
-
-	else {
-	int Rebin = 32;
-	for(it=P.Spc.ScFirstBin;it<P.Spc.ScLastBin;it++) somma+=(NonLinArray[it]);
-	int iit;
-	static double Buffer[42526*32]; //P.Spc.ScLastBin*Rebin
-	static double Buffer2[42526*32]; //P.Spc.ScLastBin*Rebin
-	for(it=0;it<P.Spc.ScLastBin*Rebin;it++) {Buffer[it]=0; Buffer2[it]=0;}
-	for(it=P.Spc.ScFirstBin;it<P.Spc.ScLastBin;it++){
-		for (iit=0;iit<Rebin;iit++){
-			Buffer[iit+it*Rebin]=(NonLinArray[it])/((float) Rebin);
-			if(IsNotANumber(Buffer[iit+it*Rebin])||IsInfinity(Buffer[iit+it*Rebin]))
-				Buffer[iit+it*Rebin]=0;
-		}
-	}
-	//for(it=(P.Spc.ScFirstBin)*Rebin;it<P.Spc.ScLastBin*Rebin;it++) somma1+=Buffer[it];
-	it=0;
-	for(iit=(P.Spc.ScFirstBin)*Rebin;iit<P.Spc.ScLastBin*Rebin;iit++){
-		if(it==RoundRealToNearestInteger(Period/((ns2ps*Binsize)/Rebin))){ 
-			it=0;
-			numrep++;}
-		//if(it<P.Chann.Num) LinArray[it]+=Buffer[iit]; 
-		Buffer2[it]+=Buffer[iit];
-		it++;					   
-	}  
-	for (itp=it;itp<(Period/((ns2ps*Binsize)/Rebin));itp++) Buffer2[itp]*=((float) (numrep+1) /max(numrep,1));  // complete filling the LinArray and normalize for lower number of replica in the last part
-	for(it=0;it<P.Chann.Num;it++)
-    		for (iit=0;iit<Rebin;iit++) 
-				LinArray[it]+=Buffer2[it*Rebin+iit];
-	
-	}
-	
-	
-	for (itp=it+1;itp<nt;itp++) LinArray[itp]*=(numrep/max(numrep-1,1));  // complete filling the LinArray and normalize for lower number of replica in the last part
-	//for(it=0;it<P.Chann.Num;it++) somma2+=LinArray[it];
-	//int rash;
-	
-	/*int 	ic = 0, iit = 0, itp = 0, ir = 0, icb = 0, Rebin = 32;
-	int    	itt = P.Spc.ScFirstBin;	// index that scans over the original non-linear time scale
-	int    	it = 0; 					// index that scans over the new linear time-scale
-	int 	ntt = min(P.Spc.ScLastBin,P.Spc.ScNumBin); // last chann of the Non-Lin Array
-	int 	nt = NumChannLin; 	// length of the Lin Array
-	double 	*dtt = NonLinDt[Board][Det]; 		// array with NonLin Delta;
-	double  dt=P.Spc.Factor;				// lin delta
-	double  rtt = NonLinDt[Board][Det][P.Spc.ScFirstBin];   //	remainder of the non-lin channel
-	double  rt = dt;  			// remainder of the new linerized time-interval that need to be filled with photons
-	double 	T=Period; 				// full Period (ps) of the signal (take it exact for rebinning)
-	double 	tt=0;						// absolute time of the actual non-lin channel (ps)
-	int		numrep=0;				// number of replica so far, to be incremented every time you surpass T
-	//double *Buffer = doubleAlloc1D(Rebin*P.Spc.ScLastBin);// Only 1 item is needed for all the boards
-	//double *Buffer2 = doubleAlloc1D(Rebin*P.Spc.ScLastBin);// Only 1 item is needed for all the boards
-	//Refold -1 = NoDataOperation
-	//Refold 0 = OnlyLinearization
-	//Refold 1 = "Antonio"
-	//Refold 2 = "Alberto"
-	//Refold 3 = "Lorenzo"   //to check
-	//Refold 4 = OnlyRefold
 	static double Buffer[SC1000_MAXBIN*SC1000_REBIN]; //P.Spc.ScLastBin*Rebin
 	static double Buffer2[SC1000_MAXBIN*SC1000_REBIN]; //P.Spc.ScLastBin*Rebin
 	for(it=0;it<min(P.Spc.ScLastBin,P.Spc.ScNumBin)*Rebin;it++) {Buffer[it]=0; Buffer2[it]=0;}
-	
 	for(ic=0;ic<P.Chann.Num;ic++) LinArray[ic]=0;
+	
 	switch(Refold){
 		case 0: 
-			for(it=P.Spc.ScFirstBin;it<min(P.Spc.ScLastBin,P.Spc.ScNumBin);it++){ 
+			for(it=P.Spc.ScFirstBin;it<min(P.Spc.ScLastBin+1,P.Spc.ScNumBin);it++){ 
 				Buffer[it]=(NonLinArray[it]/dtt[it]);
 					if(IsNotANumber(Buffer[it])||IsInfinity(Buffer[it]))
 						Buffer[it]=0;
@@ -3355,7 +3118,7 @@ void LinRefoldSC1000(int Refold,int Board,int Det,SC1000_TYPE *NonLinArray, doub
    			for (itp=it+1;itp<nt;itp++) LinArray[itp]*=((numrep+1)/max(numrep,1));  // complete filling the LinArray and normalize for lower number of replica in the last part
 	   	break;
 		case 2: 
-			for(it=P.Spc.ScFirstBin;it<min(P.Spc.ScLastBin,P.Spc.ScNumBin);it++){ 
+			for(it=P.Spc.ScFirstBin;it<min(P.Spc.ScLastBin+1,P.Spc.ScNumBin);it++){ 
 				for (iit=0;iit<Rebin;iit++){
 					Buffer[iit+it*Rebin]=(NonLinArray[it]/dtt[it])/((float) Rebin);
 						if(IsNotANumber(Buffer[iit+it*Rebin])||IsInfinity(Buffer[iit+it*Rebin]))
@@ -3363,7 +3126,7 @@ void LinRefoldSC1000(int Refold,int Board,int Det,SC1000_TYPE *NonLinArray, doub
 				}
 			}
 			it = 0;
-			for(iit=P.Spc.ScFirstBin*Rebin;iit<min(P.Spc.ScLastBin,P.Spc.ScNumBin)*Rebin;iit++){
+			for(iit=P.Spc.ScFirstBin*Rebin;iit<min(P.Spc.ScLastBin+1,P.Spc.ScNumBin)*Rebin;iit++){
 				if(it==RoundRealToNearestInteger(Period/((ns2ps*Binsize)/Rebin))){ 
 					it=0;
 					numrep++;
@@ -3379,7 +3142,7 @@ void LinRefoldSC1000(int Refold,int Board,int Det,SC1000_TYPE *NonLinArray, doub
     	break;
 		case 3: break;
 		case 4:
-			for(it=P.Spc.ScFirstBin;it<min(P.Spc.ScLastBin,P.Spc.ScNumBin);it++){ 
+			for(it=P.Spc.ScFirstBin;it<min(P.Spc.ScLastBin+1,P.Spc.ScNumBin);it++){ 
 				for (iit=0;iit<Rebin;iit++){
 					Buffer[iit+it*Rebin]=(NonLinArray[it])/((float) Rebin);
 						if(IsNotANumber(Buffer[iit+it*Rebin])||IsInfinity(Buffer[iit+it*Rebin]))
@@ -3387,7 +3150,7 @@ void LinRefoldSC1000(int Refold,int Board,int Det,SC1000_TYPE *NonLinArray, doub
 				}
 			}
 			it = 0;
-			for(iit=P.Spc.ScFirstBin*Rebin;iit<min(P.Spc.ScLastBin,P.Spc.ScNumBin)*Rebin;iit++){
+			for(iit=P.Spc.ScFirstBin*Rebin;iit<min(P.Spc.ScLastBin+1,P.Spc.ScNumBin)*Rebin;iit++){
 				if(it==RoundRealToNearestInteger(Period/((ns2ps*Binsize)/Rebin))){ 
 					it=0;
 					numrep++;
@@ -3401,7 +3164,7 @@ void LinRefoldSC1000(int Refold,int Board,int Det,SC1000_TYPE *NonLinArray, doub
 					LinArray[it]+=Buffer2[it*Rebin+iit];
 			for (itp=it+1;itp<nt;itp++) LinArray[itp]*=((numrep+1)/max(numrep,1));  // complete filling the LinArray and normalize for lower number of replica in the last part
 		break;
-	}*/
+	}
 }
 
 /* ########################   DEIB SPADLAB TDC FUNCTIONS (SPADLAB)  ####################### */
