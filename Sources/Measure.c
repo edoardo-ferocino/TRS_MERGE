@@ -601,7 +601,7 @@ void DecideAction(void){
 		P.Action.StartMamm=new[P.Mamm.Loop[Y]];
 		P.Action.CheckMamm=is_checkmamm;
 		P.Action.StopMamm=last[P.Mamm.Loop[X]];
-		P.Action.StopMamm=P.Action.StopMamm||(new[P.Mamm.Loop[Y]]?0:(P.Frame.Actual==P.Frame.Min||P.Frame.Actual==P.Frame.Max-1));//controllare
+		P.Action.StopMamm=P.Action.StopMamm||(new[P.Mamm.Loop[Y]]?0:(P.Frame.Actual==P.Frame.Min||P.Frame.Actual==(P.Frame.Max-1)));//controllare
 		P.Action.DataSave=P.Action.StopMamm;
 		P.Frame.Dir = REMINDER(P.Loop[P.Mamm.Loop[Y]].Idx,2)==0?+1:-1;
 		P.Action.ReadUIR=P.Command.ReadUIR&&new[P.Mamm.Loop[Y]];
@@ -9053,6 +9053,25 @@ void InitMammot(void){	   //EDO
 	ReInitSC1000('M');
 	//for(ib=0;ib<P.Num.Board;ib++) FlushSC1000(ib);
 	SpcOut(TRUE);
+	/*
+	ReInitSC1000('S');
+	float AcqTime = min((P.Frame.Last-P.Frame.First)+P.Mamm.ExtraFrame/abs(P.Loop[P.Mamm.Loop[X]].Delta),P.Frame.Num)*P.Spc.TimeM; //controllare  //20 è in mm
+	if(!P.Spc.Started)
+		for(ib=0;ib<P.Num.Board;ib++)
+			P.Spc.ScAcqTime=StartSC1000(ib,AcqTime);
+	P.Spc.Started = TRUE;
+	P.Mamm.IgnoreTrash = TRUE;
+	P.Spc.ScWait = TRUE;
+	P.Mamm.NumAcq.Active = TRUE;
+	MoveStep(&P.Step[StepX].Actual,CalcGoal(StepX),StepX,TRUE,P.Action.Status);
+	int ic=0;
+	do{
+		SpcOut(TRUE);
+		CheckMammot();
+		ic++;
+	}while(ic<P.Mamm.NumAcq.Tot&&P.Mamm.OverTreshold==FALSE);
+	StopMammot();
+	*/
 	MoveStep(&P.Step[StepX].Actual,CalcGoal(StepX),StepX,TRUE,P.Action.Status);
 	D.Curve = D.Data[P.Frame.Actual][id];
 	P.Mamm.RefMeas.Area = CalcArea(P.Roi.First[P.Mamm.Roi],P.Roi.Last[P.Mamm.Roi])-CalcArea(P.Roi.First[P.Mamm.Roi]-10,P.Roi.First[P.Mamm.Roi]);
