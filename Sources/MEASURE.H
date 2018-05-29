@@ -1080,6 +1080,10 @@ struct NumAcqS{		  //EDO
 	float Tot;
 	char Active;
 };
+struct ExtraFrameS{
+	int Num;
+	int IsActiveOnLoopYNum;
+};
 struct MammS {
 	char Mamm;
 	char AutoLabel;
@@ -1107,7 +1111,7 @@ struct MammS {
 	char   IniFile[MAMM_NUM_BOARD][260];		//EDO
 	struct MammRefMeaS RefMeas;				    //EDO
 	struct NumAcqS NumAcq;		  //EDO
-	int ExtraFrame;             //EDO
+	struct ExtraFrameS ExtraFrame;             //EDO
 	};
 
 struct ActionS{

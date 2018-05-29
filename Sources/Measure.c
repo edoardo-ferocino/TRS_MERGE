@@ -593,7 +593,16 @@ void DecideAction(void){
 			else P.Mamm.IsTop = FALSE;
 		}
 		else is_checkmamm=0;
-	
+		P.Mamm.ExtraFrame.Num = 20;
+		if(P.Mamm.ExtraFrame.IsActiveOnLoopYNum){
+			//P.Mamm.IsTop = FALSE;
+			//is_checkmamm = TRUE;
+			P.Mamm.ExtraFrame.Num = P.Frame.Num;
+			if(P.Mamm.ExtraFrame.IsActiveOnLoopYNum == P.Loop[P.Mamm.Loop[Y]].Idx){
+				P.Mamm.ExtraFrame.Num = P.Frame.Num;
+				P.Mamm.ExtraFrame.IsActiveOnLoopYNum = FALSE;
+			}
+		}
 		P.Action.DoJumpMamm=(P.Mamm.OverTreshold||P.Mamm.IsTop||P.Action.StopMamm);
 		P.Action.ScReInit.InitMammot = first[P.Mamm.Loop[Y]];
 		if(new[P.Mamm.Loop[Y]]) {P.Mamm.OverTreshold = FALSE; P.Action.DoJumpMamm = P.Mamm.IsTop;}
@@ -9028,8 +9037,7 @@ void AnalysisMamm_new(void){
 		if(Area/((double) MILLISEC_2_SEC*P.Spc.TimeSC1000)>=SC1000_MAX_COUNT_RATE) P.Mamm.OverTreshold = TRUE; 
 	}
 	if(Area/((double) MILLISEC_2_SEC*P.Spc.TimeSC1000)<=SC1000_MIN_COUNT_RATE)
-		P.Mamm.ExtraFrame = P.Frame.Num;  //to prevent frame loss in the next row
-	else P.Mamm.ExtraFrame = 20;
+		P.Mamm.ExtraFrame.IsActiveOnLoopYNum = P.Loop[P.Mamm.Loop[Y]].Idx+2;
 	/*for(ib=0;ib<P.Num.Board;ib++) P.Mamm.Count.Actual[ib]=0; 
 	for(ib=0;ib<P.Num.Board;ib++)
 		for(id=0;id<P.Num.Det;id++)
@@ -9083,7 +9091,7 @@ void InitMammot(void){	   //EDO
 	P.Frame.Min = 0; P.Frame.Max = P.Frame.Num;
 	P.Frame.First = 0; P.Frame.Last = P.Frame.Max-1;
 	P.Mamm.IgnoreTrash = TRUE; P.Spc.ScWait = TRUE;
-	P.Mamm.ExtraFrame = 20;
+	P.Mamm.ExtraFrame.Num = 20;
 }
 
 /* RESUME MAMMOT PROCEDURE */
@@ -9098,7 +9106,7 @@ void StartMammot(void){
 		for(ip=0; ip<P.Num.Page;ip++)
 			CompileSub(P.Ram.Actual, ifr, ip);
 	
-	float AcqTime = min((P.Frame.Last-P.Frame.First)+P.Mamm.ExtraFrame/abs(P.Loop[P.Mamm.Loop[X]].Delta),P.Frame.Num)*P.Spc.TimeM; //controllare  //20 è in mm
+	float AcqTime = min((P.Frame.Last-P.Frame.First)+(P.Mamm.ExtraFrame.Num)/abs(P.Loop[P.Mamm.Loop[X]].Delta),P.Frame.Num)*P.Spc.TimeM; //controllare  //20 è in mm
 	if(!P.Spc.Started)
 		for(ib=0;ib<P.Num.Board;ib++)
 			P.Spc.ScAcqTime=StartSC1000(ib,AcqTime);
