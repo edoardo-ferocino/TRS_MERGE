@@ -1108,6 +1108,7 @@ struct MammS {
 	struct MammRefMeaS RefMeas;				    //EDO
 	struct NumAcqS NumAcq;		  //EDO
 	int ExtraFrame;             //EDO
+	int IsRefMeas;
 	};
 
 struct ActionS{
@@ -1515,7 +1516,6 @@ struct FrameS{
 	int Half;		 //EDO
 	int Dir;		 //EDO
 	int Last;		 //EDO
-	int Mem[2][300]; //EDO
 	};
 
 struct FilterS{
