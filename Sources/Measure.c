@@ -2905,6 +2905,7 @@ void CloseSC1000(void){	   //EDO
 			
 			if(P.Mamm.IsTop){
 				rewind(P.File.File);
+				P.Loop[P.Mamm.Loop[Y]].Last = D.Head.LoopLast[P.Mamm.Loop[Y]-2];
 				CompileHeader();
 				while(fwrite(&D.Head,sizeof(D.Head),1,P.File.File)<1);
 				fflush(P.File.File);
