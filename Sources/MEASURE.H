@@ -698,7 +698,7 @@
 #define SC1000_MAXBIN	40800		// max number of channels (bin) in SC1000 // 10 mhz
 #define SC1000_REBIN 32
 #define SC1000_MAX_COUNT_RATE 25000000
-#define SC1000_MIN_COUNT_RATE 3000
+#define SC1000_MIN_COUNT_RATE 7000
 
 /* SPADLAB CONSTANTS */
 #define SPADLAB_TDC_WRITE  "\\\\localhost\\MyProcess\\tdc-write"
@@ -1112,6 +1112,7 @@ struct MammS {
 	struct MammRefMeaS RefMeas;				    //EDO
 	struct NumAcqS NumAcq;		  //EDO
 	struct ExtraFrameS ExtraFrame;             //EDO
+	int IsRefMeas;
 	};
 
 struct ActionS{
@@ -1519,7 +1520,6 @@ struct FrameS{
 	int Half;		 //EDO
 	int Dir;		 //EDO
 	int Last;		 //EDO
-	int Mem[2][300]; //EDO
 	};
 
 struct FilterS{
