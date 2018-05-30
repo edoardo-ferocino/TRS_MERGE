@@ -583,13 +583,13 @@ void DecideAction(void){
 				P.Mamm.OverTreshold = FALSE; P.Mamm.IsTop = FALSE;
 				P.Action.StopMamm = FALSE;
 			}
-			P.Frame.Half = (P.Frame.Last-P.Frame.First)/2+P.Frame.First;
+			P.Frame.Half = (P.Frame.Last-P.Frame.First+1)/2+P.Frame.First;
 			if (REMINDER(P.Loop[P.Mamm.Loop[Y]].Idx,2)==0)
 				is_checkmamm = P.Frame.Actual>=P.Frame.Half;
 			else
 				is_checkmamm = P.Frame.Actual<=P.Frame.Half;
 		//is_checkmamm = is_checkmamm||((P.Frame.Last-P.Frame.First) <= P.Mamm.TopLim*5); //controllare continous check if Frames are really close
-		if((P.Frame.Last-P.Frame.First)<=P.Mamm.TopLim) P.Mamm.IsTop = TRUE;
+		if((P.Frame.Last-P.Frame.First+1)<=P.Mamm.TopLim) P.Mamm.IsTop = TRUE;
 			else P.Mamm.IsTop = FALSE;
 		}
 		else is_checkmamm=0;
@@ -609,6 +609,7 @@ void DecideAction(void){
 		if(P.Mamm.IsTop&&(!new[P.Mamm.Loop[Y]])&&P.Mamm.Shrink[Y])
 			D.Head.LoopLast[P.Mamm.Loop[Y]-2] = P.Loop[P.Mamm.Loop[Y]].Actual;
 		P.Action.InitMamm=first[P.Mamm.Loop[Y]];
+		P.Action.MoveStep[P.Mamm.Step[X]]=first[P.Mamm.Loop[Y]]?0:P.Action.MoveStep[P.Mamm.Loop[X]];
 		P.Action.StartMamm=new[P.Mamm.Loop[Y]];
 		P.Action.CheckMamm=is_checkmamm;
 		P.Action.StopMamm=last[P.Mamm.Loop[X]];
@@ -9008,6 +9009,7 @@ void AnalysisMamm_new(void){
 	long Frames[FirstNeighb+1]; long Areas[FirstNeighb+1]; double Derivatives[FirstNeighb];
 	for(iframe=0;iframe<(FirstNeighb+1);iframe++){
 		Frames[iframe]=P.Frame.Actual-P.Frame.Dir*iframe;
+		if(Frames[iframe]<0) Frames[iframe] = 0;
 		D.Curve = D.Data[Frames[iframe]][id];
 		Areas[iframe]=CalcArea(P.Roi.First[P.Mamm.Roi],P.Roi.Last[P.Mamm.Roi])-CalcArea(P.Roi.First[P.Mamm.Roi]-10,P.Roi.First[P.Mamm.Roi]);		
 	}
@@ -9165,6 +9167,7 @@ void BackShift(void){
 	
 	TellPos(P.Mamm.Step[X],&PosX);
 	long Frame = P.Frame.Actual-P.Frame.Dir*(P.Mamm.ShiftBack-1);
+	if(Frame < 0) return;
 	if (REMINDER(P.Loop[P.Mamm.Loop[Y]].Idx,2)==0)
 		StopGoal = P.Step[StepX].Stop[Frame]; // controllare il +1
 	else
