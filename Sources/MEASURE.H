@@ -772,9 +772,17 @@
 #define MAMM_VIS_AND_NIR	3
 #define MAMM_VIS_OR_NIR		4
 #define MAMM_NUM_LAMBDA		7
-#define MAMM_CountRateTreshold 1500000 //patch
-#define FFIRST			(char) 0
-#define FLAST			(char) 1
+#define MAMM_NORTHWEST_DET	0
+#define MAMM_WEST_DET		1
+#define MAMM_SOUTHWEST_DET	2
+#define MAMM_SOUTH_DET		3
+#define MAMM_SOUTHEAST_DET	4
+#define MAMM_EAST_DET		5
+#define MAMM_NORTHEAST_DET	6
+#define MAMM_NORTH_DET		7
+
+
+
 
 /* OMA CONSTANTS  */
 /***/

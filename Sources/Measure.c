@@ -9003,7 +9003,7 @@ void AnalysisMamm_new(void){
 	char Cond1, Cond2, Cond3;
 	
 	P.Mamm.OverTreshold = FALSE; 
-	id = (P.Step[P.Mamm.Step[X]].Dir==1)?1:5;  //most right or most left detector according to step movement
+	id = (P.Step[P.Mamm.Step[X]].Dir==1)?MAMM_WEST_DET:MAMM_EAST_DET;  //most right or most left detector according to step movement
 	if(P.Mamm.IsRefMeas){
 	int FirstNeighb = 1; int iframe;
 	long Frames[FirstNeighb+1]; long Areas[FirstNeighb+1]; double Derivatives[FirstNeighb];
@@ -9061,7 +9061,7 @@ void InitMammot(void){	   //EDO
 	char StepX=P.Mamm.Step[X];
 	char StepY=P.Mamm.Step[Y];
 	char LoopX=P.Mamm.Loop[X];
-	int ib=0,ifr,ip,id = 3; //detector number 3
+	int ib=0,ifr,ip,id = MAMM_SOUTH_DET; 
 
 	if(P.Mamm.IsRefMeas){
 	/*
@@ -9076,6 +9076,14 @@ void InitMammot(void){	   //EDO
 		ic++;
 	}while(ic<P.Mamm.NumAcq.Tot&&P.Mamm.OverTreshold==FALSE);
 	StopMammot();
+	D.Curve = D.Data[P.Frame.Actual][id];
+	P.Mamm.RefMeas.Area = CalcArea(P.Roi.First[P.Mamm.Roi],P.Roi.Last[P.Mamm.Roi])-CalcArea(P.Roi.First[P.Mamm.Roi]-10,P.Roi.First[P.Mamm.Roi]);
+	GetRange(P.Roi.First[P.Mamm.Roi],P.Roi.Last[P.Mamm.Roi],P.Mamm.Fract,&P.Mamm.RefMeas.MaxVal,&P.Mamm.RefMeas.MaxPos,&P.Mamm.RefMeas.First,&P.Mamm.RefMeas.Last,&P.Mamm.RefMeas.Treshold);
+	P.Mamm.RefMeas.BaricentrePos = CalcBaricentre(P.Mamm.RefMeas.First,P.Mamm.RefMeas.Last);
+	P.Mamm.RefMeas.Width=CalcWidth(P.Mamm.RefMeas.First,P.Mamm.RefMeas.Last,P.Mamm.RefMeas.Treshold);
+	P.Frame.Min = 0; P.Frame.Max = P.Frame.Num;
+	P.Frame.Last = P.Frame.Max-1;
+	P.Mamm.IgnoreTrash = TRUE; P.Spc.ScWait = TRUE;
 	P.Frame.Actual = ic--; P.Frame.First = P.Frame.Actual;
 	*/
 	MoveStep(&P.Step[StepX].Actual,P.Step[StepX].Home,StepX,TRUE,P.Action.Status);
@@ -9094,7 +9102,6 @@ void InitMammot(void){	   //EDO
 	P.Frame.Min = 0; P.Frame.Max = P.Frame.Num;
 	P.Frame.First = 0; P.Frame.Last = P.Frame.Max-1;
 	P.Mamm.IgnoreTrash = TRUE; P.Spc.ScWait = TRUE;
-	P.Mamm.ExtraFrame.Num = 20;
 }
 
 /* RESUME MAMMOT PROCEDURE */
